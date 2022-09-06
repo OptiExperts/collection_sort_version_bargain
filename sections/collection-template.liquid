@@ -956,10 +956,13 @@
          {% endcase %}
          <!-- custom -->
          <div class="page-width px-0">
+
+          {% assign newArray = false %}
+          {% assign zeroFill = '0000' %}
+          {% assign zeroFillSize = zeroFill | size %}
+
          <ul class="grid grid--uniform{% if collection.products_count > 0 %} grid--view-items{% endif %}">
-            {% assign newArray = false %}
-            {% assign zeroFill = '0000' %}
-            {% assign zeroFillSize = zeroFill | size %}
+
             {% for product in collection.products %}
               {% assign inventoryCount = 0 %}
               {% for variant in product.variants %}
@@ -981,10 +984,10 @@
               {% endif %}
 
               <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
-                
+                {% for newArrayItem in newArray %}
                   {% assign i = newArrayItem | split:'.' | last | abs %}
                   {% include 'product-card-grid', product: collection.products[i], max_height: max_height %}
-        
+                {% endfor %}
               </li>
               {% else %}
               {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
