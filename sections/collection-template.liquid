@@ -1,3 +1,4 @@
+{%- comment -%}
 {% style %}
    .grid-view-item__image {object-fit : {{section.settings.image-effect}} !important;}
    .secondary {object-fit : {{section.settings.image-effect}} !important;}
@@ -1073,6 +1074,31 @@
     padding-right: 0px !important;
         }
 </style>
+{%- endcomment -%}
+
+{% assign remaining = products_per_page %}
+{% for product in collection.products limit: products_per_page %}
+  {% if product.available and product.price >= product.compare_at_price_max %}
+    {% include 'partial--product' %}
+    {% assign remaining = remaining | minus: 1 %}
+  {% endif %}
+{% endfor %}	
+{% for product in collection.products limit: products_per_page %}
+  {% if product.compare_at_price > product.price %}
+    {% if remaining > 0 %}
+        {% include 'partial--product' %}
+        {% assign remaining = remaining | minus: 1 %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+{% for product in collection.products limit: products_per_page %}
+  {% if product.available == false %}
+    {% if remaining > 0 %}
+        {% include 'partial--product' %}
+        {% assign remaining = remaining | minus: 1 %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
 
 {% schema %}
 {
