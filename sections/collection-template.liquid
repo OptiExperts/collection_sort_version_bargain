@@ -941,8 +941,7 @@
             </div>
             {% endif %}
          </header>
-
-
+         
          {% if section.settings.layout == 'grid' %}
          {% case section.settings.grid %}
          {% when 2 %}
@@ -986,7 +985,7 @@
             {% endfor %}
 
             <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
-              {% assign newArray = newArray | sort %}
+              {% assign newArray = newArray | sort | reverse %}
                 {% for newArrayItem in newArray %}
                   {% assign i = newArrayItem | split:'.' | last | abs %}
                   {% include 'product-card-grid',product: collection.products[i], max_height: max_height %}
