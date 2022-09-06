@@ -1076,50 +1076,6 @@
 </style>
 {%- endcomment -%}
 
-{% assign newArray = false %}
-{% assign zeroFill = '0000' %}
-{% assign zeroFillSize = zeroFill | size %}
-{% for product in collection.products %}
-
-  {% assign inventoryCount = 0 %}
-  {% for variant in product.variants %}
-    {% if variant.inventory_management != "shopify" %}{% continue %}{% endif %}
-    {% assign inventoryCount = inventoryCount | plus:variant.inventory_quantity %}
-  {% endfor %}
-
-  {% assign indexCharSize = inventoryCount | append:'' | size %}
-  {% assign toSlice = zeroFillSize | minus:indexCharSize %}
-  {% assign tmpZeroFill = zeroFill | slice:0,toSlice %}
-  {% assign newOrder = inventoryCount | default:'0' %}
-  {% assign matrix = tmpZeroFill | append:newOrder | append:'.'  | append:forloop.index0 %}
-
-  {% if newArray %}
-    {% assign tmpIndex = matrix | split:',' %}
-    {% assign newArray = newArray | concat:tmpIndex %}
-  {% else %}
-    {% assign newArray = matrix | split:',' %}
-  {% endif %}
-
-{% endfor %}
-
-{% assign newArray = newArray | sort %}
-{% for newArrayItem in newArray %}
-  {% assign i = newArrayItem | split:'.' | last | abs %}
-  {% assign grid = 'small--one-half medium-up--one-fifth' %}
-  {% if paginationAmount == 1 %}
-    {% assign grid = 'one-whole pagination_1' %}
-  {% elsif paginationAmount == 2 %}
-     {% assign grid = 'one-half pagination_2' %}
-  {% elsif paginationAmount == 3 %}
-     {% assign grid = 'small--one-half medium-up--one-third pagination_3' %}
-  {% elsif paginationAmount == 4 %}
-     {% assign grid = 'small--one-half medium-up--one-quarter' %}
-  {% endif %}
-  <div class="grid__item {{ grid }}">
-    {% include 'product-card-grid', product: collection.products[i] %}
-  </div>
-{% endfor %}
-
 {% schema %}
 {
   "name": {
