@@ -1,0 +1,156 @@
+{%- liquid
+  assign html = section.settings.html
+  assign visible = section.settings.visible
+  assign heading = section.settings.heading
+  assign bg_color = section.settings.bg_color
+  assign heading_color = section.settings.heading_color
+  assign heading_align = section.settings.heading_align
+  assign heading_fs = section.settings.heading_fs
+  assign padding = section.settings.padding
+  assign margin = section.settings.margin
+  assign full_bg = section.settings.full_bg
+  assign section_id = '#section-' | append: section.id
+-%}
+
+{%- if full_bg -%}
+  {%- assign bg_class = '' -%}
+{%- else -%}
+  {%- assign bg_class = '.section-wrapper' -%}
+{%- endif -%}
+
+<div class="section-custom-html {{visible}} {{section.settings.test_class}}" id="section-{{section.id}}">
+  <div class="{%- if section.settings.boxed -%}page-width{%- endif -%}">
+    <div class="section-wrapper">
+      {%- if heading != blank -%}
+        <div class="section-heading {{heading_align}}">
+          <p class="h2" style="color: {{heading_color}};font-size: {{heading_fs}};">{{heading}}</p>
+        </div>
+      {%- endif -%}
+      <div class="section-body">
+        {{html}}
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  {%- render 'css-responsive' preClassID: section_id, classID: bg_class,
+    value_1: padding, property_1: 'padding'
+    value_2: margin, property_2: 'margin'
+    value_3: bg_color, property_3: 'background-color' -%}
+</style>
+
+
+{%- schema -%}
+  {
+    "name" : "Custom HTML",
+    "tag" : "section",
+    "settings" : [
+      {
+        "type": "text",
+        "id": "test_class",
+        "label": "Test class"
+      },
+      {
+        "type": "html",
+        "id": "html",
+        "label": "HTML"
+      },
+      {
+        "type": "select",
+        "id": "visible",
+        "label" : "Visible on ",
+        "options": [
+         {
+            "value": "",
+            "label": "Both"
+         },
+         {
+           "value": "small--hide",
+           "label": "Desktop"
+         },
+         {
+           "value": "medium-up--hide",
+           "label": "Mobile"
+         }
+        ]
+      },
+      {
+        "type" : "checkbox",
+        "id" : "boxed",
+        "label" : "Boxed",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "padding",
+        "label": "Padding"
+      },
+      {
+        "type": "text",
+        "id": "margin",
+        "label": "Margin"
+      },
+      {
+        "type": "header",
+        "content": "Background"
+      },
+      {
+        "type" : "checkbox",
+        "id" : "full_bg",
+        "label" : "Full section background",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background color"
+      },
+      {
+        "type": "header",
+        "content": "Heading"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Content",
+        "default" : "OUR CUSTOMER REVIEWS"
+      },
+      {
+        "type": "text",
+        "id": "heading_fs",
+        "label": "Font size",
+        "default" : "18px"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Color",
+        "default" : "#5B8BA9"
+      },
+      {
+        "type": "select",
+        "id": "heading_align",
+        "label" : "Align",
+        "options": [
+         {
+            "value": "text-left",
+            "label": "Left"
+         },
+         {
+           "value": "text-center",
+           "label": "Center"
+         },
+         {
+           "value": "text-right",
+           "label": "Right"
+         }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name" : "Custom HTML"
+      }
+    ]
+  }
+{%- endschema -%}

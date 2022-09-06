@@ -1,0 +1,35 @@
+<div id="myDIV2" class="small--hide ">
+   <form action="{{ routes.search_url }}" method="get" class="search-header search" role="search" value="article">
+     <input class="search-header__input search__input"
+            type="search"
+            name="q"
+            placeholder="Search an article"
+            aria-label="{{ 'general.search.placeholder' | t }}">
+     <input type="hidden" name="type" value="article" />
+     <button class="search-header__submit search__submit btn--link site-header__icon" type="submit">
+       <i class="fa fa-search" aria-hidden="true"></i>
+       <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
+     </button>
+   </form>
+   <br>
+   {%- for block in section.blocks -%}
+   {%- case block.type -%}
+   {%- when 'collection' -%}
+   {% include 'widget-products' %}  
+   {%- when 'html' -%}
+   {% include 'custom-html' %}
+   {%- when 'newsletter' -%}
+   {% include 'newsletter-sidebar' %}  
+   {%- when 'banner' -%}
+   {% include 'banner-sidebar-image' %}  
+   {%- when 'comments' -%}
+   {% include 'recent-comments' %}    
+   {%- when 'tags' -%}
+   {% include 'Blog-sidebar-tag-filter' %}  
+   {%- when 'articles' -%}
+   {% include 'recent-articles' %}  
+   {%- endcase -%}
+   {%- endfor -%}
+</div>
+         <button class="float-filter fa fa-sliders medium-up--hide" onclick="myBlog()"></button>
+<script>function myBlog(){document.getElementById("myDIV2").classList.toggle("mob-sidebar")}</script>   

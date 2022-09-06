@@ -1,0 +1,7 @@
+<div class="product-options {{ block.settings.product-options-visibility }}">
+        {% if block.settings.note_seller_txt != blank %}
+  <label for="notes-to-seller--{{forloop.index}}" class="{% if block.settings.text-required %} required-icon {% endif %}">{{ block.settings.note_seller_txt }}</label>
+        {% endif %}
+  <input id="notes-to-seller--{{forloop.index}}" type="text" {% if block.settings.text-required %} required {% endif %}  class="{% if block.settings.text-required %} required {% endif%} note-seller" name="properties[{{ block.settings.note_seller_txt }}]" placeholder="{{ block.settings.note_seller_placeholder }}">
+  <input type="hidden" required class="required" value="Submit">
+</div>

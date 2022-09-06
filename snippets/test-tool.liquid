@@ -1,0 +1,72 @@
+<div id="test-tool">
+  <ul>
+    <li><input type="checkbox" id="test-tool-82" data-class-test="test_82" /><label for="test-tool-82">test_82</label></li>
+    <li><input type="checkbox" id="test-tool-83" data-class-test="test_83" /><label for="test-tool-83">test_83</label></li>
+    <li><input type="checkbox" id="test-tool-84" data-class-test="test_84" /><label for="test-tool-84">test_84</label></li>
+  </ul>
+</div>
+
+<script>
+  (() => {
+    let testTool = document.getElementById("test-tool");
+    let testClass = ["test_84","test_82","test_83"];
+    let addClass = ["test_84","test_82","test_83"];
+
+    testClass.forEach((itemClass) => {
+      document.body.classList.contains(itemClass) &&
+        (testTool.querySelector(`input[data-class-test="${itemClass}"]`).checked = true);
+    });
+
+    testTool.querySelectorAll("input").forEach((input) => {
+      input.addEventListener("input", function () {
+        if (this.checked) {
+          document.body.classList.add(this.dataset.classTest);
+        } else {
+          document.body.classList.remove(this.dataset.classTest);
+        }
+      });
+    });
+
+    addClass.forEach((className) => {
+      testTool.querySelector(`li input[data-class-test="${className}"]`).click();
+    });
+  })();
+</script>
+
+<style>
+  #test-tool {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    padding: 20px;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+  }
+  #test-tool ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  #test-tool ul li {
+    display: flex;
+    align-items: center;
+  }
+  #test-tool ul li:not(:last-child) {
+    padding-bottom: 10px;
+  }
+  #test-tool ul li label,
+  #test-tool ul li input {
+    margin: 0;
+  }
+  #test-tool ul li label {
+    padding-left: 5px;
+    color: white;
+  }
+  #test-tool input {
+    appearance: auto;
+  }
+</style>

@@ -1,0 +1,212 @@
+<div class="shipping-estimate">
+  <div class="shipping-estimate-wapper">
+
+    <div class="shipping-estimate-title">
+      {% include 'icon-truck2' %}
+      <span class="heading-title">Estimate Shipping Date</span>
+    </div>
+
+    <div class="shipping-estimate-form" style="display: none;" >
+      <input placeholder="Enter your postcode" type="number" id="est_postcode" class="postcode-field" >
+      <a href="javascript:void(0);" id="postcode_btn" class="postcode_btn">Go</a>
+    </div>
+    <p class="shipping-estimate-text-below show-test_61--mobile">Shipped FREE directly from Melbourne or Sydney</p>
+
+    <div class="shipping-estimate-error" style="display: none;">
+    	<span class="error-postcode">Invalid Postcode</span>
+    </div>
+    <div class="shipping-estimate-result" style="display: none;">
+        <div class="shipping-localtion">
+          <span class="localtion-shipping">MELBOURNE, 3000</span>
+          <a href="javascript:void(0);" id="est_change" class="btn_change">CHANGE</a>
+      	</div>
+      	<div class="shipping-time">
+          <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.462 8.72599C3.64804 8.91204 3.83409 8.97405 4.08215 8.97405C4.33021 8.97405 4.51626 8.91204 4.70231 8.72599L11.8961 1.53219C12.2062 1.22212 12.2062 0.663977 11.8961 0.291884C11.586 -0.0181932 11.0279 -0.0181932 10.6558 0.291884L4.08215 6.86553L1.60153 4.38491C1.22944 4.01281 0.733313 4.01281 0.36122 4.38491C0.0511427 4.69498 0.0511427 5.25312 0.36122 5.62522L3.462 8.72599Z" fill="#d72324"/>
+          </svg>
+          <span class="estimate-time">Delivered by July 8 - July 12</span>
+
+      	</div>
+    </div>
+
+  </div>
+
+</div>
+<script type="text/javascript" src="{{ 'postcode-au.js' | asset_url }}"></script>
+
+{%- capture _stateJSON -%}
+  [
+    {
+      "state_name": "Victoria",
+      "state": "VIC",
+      "min_day": 2,
+      "max_day": 3
+    },
+    {
+      "state_name": "New South Wales",
+      "state": "NSW",
+      "min_day": 2,
+      "max_day": 3
+    },
+    {
+      "state_name": "South Australia",
+      "state": "SA",
+      "min_day": 3,
+      "max_day": 5
+    },
+    {
+      "state_name": "Australian Capital Territory",
+      "state": "ACT",
+      "min_day": 3,
+      "max_day": 5
+    },
+    {
+      "state_name": "Queensland",
+      "state": "QLD",
+      "min_day": 4,
+      "max_day": 7
+    },
+    {
+      "state_name": "Northern Territory",
+      "state": "NT",
+      "min_day": 4,
+      "max_day": 7
+    },
+    {
+      "state_name": "Tasmania",
+      "state": "TAS",
+      "min_day": 4,
+      "max_day": 7
+    },
+    {
+      "state_name": "Western Australia",
+      "state": "WA",
+      "min_day": 4,
+      "max_day": 7
+    }
+  ]
+{%- endcapture -%}
+<script type="application/json" id="stateJSON">{{ _stateJSON }}</script>
+<script>
+
+  function estimateshipping (postcode){
+
+    var postcode_parse = JSON.parse(postcodeJSON);
+    var state_parse = JSON.parse($('#stateJSON').html());
+    var error = false;
+
+    var cur_postcode = postcode_parse.find(item => item.Zip == postcode);
+
+    if(typeof cur_postcode !== 'undefined') {
+    	var cur_state = state_parse.find(item => item.state == cur_postcode.State);
+        if(typeof cur_state === 'undefined') {
+          error = true;
+        }
+    } else {
+      error = true;
+    }
+
+    if(error) {
+      $('.shipping-estimate-form').show();
+      $('.shipping-estimate-error').show();
+      $('.shipping-estimate-result').hide();
+    } else {
+      $('.shipping-estimate-form').hide();
+      $('.shipping-estimate-error').hide();
+      $('.shipping-estimate-result').show();
+
+      $(".localtion-shipping").html(cur_postcode.Suburb +', '+ cur_postcode.Zip);
+
+      var today = new Date();
+      var min_day = new Date(today.getTime() + (cur_state.min_day *24*60*60*1000));
+      var max_day = new Date(today.getTime() + (cur_state.max_day *24*60*60*1000));
+
+      var month = new Array();
+        month[0] = "January";
+        month[1] = "February";
+        month[2] = "March ";
+        month[3] = "April";
+        month[4] = "May";
+        month[5] = "June";
+        month[6] = "July";
+        month[7] = "August";
+        month[8] = "September";
+        month[9] = "October";
+        month[10] = "November";
+        month[11] = "December";
+      var min_month = month[min_day.getMonth()];
+      var max_month = month[max_day.getMonth()];
+
+      $(".estimate-time").html('Delivered by ' + min_month + ' ' + min_day.getDate() + ' - ' + max_month + ' ' + max_day.getDate());
+      var valuecookie = cur_postcode.Zip + '|||' + cur_postcode.Suburb + '|||' + cur_state.min_day + '|||' + cur_state.max_day;
+
+      jQuery.cookie('estshipcookie', valuecookie, { expires: 7 });
+    }
+
+  }
+
+  function init_estship (){
+
+    var cur_value = jQuery.cookie('estshipcookie').split("|||");
+    $('.shipping-estimate-form').hide();
+    $('.shipping-estimate-error').hide();
+    $('.shipping-estimate-result').show();
+
+    $(".localtion-shipping").html(cur_value[1] +', '+ cur_value[0]);
+
+    var today = new Date();
+    var min_day = new Date(today.getTime() + (cur_value[2] *24*60*60*1000));
+    var max_day = new Date(today.getTime() + (cur_value[3] *24*60*60*1000));
+
+    var month = new Array();
+    month[0] = "January";
+    month[1] = "February";
+    month[2] = "March ";
+    month[3] = "April";
+    month[4] = "May";
+    month[5] = "June";
+    month[6] = "July";
+    month[7] = "August";
+    month[8] = "September";
+    month[9] = "October";
+    month[10] = "November";
+    month[11] = "December";
+    var min_month = month[min_day.getMonth()];
+    var max_month = month[max_day.getMonth()];
+
+    $(".estimate-time").html('Delivered by ' + min_month + ' ' + min_day.getDate() + ' - ' + max_month + ' ' + max_day.getDate());
+
+  }
+
+
+  $(document).ready(function(){
+
+    const submitGo = document.querySelector('#postcode_btn');
+    const submitChange = document.querySelector('#est_change');
+
+    if (jQuery.cookie('estshipcookie')) {
+    	init_estship();
+    } else {
+      	$('.shipping-estimate-form').show();
+      	$('.shipping-estimate-error').hide();
+      	$('.shipping-estimate-result').hide();
+    }
+
+    $( '#est_postcode' ).on("blur click focus change", function(event){
+      event.stopPropagation();
+    });
+
+    submitGo.addEventListener('click', () => {
+    	let postcode = $("#est_postcode").val();
+        estimateshipping (postcode);
+    });
+
+    submitChange.addEventListener('click', () => {
+    	$('.shipping-estimate-form').show();
+      	$('.shipping-estimate-error').hide();
+      	$('.shipping-estimate-result').hide();
+    });
+
+
+  });
+</script>

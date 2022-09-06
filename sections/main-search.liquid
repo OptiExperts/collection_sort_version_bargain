@@ -1,0 +1,102 @@
+{% paginate search.results by 12 %}
+<div class="page-width">
+  {% if search.performed == false %}
+    <div class="text-center">
+      <h1 class="h2">{{ 'general.search.title' | t }}</h1>
+  {% else %}
+    <div class="section-header text-center">
+      <h1 class="h2">
+        <span class="visually-hidden">{{ 'general.search.heading' | t: count: search.results_count }}:</span>
+        {{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}
+      </h1>
+  {% endif %}
+      <div class="grid">
+        <div class="grid__item medium-up--two-fifths medium-up--push-three-tenths">
+          <form action="{{ routes.search_url }}" method="get" role="search" class="search">
+            <div aria-live="polite" class="form-message form-message--error search-result-error-message hide" data-search-error-message>
+              <ul id="error-search-form">
+                <li>{{ 'general.search.empty_search_message' | t }}</li>
+              </ul>
+            </div>
+            <div class="input-group">
+              <input type="hidden" name="type" value="product" />
+              <input type="search"
+                id="SearchInput"
+                class="input-group__field search__input"
+                name="q"
+                value="{{ search.terms | escape }}"
+                placeholder="{{ 'general.search.placeholder' | t }}"
+                aria-label="{{ 'general.search.placeholder' | t }}"
+                >
+              <span class="input-group__btn">
+                <button id="SearchResultSubmit" class="btn search__submit" type="submit">{{ 'general.search.submit' | t }}</button>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% if search.performed and search.results_count == 0 %}
+        <hr class="hr--small hr--invisible" aria-hidden="true" />
+        <div class="rte">
+          <p>{{ 'general.search.no_results_html' | t: link: routes.root_url }}</p>
+ <a class="btn"href="javascript:history.go(-1)"><i class="fa fa-arrow-left" aria-hidden="true" title="{{ 'general.search.back_to_previous' | t }}"></i> {{ 'general.search.back_to_previous' | t }}</a>                    
+        </div>
+      {% endif %}
+  </div>
+</div>
+{% if search.performed %}
+  {% if search.results_count > 0 %}
+    <hr aria-hidden="true" />
+  {% endif %}
+  <h2 class="visually-hidden">{{ 'general.search.heading' | t: count: search.results_count }}</h2>
+  <div class="page-width grid custom-grid">
+    {% for item in search.results %}
+      <div class="grid__item one-quarter">
+          {% if item.object_type == 'product' %}
+            {% include 'product-card-grid', product: item %}
+          {% else %}
+            <div class="product-card product-card--grid post-card--grid">
+              <div class="grid-view-item__link">
+                {% if item.image %}
+                  <div class="grid-view-item">
+                    <div class="grid-view-item__image-wrapper product-card__image-wrapper">
+                      <a href="{{item.url}}">
+                      	<img class="grid-view-item__image" src="{{ item.image.src | img_url: '600x600' }}" alt="{{ item.image.alt | escape }}">
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+                <div class="grid-view-item__title-column">
+                  <div class="article__title-featured" aria-hidden="true">
+                    <h3>
+                      <a href="{{ item.url }}" title="{{ item.title }}">
+                        {{ item.title }}
+                      </a>
+                    </h3>
+                  </div>
+                  <div class="article__grid-meta">
+                    {% if item.published_at %}
+                    	<i class="fa fa-calendar" aria-hidden="true"></i>
+                    	<span class="article__date">{{ item.published_at | date: format: "date" }}</span>
+                    {% endif %}
+                    <div class="article__grid-excerpt">{{ item.content | strip_html | truncate: 100 }}</div>
+                    <ul class="list--inline article__meta-buttons">
+                     <li>
+                        <a href="{{item.url}}" class="btn btn--tertiary btn--small">Full read</a>
+                     </li>
+                  </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% if paginate.pages > 1 %}
+    {% include 'pagination' %}
+  {% endif %}
+{% endif %}
+{% endpaginate %}
+ 
+<style>.template-search .post-card--grid .grid-view-item__image-wrapper .grid-view-item__image{position:relative}.template-search .post-card--grid .article__grid-excerpt{margin-top:12px}.template-search .post-card--grid .grid-view-item__image-wrapper{overflow:hidden}.template-search .post-card--grid .grid-view-item__image-wrapper a img{transition:transform .5s}.template-search .post-card--grid .grid-view-item__image-wrapper a:hover img{transform:scale(1.2)}@media only screen and (max-width:480px){.template-search .one-quarter{width:100%}}@media screen and (max-width:749px){.template-search .one-quarter{width:50%}}</style>

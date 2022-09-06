@@ -1,0 +1,105 @@
+{%- capture form -%}
+  {% form 'customer', id: 'DiscountPopup' %}
+    {%- assign posted_successfully = form.posted_successfully? -%}
+    <div class="form_title">{{ 'products.product.code_sent_to_email' | t}}</div>
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <div class="input-group {% if form.errors %} input-group--error{% endif %}">
+      <input type="email"
+        name="contact[email]"
+        class="input-group__field newsletter__input{% if form.errors %} input--error{% endif %}"
+        value="{{ form.email }}"
+        placeholder="{{ 'products.product.enter_email' | t }}"
+        aria-label="{{ 'products.product.enter_email' | t }}"
+        aria-required="true"
+        required
+        autocorrect="off"
+        autocapitalize="off"
+        {% if form.errors %}
+          aria-invalid="true"
+        {% endif %}>
+        {{ form.errors | default_errors }}
+      <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe">
+        <span class="newsletter__submit-text--large">{{ 'products.product.get_30_off_button' | t }}</span>
+      </button>
+    </div>
+
+
+    <a href="javascript:void(0)" class="js-close-popup">{{ 'products.product.do_not_a_code' | t}}</a>
+  {% endform %}
+{%- endcapture -%}
+
+{%- if posted_successfully -%}
+  {%- assign hide_message = '' -%}
+  {%- assign hide_form = 'hide' -%}
+{%- else -%}
+  {%- assign hide_form = '' -%}
+  {%- assign hide_message = 'hide' -%}
+{%- endif -%}
+<div class="product-discount-popup" id="product-discount-popup">
+  <div class="product-discount-popup_wrapper">
+    <button class="product-discount-popup_close js-close-popup"></button>
+    <div class="product-discount-popup_form js-discount-form">
+      <div class="product-discount-popup_form_header">
+        <div class="title">{{ 'products.product.get_30_off' | t}}</div>
+        <div class="subtitle">{{ 'products.product.code_valid_24h' | t}}</div>
+      </div>
+      {{form}}
+      <div class="product-discount-popup_form_bottom">{{ 'products.product.new_subscribers' | t}}</div>
+    </div>
+
+    <div class="product-discount-popup_message js-message-success hide">
+      <div class="product-discount-popup_message_title">{{ 'products.product.code_being_used' | t}}</div>
+      <div class="product-discount-popup_message_sub-1">{{ 'products.product.code_expire' | t}}</div>
+      <div class="product-discount-popup_message_sub-2">{{ 'products.product.check_your_junk' | t}}</div>
+    </div>
+  </div>
+</div>
+
+<a href="javascript:void(0)" class="product-discount-popup-button" id="product-discount-popup-button">
+  <svg width="24" height="23" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0)">
+    <path d="M23.188 1.11503C22.9249 0.848377 22.6087 0.639936 22.26 0.503202C21.9112 0.366469 21.5377 0.304489 21.1634 0.321276C19.2905 0.383707 17.3374 2.18527 16.5436 2.99686L11.8613 2.15851C11.3559 2.07126 10.8368 2.10673 10.3479 2.26194C9.85901 2.41715 9.41455 2.68755 9.05196 3.05037L0.704136 11.3982C0.251012 11.8529 -0.00341797 12.4686 -0.00341797 13.1106C-0.00341797 13.7525 0.251012 14.3683 0.704136 14.823L7.83903 21.9578C8.29372 22.411 8.90948 22.6654 9.5514 22.6654C10.1933 22.6654 10.8091 22.411 11.2638 21.9578L19.6027 13.61C19.9687 13.2496 20.2412 12.8054 20.3966 12.3158C20.552 11.8262 20.5856 11.3062 20.4945 10.8007L19.9059 7.50968C21.2395 6.97099 22.4038 6.08388 23.2772 4.94112C23.7427 4.4074 23.9917 3.7188 23.9752 3.01077C23.9587 2.30273 23.6779 1.62649 23.188 1.11503ZM18.7287 11.1396C18.7768 11.3624 18.7694 11.5936 18.7072 11.8128C18.645 12.0321 18.5298 12.2327 18.3719 12.3971L10.0241 20.736C9.90549 20.8536 9.74521 20.9196 9.57816 20.9196C9.41111 20.9196 9.25083 20.8536 9.13223 20.736L1.99734 13.6011C1.8797 13.4825 1.81369 13.3222 1.81369 13.1552C1.81369 12.9881 1.8797 12.8278 1.99734 12.7092L10.3362 4.36141C10.5988 4.0988 10.9549 3.95123 11.3262 3.95115C11.4092 3.94195 11.4929 3.94195 11.5759 3.95115L16.7309 4.84302C17.0124 4.89449 17.2715 5.03043 17.4738 5.23276C17.6761 5.43508 17.8121 5.69421 17.8636 5.97568L17.9171 6.27C17.3765 6.39396 16.8113 6.35358 16.2939 6.15405C16.1893 6.09661 16.0742 6.06074 15.9555 6.04858C15.8368 6.03642 15.7168 6.04821 15.6027 6.08325C15.4886 6.11829 15.3828 6.17587 15.2913 6.25258C15.1999 6.32929 15.1248 6.42357 15.0705 6.52983C15.0162 6.63609 14.9837 6.75217 14.9751 6.8712C14.9664 6.99023 14.9818 7.10978 15.0202 7.22277C15.0586 7.33577 15.1192 7.43991 15.1986 7.52902C15.278 7.61813 15.3745 7.69041 15.4823 7.74157H15.5269C16.0742 7.98409 16.6674 8.10577 17.266 8.09831C17.5799 8.09072 17.8928 8.06091 18.2025 8.00913L18.7287 11.1396ZM21.8056 3.93332C21.2175 4.70302 20.4486 5.31571 19.567 5.71704C19.4253 4.93542 18.9957 4.23533 18.363 3.75494C19.1256 2.94706 20.1139 2.38765 21.1991 2.14959C21.3275 2.14138 21.4562 2.16104 21.5762 2.20722C21.6963 2.2534 21.805 2.32502 21.8948 2.41715C22.091 2.58661 22.5191 2.97011 21.8056 3.93332ZM9.92599 15.7951C10.0963 15.9595 10.1943 16.1848 10.1985 16.4215C10.2027 16.6581 10.1127 16.8868 9.94828 17.0571C9.78389 17.2274 9.55858 17.3254 9.32191 17.3296C9.08524 17.3338 8.85661 17.2438 8.6863 17.0794L5.65397 14.047C5.48786 13.8799 5.39462 13.6539 5.39462 13.4183C5.39462 13.1827 5.48786 12.9566 5.65397 12.7895C5.73688 12.7059 5.83552 12.6396 5.9442 12.5943C6.05288 12.549 6.16945 12.5257 6.28719 12.5257C6.40493 12.5257 6.5215 12.549 6.63018 12.5943C6.73886 12.6396 6.8375 12.7059 6.92041 12.7895L9.92599 15.7951Z" fill="#EE8687"/>
+    </g>
+    <defs>
+    <clipPath id="clip0">
+    <rect width="24" height="22.3768" fill="white" transform="translate(0 0.3116)"/>
+    </clipPath>
+    </defs>
+  </svg>
+  <span>{{ 'products.product.want_a_code' | t}}</span>
+</a>
+{% comment %} <div class="test-content-46"></div> {% endcomment %}
+
+<script>
+  (() => {
+    let postedSuccessfully = {{posted_successfully | default: false}};
+    let triggerButton = document.getElementById('product-discount-popup-button');
+    let productDiscountPopup = document.getElementById('product-discount-popup');
+    let discountForm = productDiscountPopup.querySelector('.js-discount-form');
+    let discountMessage = productDiscountPopup.querySelector('.js-message-success');
+
+    if(postedSuccessfully){
+      discountForm.classList.add('hide');
+      discountMessage.classList.remove('hide');
+      productDiscountPopup.classList.add('is-open');
+      let newSearchParams = location.search.replace('?','').split('&').filter(param => !param.includes('customer_posted')).join('&');
+      if(!newSearchParams){
+        history.pushState({},"", window.location.pathname);
+      }else{
+        history.pushState({},"", `${window.location.pathname}?${newSearchParams}`);
+      }
+    }
+
+    triggerButton.addEventListener('click', () => {
+      productDiscountPopup.classList.add('is-open');
+    })
+
+    productDiscountPopup.querySelectorAll('.js-close-popup').forEach(closeBtn => {
+      closeBtn.addEventListener('click',() => {
+        productDiscountPopup.classList.remove('is-open');
+      })
+    })
+  })()
+</script>
+
+{% comment %} <style>.test-content-46{display:none;}body.test_46 .test-content-46{display:block;}</style> {% endcomment %}

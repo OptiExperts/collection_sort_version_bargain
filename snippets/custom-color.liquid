@@ -1,0 +1,22 @@
+{%- liquid
+  assign custom_color = settings.custom_color | split: ';'
+  assign contain_color = false
+-%}
+
+{%- for color in custom_color -%}
+  {%- liquid
+    assign label = color | split: ':' | first | strip | strip_newlines | downcase
+    assign value_downcase = value | strip | downcase
+  -%}
+  {%- if value_downcase == label -%}
+    {{-color | remove_first: label | remove_first: ':' | strip | strip_newlines -}}
+    {%- assign contain_color = true -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- unless contain_color -%}
+  {{value | handleize}}
+{%- endunless -%}
+
+

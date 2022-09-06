@@ -1,0 +1,96 @@
+<div class="test_02 delivery-estimate">
+<div class="drop-down-wrapper">
+  <h3 class="desktop" style="font-size:18px;">Delivery Estimate</h3>
+  <h3 class="mobile">Estimate Shipping Date</h3>
+<p class="description">
+Enter your state and postcode below to receive a shipping estimate
+</p>
+<input placeholder="Postcode" id="TextField2" class="Field__Input" aria-labelledby="Postcode" aria-invalid="false" value="">
+    <select>
+        <option value="">Select Your State</option>
+        <option value="approximately 2 - 3 working days">Victoria</option>
+        <option value="approximately 2 - 3 working days">New South Wales</option>
+        <option value="approximately 3 - 5 working days">South Australia</option>
+        <option value="approximately 3 - 5 working days">Australian Capital Territory</option>
+        <option value="approximately 4 - 7 working days">Queensland</option>
+        <option value="approximately 4 - 7 working days">Northern Territory</option>
+        <option value="approximately 4 - 7 working days">Tasmania</option>
+        <option value="approximately 4 - 7 working days">Western Australia</option>
+    </select>
+
+    <div class="country_dropdown">
+      <a href="#">Select your state</a>
+      <ul class="country_list">
+        {% for block in section.blocks %}
+          <li><input id="Country-{{ forloop.index }}" value="{{ block.settings.location }}" data-min="{{ block.settings.min_days }}" data-max="{{ block.settings.max_days }}" type="radio" name="Shipping-location"><label for="Country-{{ forloop.index }}">{{ block.settings.location }}</label></li>
+        {% endfor %}       
+      </ul>
+    </div>
+    <div class="chosen_location">
+      <h2>Your delivery location:</h2>
+      <h4 class="location"></h4>
+      <a class="change" href="#">Change</a>
+      <div class="estimated-date">
+        <strong><svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.462 8.72599C3.64804 8.91204 3.83409 8.97405 4.08215 8.97405C4.33021 8.97405 4.51626 8.91204 4.70231 8.72599L11.8961 1.53219C12.2062 1.22212 12.2062 0.663977 11.8961 0.291884C11.586 -0.0181932 11.0279 -0.0181932 10.6558 0.291884L4.08215 6.86553L1.60153 4.38491C1.22944 4.01281 0.733313 4.01281 0.36122 4.38491C0.0511427 4.69498 0.0511427 5.25312 0.36122 5.62522L3.462 8.72599Z" fill="#d72324"/>
+          </svg>
+           Delivered by <span class="date"></span></strong>
+        Estimated delivery is <span class="min"></span> - <span class="max"></span> business days
+      </div>
+    </div>
+  <p>&nbsp;</p>
+  <p class="desktop">Your estimated delivery date is:</p>
+    <h2 style="font-size:14px;text-align:left;">Please enter your postage details above</h2>
+</div>
+</div>
+
+<script>
+  $(document).ready(function(){ 
+        
+        $(".drop-down-wrapper select").on("change",function(){
+            var selVal = $(this).val();
+            $("h2").html(selVal);
+        });
+
+        const openDropDown = document.querySelector('.country_dropdown a');
+        const result = document.querySelector('.chosen_location');
+        const wrapper = document.querySelector('.country_dropdown .country_list');
+        const change = document.querySelector('.chosen_location .change');
+        openDropDown.addEventListener('click', () => {
+          wrapper.classList.add('active');
+        });
+
+        change.addEventListener('click', (e) => {
+          e.preventDefault();
+          wrapper.classList.add('active');
+          result.classList.remove('active');
+        })
+
+        const location = document.querySelector('.chosen_location .location')
+        const inputs = document.querySelectorAll('.country_dropdown input');
+        const dateWrapper = document.querySelector('.estimated-date .date');
+        const currentSeconds = new Date().getTime() / 1000;
+        const minWrapper = document.querySelector('.estimated-date .min');
+        const maxWrapper = document.querySelector('.estimated-date .max');
+        inputs.forEach(element => {
+          element.addEventListener('click', () => {
+            const value = element.value;
+            const min = element.dataset.min;
+            const max = element.dataset.max;         
+            const seconds = max * 24 * 60 * 60;    
+            const date = new Date((seconds + currentSeconds) * 1000);  
+            const month = new Intl.DateTimeFormat('en', { month: 'long' }).format(date);         
+            const year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
+            const day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);            
+            result.classList.add('active');
+            wrapper.classList.remove('active');
+            openDropDown.classList.add('hide');
+            location.innerHTML = value;
+            dateWrapper.innerHTML = `${month} ${day}, ${year}`;
+            minWrapper.innerHTML = min;
+            maxWrapper.innerHTML = max;
+          })
+        });
+        
+    });
+</script>

@@ -1,0 +1,35 @@
+<style>
+
+.comment-sp {
+	margin-bottom: 10px;
+}
+
+.comment:last-child {
+	margin-bottom: 0;
+}
+
+.comment__content_sb {
+	margin-bottom: 1px;
+}
+
+.comment__meta-item-sb {
+	margin-right: 5px;
+	font-size: 12px;
+}
+
+.comment__meta-item-sb:first-child::before {
+	content: '\2014 \0020';
+}    
+</style>  
+
+<div class="">
+  <a href="{{ article.url }}#comments" title="{{ comment.content | strip_html | truncate: 85  }}">
+<div class="comment__content_sb">
+ {{ comment.content | truncate: 45 }}
+</div>
+<div class="comment__meta">
+  <span class="comment__meta-item-sb">{{ comment.author  }}</span>
+  <span class="comment__meta-item-sb">{{ comment.created_at | time_tag: format: 'date' }}</span>
+</div>
+  </a>
+</div>

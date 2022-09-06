@@ -1,0 +1,628 @@
+<style>.shipping-bar.both-fixed{position:fixed;top:0;width:100%;z-index:999}.shipping-bar.shiiping-bar-fixed{position:fixed;top:0;width:100%;z-index:999}.shipping-bar{text-align:center;margin-left:0!important;margin-right:0!important;font-size:13px}.shipping-bar .grid__item{padding-left:0!important;padding-right:0!important}@media only screen and (max-width:749px){.shipping-bar .one-third{width:100%}}@media only screen and (max-width:749px){.shipping-bar .one-half{width:100%}}.shipping-bar{background-color:var(--bk-bfr-freeship)}.shipping-bar p{color:var(--txt-bfr-freeship);width:100%;padding-top:8px!important;padding-bottom:8px!important}.shipping-bar .anounc-free{color:var(--txt-aftr-freeship);background-color:var(--bk-aftr-freeship);width:100%;padding-top:8px!important;padding-bottom:8px!important}</style>
+{% if section.settings.top_bar_enable %}{% include 'shipping-bar' %}{% endif %}
+<div data-section-id="{{ section.id }}" data-section-type="header-section">
+   {% if section.settings.header_layout == 'center-logo' %}
+   {% include 'header-2' %}
+   {% else %}
+
+   <header class="site-header border-bottom logo--left" role="banner">
+      <div class="grid grid--no-gutters header-width grid--table site-header__mobile-nav">
+        <nav class="grid__item medium-up--four-sixths small--hide" id="SiteTabMenu" role="navigation">
+            {% include 'site-tab-menu' %}
+         </nav>
+        <div class="grid__item text-right site-header__icons medium-up--hide">
+            <div class="site-header__icons-wrapper">
+               {% unless linklists[section.settings.main_linklist_1] == blank and linklists[section.settings.main_linklist_3] == blank and linklists[section.settings.main_linklist_3] == blank %}
+               <button type="button"
+                  class="site-header__bars btn--link site-header__icon site-header__menu js-mobile-nav-toggle mobile-nav--open"
+                  aria-controls="MobileNav" aria-expanded="false" aria-label="{{ 'layout.navigation.menu' | t }}">
+                  <i class="fa fa-bars fa-lg " aria-hidden="true"></i>
+               </button>
+               {% endunless %}
+            </div>
+         </div>
+         <div class="grid__item medium-up--one-sixth left h2 site-header__logo">
+           <a href="/"> 
+           		<img src="{{ 'logo.svg' | asset_url }}" alt="{{ shop.name }}">
+           </a>
+         </div>
+         <nav class="grid__item medium-up--four-sixths small--hide site-header__menu" id="AccessibleNav" role="navigation">
+            {% include 'site-tab-nav' %}
+         </nav>
+         <div class="grid__item medium-up--one-quarter text-right site-header__icons{% if shop.customer_accounts_enabled %} site-header__icons--plus{% endif %}">
+            <div class="site-header__icons-wrapper">
+               {% if settings.show_multiple_currencies and template != 'index' %}
+               <div class="site-header__icon small--hide">
+                  {% include 'currency-picker' %}
+               </div>
+               {% endif %}
+               {% comment %} <div class="site-header__search site-header__icon">
+                  {% include 'search-form' %}
+
+               </div> {% endcomment %}
+               <div class="site-header__search-custom site-header__icon">
+                  {% include 'search-form-custom' %}
+               </div>
+               <button type="button" class="btn--link site-header__icon site-header__search-toggle js-drawer-open-top">
+                  <i class="fa fa-search fa-lg" aria-hidden="true" title="{{ 'layout.navigation.search' | t }}"></i>
+                  <span class="icon__fallback-text">{{ 'layout.navigation.search' | t }}</span>
+               </button>
+               {% if shop.customer_accounts_enabled %}
+               {% if customer %}
+               <a href="{{ routes.account_url }}" class="site-header__icon site-header__account"
+                  title="{{ 'layout.customer.account' | t }}">
+                  <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+                  <span class="icon__fallback-text">{{ 'layout.customer.account' | t }}</span>
+               </a>
+               {% else %}
+               <a href="/account/login?url={{ theme_role | theme_url }}" class="site-header__icon site-header__account"
+                  title="{{ 'layout.customer.log_in' | t }}">
+                  <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+                  <span class="icon__fallback-text">{{ 'layout.customer.log_in' | t }}</span>
+               </a>
+               {% endif %}
+               {% endif %}
+               <a href="{{ routes.cart_url }}" class="site-header__icon site-header__cart"
+                  title="{{ 'layout.cart.title' | t }}">
+                  <i class="fa fa-shopping-cart fa-lg"></i> <span
+                     class="icon__fallback-text">{{ 'layout.cart.title' | t }}</span>
+                  <div id="CartCount" class="site-header__cart-count{% if cart.item_count == 0 %} hide{% endif %}"
+                     data-cart-count-bubble>
+                     <span data-cart-count>{{ cart.item_count }}</span>
+                     <span
+                        class="icon__fallback-text medium-up--hide">{{ 'layout.cart.items_count' | t: count: cart.item_count }}</span>
+                  </div>
+               </a>
+
+                {%- if settings.enable_wishlist -%}
+              
+                  <a href="{{ routes.root }}/pages/wishlist" class="site-header__icon site-header__wishlist site-header__cart">
+                      <svg width="22" height="23" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  						<path d="M1.73738 2.02354C-0.580124 4.72138 -0.578129 9.06285 1.73738 11.7636L11.9937 23.7309C15.4164 19.7463 18.8392 15.7618 22.2619 11.7775C24.5794 9.07964 24.5794 4.73564 22.2619 2.03739C19.9444 -0.660442 16.2128 -0.660769 13.895 2.03739L12.0052 4.23706L10.1037 2.02338C7.78618 -0.674459 4.05459 -0.674459 1.73679 2.02338L1.73738 2.02354Z" fill="#000"/>
+						</svg>
+
+                      <div class="site-header__wishlist-count site-header__cart-count">
+                        <span id="WishlistCount">0</span>
+                      </div>
+                  </a>
+          
+                {%- endif -%}
+
+               {% unless linklists[section.settings.main_linklist] == blank %}
+               <button type="button"
+                  class="site-header__bars btn--link site-header__icon site-header__menu js-mobile-nav-toggle mobile-nav--open"
+                  aria-controls="MobileNav" aria-expanded="false" aria-label="{{ 'layout.navigation.menu' | t }}">
+                  <i class="fa fa-bars fa-lg " aria-hidden="true"></i>
+               </button>
+               {% endunless %}
+            </div>
+         </div>
+      </div>
+
+      {% include 'menu-mobile' %}
+
+      {% comment %}
+      <nav class="mobile-nav-wrapper medium-up--hide" role="navigation">
+         {% if settings.show_multiple_currencies and template != 'index' %}
+         {% include 'currency-picker' %}
+         {% endif %}
+         <ul id="MobileNav" class="mobile-nav">
+            {% for link in linklists[section.settings.main_linklist].links %}
+            {%- assign outerLoopIndex = forloop.index -%}
+            <li class="mobile-nav__item border-bottom">
+               {% if link.links != blank %}
+               {% capture child_list_handle %}{{ link.handle }}-{{ outerLoopIndex }}{% endcapture %}
+               <button type="button" class="btn--link js-ct-toggle-submenu mobile-nav__link
+              {% if link.child_active %} mobile-nav__link--active{% endif %}" data-target="{{ child_list_handle }}"
+                  data-level="1" aria-expanded="false">
+                  {{ link.title | escape }}
+               </button>
+               <ul class="mobile-nav__dropdown" data-parent="{{ child_list_handle }}" data-level="2">
+                  {% comment %} <li class="visually-hidden" tabindex="-1" data-menu-title="2">
+                     {{- link.title }} {{ 'layout.navigation.menu' | t -}}
+                  </li>
+                  <li class="mobile-nav__item border-bottom">
+                     <div class="mobile-nav__table">
+                        <button class="fa fa-angle-left btn--link js-toggle-submenu mobile-nav__return-btn"
+                           type="button" aria-expanded="true" aria-label="{{ link.title }}">
+                        </button>
+                        <span
+                           class="mobile-nav__sublist-link mobile-nav__sublist-header mobile-nav__sublist-header--main-nav-parent">
+                           {{ link.title | escape }}
+                        </span>
+                     </div>
+                  </li> {% endcomment %}
+                  {% for childlink in link.links %}
+                  <li class="mobile-nav__item second-lv
+                  {% comment %} {% unless forloop.last %} border-bottom{% endunless %} {% endcomment %}
+                  ">
+                     {% if childlink.links != blank %}
+                     {% capture grandchild_list_handle %}{{ childlink.handle }}-{{ outerLoopIndex }}-{{ forloop.index }}{% endcapture %}
+                     <button type="button"
+                        class="btn--link js-ct-toggle-submenu mobile-nav__link mobile-nav__sublist-link"
+                        data-target="{{ grandchild_list_handle }}" aria-expanded="false">
+                        {{ childlink.title | escape }}
+                     </button>
+                     <ul class="mobile-nav__dropdown" data-parent="{{ grandchild_list_handle }}" data-level="3">
+                        <li class="mobile-nav__item last-lv">
+                           <a href="{{ childlink.url }}" class="mobile-nav__sublist-link upp-link"
+                              title="{{ childlink.title | escape }}" {% if childlink.current %} aria-current="page"
+                              {% endif %}>
+                              Shop all
+                           </a>
+                        </li>
+                        {% comment %} <li class="visually-hidden" tabindex="-1" data-menu-title="3">
+                           {{- childlink.title }} {{ 'layout.navigation.menu' | t -}}
+                        </li>
+                        <li class="mobile-nav__item border-bottom">
+                           <div class="mobile-nav__table">
+                              <button type="button"
+                                 class="fa fa-angle-left btn--link js-toggle-submenu mobile-nav__return-btn"
+                                 data-target="{{ child_list_handle }}" aria-expanded="true"
+                                 aria-label="{{ childlink.title }}">
+                              </button>
+                              <a href="{{ childlink.url }}" class="mobile-nav__sublist-link mobile-nav__sublist-header"
+                                 {% if childlink.current %} aria-current="page" {% endif %}
+                                 title="{{ childlink.title | escape }}">
+                                 {{ childlink.title | escape }}
+                              </a>
+                           </div>
+                        </li> {% endcomment %}
+                        {% for grandchildlink in childlink.links %}
+                        <li class="mobile-nav__item last-lv
+                          {% comment %} {% unless forloop.last %} border-bottom{% endunless %} {% endcomment %}
+                          ">
+                           <a href="{{ grandchildlink.url }}" class="mobile-nav__sublist-link"
+                              {% if grandchildlink.current %} aria-current="page" {% endif %}
+                              title="{{ grandchildlink.title | escape }}">
+                              {{ grandchildlink.title | escape }}
+                           </a>
+                        </li>
+                        {% endfor %}
+                     </ul>
+                     {% else %}
+                     <a href="{{ childlink.url }}" class="mobile-nav__sublist-link" {% if childlink.current %}
+                        aria-current="page" {% endif %} title="{{ childlink.title | escape }}"
+                        title="{{ link.title | escape }}">
+                        {{ childlink.title | escape }}
+                     </a>
+                     {% endif %}
+                  </li>
+                  {% endfor %}
+               </ul>
+               {% else %}
+               <a href="{{ link.url }}" class="mobile-nav__link{% if link.active %} mobile-nav__link--active{% endif %}"
+                  {% if link.current %} aria-current="page" {% endif %} title="{{ link.title | escape }}">
+                  {{ link.title | escape }}
+               </a>
+               {% endif %}
+            </li>
+            {% endfor %}
+         </ul>
+      </nav>
+     {% endcomment %}
+   </header>
+   {% include 'confidence-bar' %}
+   {% include 'confidence-bar-mob' %}
+   {% include 'search-mobile' %}
+   {% endif %}
+</div>
+
+<script type="application/ld+json">
+   {
+   "@context": "http://schema.org",
+   "@type": "Organization",
+   "name": {{ shop.name | json }},
+   {% if section.settings.logo %}
+   {% assign image_size = section.settings.logo.width | append:'x' %}
+   "logo": {{ section.settings.logo | img_url: image_size | prepend: "https:" | json }},
+   {% endif %}
+   "sameAs": [
+   {{ settings.social_twitter_link | json }},
+   {{ settings.social_facebook_link | json }},
+   {{ settings.social_pinterest_link | json }},
+   {{ settings.social_instagram_link | json }},
+   {{ settings.social_tumblr_link | json }},
+   {{ settings.social_snapchat_link | json }},
+   {{ settings.social_youtube_link | json }},
+   {{ settings.social_vimeo_link | json }}
+   ],
+   "url": {{ shop.url | append: page.url | json }}
+   }
+   </script>
+   {% if template.name == 'index' %}
+   {% assign potential_action_target = shop.url | append: "{{ routes.search_url }}?q={search_term_string}" %}
+   {% endif %}
+   {% if section.settings.sticky_header_enable and section.settings.sticky_top_bar %}
+   <script language="JavaScript" type="text/javascript">$(window).scroll(function(){$(window).scrollTop()>135?$(".site-header,.shipping-bar,.page-container").addClass("both-fixed"):$(".site-header,.shipping-bar,.page-container").removeClass("both-fixed")});</script>
+   {% elsif section.settings.sticky_top_bar %}
+   <script language="JavaScript" type="text/javascript">$(window).scroll(function(){$(window).scrollTop()>54?$(".shipping-bar,.page-container").addClass("shiiping-bar-fixed"):$(".shipping-bar,.page-container").removeClass("shiiping-bar-fixed")});</script>
+   {% elsif section.settings.sticky_header_enable %}
+   <script type="text/javascript">$(window).scroll(function(){$(window).scrollTop()>80?$(".site-header,.page-container").addClass("header-fixed"):$(".site-header,.page-container").removeClass("header-fixed")});</script>
+   {% endif %}
+
+   {% schema %}
+   {
+     "name": {
+       "de": "Titel",
+       "en": "Header",
+       "es": "Encabezado",
+       "fr": "En-tête"
+     },
+     "settings": [
+       {
+         "type": "image_picker",
+         "id": "logo",
+         "label": {
+           "de": "Logo-Foto",
+           "en": "Logo image",
+           "es": "Logotipo",
+           "fr": "Image du logo"
+         },
+           "info": {
+             "de": "Maximale Höhe 60px",
+             "en": "Maximum height 60px",
+             "es": "Altura máxima 60px",
+             "fr": "Hauteur maximale 60px"
+           }
+       },
+       {
+         "type": "range",
+         "id": "logo_max_width",
+         "label": {
+           "de": "Logobreite",
+           "en": "Custom logo width",
+           "es": "Ancho del logotipo personalizado",
+           "fr": "Largeur personnalisée du logo"
+         },
+         "min": 50,
+         "max": 250,
+         "step": 2,
+         "unit": {
+           "de": "px",
+           "en": "px",
+           "es": "px",
+           "fr": "px"
+         },
+         "default": 100
+       },
+	  {
+         "type": "textarea",
+         "id": "logo_svg",
+         "label": {
+           "de": "Logo-SVG",
+           "en": "Logo SVG",
+           "es": "Logo SVG",
+           "fr": "SVG du logo"
+         },
+           "info": {
+             "de": "Maximale Höhe 60px",
+             "en": "Maximum height 60px",
+             "es": "Altura máxima 60px",
+             "fr": "Hauteur maximale 60px"
+           }
+       },
+      {
+           "type": "select",
+           "id": "header_layout",
+           "label": {
+             "de": "Select Layout",
+             "en": "Select Layout",
+             "es": "Select Layout",
+             "fr": "Select Layout"
+           },
+           "options": [
+             {
+               "value": "default",
+               "label": {
+                 "de": "Default",
+                 "en": "Default",
+                 "es": "Default",
+                 "fr": "Default"
+               }
+             },
+             {
+               "value": "center-logo",
+               "label": {
+                 "de": "Center Logo",
+                 "en": "Center Logo",
+                 "es": "Center Logo",
+                 "fr": "Center Logo"
+               }
+             }
+           ],
+           "default": "default"
+       },
+       {
+        "type": "text",
+        "id": "title_linklist_1",
+        "label": {
+          "de": "Title Menü 1",
+           "en": "Title Menu 1",
+           "es": "Title Menú 1",
+           "fr": "Title Menu 1"
+          },
+        "default": "INDOOR"
+       },
+       {
+         "type": "link_list",
+         "id": "main_linklist_1",
+         "label": {
+           "de": "Menü 1",
+           "en": "Menu 1",
+           "es": "Menú 1",
+           "fr": "Menu 1"
+         },
+         "default": "main-menu"
+       },
+       {
+        "type": "text",
+        "id": "title_linklist_2",
+        "label": {
+          "de": "Title Menü 2",
+           "en": "Title Menu 2",
+           "es": "Title Menú 2",
+           "fr": "Title Menu 2"
+          },
+        "default": "OUTDOOR"
+       },
+       {
+         "type": "link_list",
+         "id": "main_linklist_2",
+         "label": {
+           "de": "Menü 2",
+           "en": "Menu 2",
+           "es": "Menú 2",
+           "fr": "Menu 2"
+         },
+         "default": "main-menu"
+       },
+	   {
+        "type": "text",
+        "id": "title_linklist_3",
+        "label": {
+          "de": "Title Menü 3",
+           "en": "Title Menu 3",
+           "es": "Title Menú 3",
+           "fr": "Title Menu 3"
+          },
+        "default": "DIY"
+       },
+       {
+         "type": "link_list",
+         "id": "main_linklist_3",
+         "label": {
+           "de": "Menü 3",
+           "en": "Menu 3",
+           "es": "Menú 3",
+           "fr": "Menu 3"
+         },
+         "default": "main-menu"
+       },
+      {
+         "type": "link_list",
+         "id": "left_linklist",
+         "label": {
+           "de": "Left Menü",
+           "en": "Left Menu",
+           "es": "Left Menú",
+           "fr": "Left Menu"
+         },
+        "info": {
+           "de": "This Menu will only work, if Header Layout is set to Center Logo",
+         "en": "This Menu will only work, if Header Layout is set to Center Logo",
+           "es": "This Menu will only work, if Header Layout is set to Center Logo",
+           "fr": "This Menu will only work, if Header Layout is set to Center Logo"
+         },
+         "default": "main-menu"
+       },
+      {
+            "type": "checkbox",
+            "id": "sticky_header_enable",
+            "default": true,
+            "label": {
+             "de": "Sticky Header aktivieren",
+             "en": "Enable sticky header",
+             "es": "Activar encabezado adhesivo",
+             "fr": "Activer l'en-tête collant"
+           }
+         },
+       {
+         "type": "header",
+         "content": {
+           "de": "Ankündigungsbereich",
+           "en": "Announcement bar",
+           "es": "Barra de anuncios",
+           "fr": "Barre d'annonces"
+         }
+       },
+          {
+            "type": "checkbox",
+            "id": "top_bar_enable",
+            "default": true,
+           "label": {
+             "de": "aktivieren",
+             "en": "Enable",
+             "es": "activar",
+             "fr": "Activer"
+           }
+         },
+          {
+            "type": "checkbox",
+            "id": "sticky_top_bar",
+            "default": true,
+            "label": {
+             "de": "Klebrig",
+             "en": "Sticky",
+             "es": "Pegajosa",
+             "fr": "collante"
+           }
+         },
+          {
+            "type": "checkbox",
+            "id": "phone_enable",
+            "default": true,
+           "label": {
+             "de": "Telefon aktivieren",
+             "en": "Enable Phone",
+             "es": "Habilitar teléfono",
+             "fr": "Activer le téléphone"
+           }
+         },
+         {
+           "type": "text",
+           "id": "phone_txt",
+           "label": {
+             "de": "Telefon",
+             "en": "phone",
+             "es": "teléfono",
+             "fr": "téléphone"
+           },
+           "default": "000-111-222-666"
+         },
+          {
+            "type": "checkbox",
+            "id": "mail_enable",
+            "default": true,
+           "label": {
+             "de": "E-Mail aktivieren",
+             "en": "Enable Mail",
+             "es": "Habilitar correo electrónico",
+             "fr": "Activer l'E-Mail"
+           }
+         },
+         {
+           "type": "text",
+           "id": "mail_txt",
+           "label": {
+             "de": "E-Mail",
+             "en": "E-Mail",
+             "es": "E-Mail",
+             "fr": "E-Mail"
+           },
+           "default": "support@plaktheme.com"
+         },
+          {
+            "type": "checkbox",
+            "id": "freeship_bar_enable",
+            "default": true,
+           "label": {
+             "de": "Freier Versandtext aktivieren",
+             "en": "Enable freeshipping text",
+             "es": "Habilitar texto de envío gratuito",
+             "fr": "Activer le texte de livraison gratuite"
+           }
+         },
+         {
+           "type": "select",
+           "id": "ship_txt_select",
+           "label": {
+             "de": "Art auswählen",
+             "en": "Select type",
+             "es": "Seleccione tipo",
+             "fr": "Sélectionner le genre"
+           },
+           "options": [
+             {
+               "value": "ship_dynamic_bar_enable",
+               "label": {
+                 "de": "Dynamischer Text",
+                 "en": "Dynamic text",
+                 "es": "Texto dinámico",
+                 "fr": "Texte dynamique"
+               }
+             },
+             {
+               "value": "ship_static_bar_enable",
+               "label": {
+                 "de": "Statischer Text",
+                 "en": "Static text",
+                 "es": "Texto estático",
+                 "fr": "Texte statique"
+               }
+             }
+           ],
+           "default": "ship_static_bar_enable"
+         },
+       {
+         "type": "header",
+         "content": {
+                 "de": "Statischer Text",
+                 "en": "Static text",
+                 "es": "Texto estático",
+                 "fr": "Texte statique"
+         }
+       },
+         {
+           "type": "text",
+           "id": "static_txt",
+           "label": {
+             "de": "Text",
+             "en": "Text",
+             "es": "Texto",
+             "fr": "Texte"
+           },
+           "default": "Freeshipping worldwide"
+         },
+       {
+         "type": "header",
+         "content": {
+                 "de": "Dynamischer Text",
+                 "en": "Dynamic text",
+                 "es": "Texto dinámico",
+                 "fr": "Texte dynamique"
+         }
+       },
+         {
+           "type": "text",
+           "id": "announc-bfr",
+           "label": {
+             "de": "Text vor Preis",
+             "en": "Text before price",
+             "es": "Texto antes del precio",
+             "fr": "Texte avant prix"
+           },
+           "default": "Spend just"
+         },
+         {
+           "type": "text",
+           "id": "announc-aftr",
+           "label": {
+             "de": "Text nach Preis",
+             "en": "Text after price",
+             "es": "Texto después del precio",
+             "fr": "Texte après prix"
+           },
+           "default": "To Get The Shipping Free"
+         },
+         {
+           "type": "text",
+           "id": "announc-freshp",
+           "label": {
+             "de": "Erfolgstext",
+             "en": "Success text",
+             "es": "Texto de éxito",
+             "fr": "Texte de réussite"
+           },
+           "default": "Congrats ! You Got Freeshipping !"
+         },
+         {
+           "type": "text",
+           "id": "free-shipping",
+           "label": {
+             "de": "Freeshipping Preis",
+             "en": "Price to get freeshipping",
+             "es": "Precio de envío gratuito",
+             "fr": "Prix de la livraison gratuite"
+           },
+             "default": "60",
+           "info": {
+             "de": "Sie müssen den Freeshipping-Betrag in den Shopify-Einstellungen einstellen. Lerne mehr über [Free shipping over a set dollar amount ](https://help.shopify.com/en/manual/shipping/rates-and-methods/free-shipping)",
+             "en": "You have to set the freeshipping amount in Shopify settings. Learn more about [Free shipping over a set dollar amount ](https://help.shopify.com/en/manual/shipping/rates-and-methods/free-shipping)",
+             "es": "Tienes que establecer la cantidad de envío gratuito en la configuración de Shopify. Aprender más acerca de [Free shipping over a set dollar amount ](https://help.shopify.com/en/manual/shipping/rates-and-methods/free-shipping)",
+             "fr": "Vous devez définir le montant de la livraison gratuite dans les paramètres Shopify. En savoir plus sur [Free shipping over a set dollar amount ](https://help.shopify.com/en/manual/shipping/rates-and-methods/free-shipping)"
+           }
+   }
+     ]
+   }
+   {% endschema %}

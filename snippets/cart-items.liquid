@@ -1,0 +1,64 @@
+{%- liquid
+ 	assign productSelect 	= item.variant
+ 	assign product 			= item.product
+ 	assign image 			= productSelect.image | default: product.featured_image
+ 	assign img_url 			= image | img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+ 	assign ajaxQuantity 	= true
+-%}
+
+<div class="cart-item-block animation-fade-index-{{number}}" data-class="cart-item-block" data-line-item>
+	<div class="row no-gutters">
+		<div class="col-3">
+			<div class="featured_product__item-image">
+				<a href="{{product.url | within: collection }}">
+                  <img class="CartItem__Image" src="{{ image | img_url: '240x' }}" alt="{{ product.title | escape }}">
+				</a>
+			</div>
+		</div>
+		<div class="col-9">
+			<div class="featured_product__item-info">
+				<h6>
+					<a href="{{product.url | within: collection }}" data-item-url>
+						<span class="product-title" data-item-title>{{product.title}}</span>
+
+						{%- unless item.product.has_only_default_variant -%}
+							<span class="product-option" data-item-option>{{ item.options_with_values | map: 'value' | join: '/' }}</span>
+						{%- endunless -%}
+					</a>
+				</h6>
+
+				<div class="cart-info">
+					<div class="product-price">
+						{%- assign compare_price = productSelect.compare_at_price -%}
+						{%- assign price         = productSelect.price -%}
+
+						<span class="price" data-item-price>{%- render 'money-format', price: price -%}</span>
+						<span class="price-compare{% unless compare_price > price %} hide{% endunless -%}" data-item-price-compare>{%- render 'money-format', price: compare_price -%}</span>
+					</div>
+
+
+					<div class="product-qty product-cart">
+						{%- if ajaxQuantity -%}
+							<div class="qty-wrapper" data-quantity>
+								<div class="qty-select">
+									<a href="javascript:void(0);" class="qty-minus">-</a>
+
+									<input type="text" name="quantity" value="{{ item.quantity }}" pattern="[0-9]+" data-item-key="{{ item.key }}" min="1"{% if item.variant.inventory_policy != 'continue' %} max="{{item.variant.inventory_quantity}}"{% endif %}/>
+									<a href="javascript:void(0);" class="qty-plus">+</a>
+								</div>
+							</div>
+						{%- else -%}							
+							<span><span data-item-qty name="quantity" data-item-key="{{ item.key }}">{{ item.quantity }}</span>&times;<span data-item-qty-label>{{ item.quantity | pluralize: 'item', 'items' }}</span></span>
+							<a href="javascript:void(0);" class="cart-remove-item" data-item-key="{{ item.key }}" data-item-remove>{{ "cart.general.remove" | t }}</a>
+						{%- endif -%}
+					</div>
+				</div>
+				{%- if ajaxQuantity -%}
+					<div class="cart-remove">
+						<a href="javascript:void(0);" class="cart-remove-item" data-item-key="{{ item.key }}" data-item-remove>{{ "cart.general.remove" | t }}</a>
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	</div>
+</div>

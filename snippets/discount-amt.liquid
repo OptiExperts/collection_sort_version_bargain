@@ -1,0 +1,14 @@
+{% if variant.compare_at_price > variant.price %}
+<style>.dashb{background-color:{{settings.disc-bkamt}}}.save{color:{{settings.disc-txt-clr}};font-size:14px;font-weight: 500;}.save1{color:{{settings.disc-txtamt}};font-size:16px;font-weight: 600;}.save2{color:{{settings.disc-txtamt}};background-color:{{settings.disc-bkamt}};font-size:16px;}</style>  
+<div class="dashb"> 
+<span class="save"> <i class="fa fa-tag" aria-hidden="true"></i>
+    {{ 'products.product.discount_amount' | t }} &nbsp;
+</span>
+<span class="save1"> {{ variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round}}%
+</span> 
+<span class="save2" data-baseprice="{{  product.price }}">   
+    <span class="money">&nbsp{{ variant.compare_at_price | minus: variant.price | money_with_currency }}</span>
+</span>
+</div>  
+{% endif %}
+ 

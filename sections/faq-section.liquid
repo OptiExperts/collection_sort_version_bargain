@@ -1,0 +1,962 @@
+
+<style>.index-faq {display: flex;}.title-holder {text-align : {{section.settings.faq_h_layout}};font-size: {{section.settings.faq-h-sz}}px;background: {{section.settings.faq_h_bk}};color : {{section.settings.faq_h_txt}};}.title-holder h1,h2,h3{font-size: {{section.settings.faq-h-sz}}px;}.contact-form-pos {float: right;}.contact-form-pos img {width: 100%;}.faq-answer {display: none;}.faq-question {font-size: 13px;font-weight: 700;margin-top: 5px;background: {{section.settings.faq_q_bk}};color : {{section.settings.faq_q_txt}};padding: 10px;border: 1px solid #eaeaea;cursor: pointer;}
+  .faq-question span {display: inline-block;float: right;height: 15px;width: 15px;background: #bdbdbd;text-align: center;border-radius: 50%;text-align: center;color: #fff;}.faq-answer {background: {{section.settings.faq_a_bk}};padding: 20px 30px 30px;box-shadow: 5px 5px 65px #e7e7e7;margin-bottom: 25px;}.faq-answer p {color : {{section.settings.faq_a_txt}};font-size: {{section.settings.faq-a-sz}}px;  }.faq-wrapper .faq-question span i {text-stroke: 1px #bdbdbd;-webkit-text-stroke: 1px #bdbdbd;-moz-text-stroke: 1px #bdbdbd;-ms-text-stroke: 1px #bdbdbd;font-size: 15px;}.faq-wrapper .faq-question span {line-height: 16px;}.contact-form .grid--half-gutters, .contact-form .grid--half-gutters > .grid__item {margin-left : 0px !important;}.contact-form .grid--half-gutters .grid__item:nth-child(1) {padding-left : 0px !important;}@media only screen and (max-width: 667px) {.contact-form .grid--half-gutters .grid__item {padding-left : 0px !important;}}
+  @media (min-width: 200px) and (max-width: 600px) {
+    .index-faq {display: block;}
+  }
+</style>
+{% if section.settings.enable_contact %}
+{% assign faq-with = 'three-quarters' %}
+{% else %}
+{% assign faq-with = 'page-width' %}
+{% endif %}
+<div class="page-width grid__item medium-up--{{faq-with}}">
+   <div class="title-holder">
+  
+  
+      {% if section.settings.title != blank %}
+      {% if section.settings.faq-row-h == 'h1'%}
+        <h1>{{ section.settings.title | escape }}</h1>
+      {% elsif section.settings.faq-row-h == 'h2' %}
+        <h2>{{ section.settings.title | escape }}</h2>      
+      {% else %}
+        <h3>{{ section.settings.title | escape }}</h3>      
+      {% endif %}
+            {% endif %}  
+  
+     </div>
+
+  
+  
+  
+   {% if section.blocks.size > 0 %}
+   <div class="faq-wrapper">
+      {% for block in section.blocks %}
+      <div class="faq--{{ block.id }}" {{ block.shopify_attributes }}>
+      <div class="faq-individual">
+         {% if block.settings.question != blank %}
+         <div class="faq-question">{{ block.settings.question }} <span><i class="fa fa-plus"></i></span></div>
+         {% endif %}
+         {% if block.settings.answer != blank %}
+         <div class="faq-answer">{{ block.settings.answer }}</div>
+         {% endif %}
+      </div>
+   </div>
+   {% endfor %}
+</div>
+{% endif %}
+{% if section.blocks.size == 0 %}
+{% include 'no-blocks' %}
+{% endif %}
+</div>
+{% if section.settings.enable_contact %}
+<div class="page-width grid__item medium-up--one-quarter contact-form-pos {{section.settings.faq-visibility}}">
+   {% if section.settings.faq-img %}
+   <img class="lazyload medium-up animation--{{settings.lazyloading-effect}}" data-src="{{ section.settings.faq-img | img_url: '' }}" alt="{{ section.settings.faq-img.alt | escape }}">
+   {% endif %}
+   <div class="contact-form form-vertical">
+      <p> {{section.settings.contact-form-hd}} </p>
+      {%- assign formId = 'ContactForm' -%}
+      {% form 'contact', id: formId %}
+      {% include 'form-status', form_id: formId %}
+      <div class="grid grid--half-gutters">
+         <div class="grid__item medium-up--one-half">
+            <label for="{{ formId }}-name">{{ 'contact.form.name' | t }}</label>
+            <input type="text" id="{{ formId }}-name" name="contact[name]" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+         </div>
+         <div class="grid__item medium-up--one-half">
+            <label for="{{ formId }}-email">{{ 'contact.form.email' | t }} <span aria-hidden="true">*</span></label>
+            <input
+            type="email"
+            id="{{ formId }}-email"
+            name="contact[email]"
+            autocorrect="off"
+            autocapitalize="off"
+            value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+            aria-required="true"
+            {%- if form.errors contains 'email' -%}
+            class="input--error"
+            aria-invalid="true"
+            aria-describedby="{{ formId }}-email-error"
+            {%- endif -%}
+            >
+            {%- if form.errors contains 'email' -%}
+            <span id="{{ formId}}-email-error" class="input-error-message"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+            {%- endif -%}
+         </div>
+      </div>
+      <label for="{{ formId }}-phone">{{ 'contact.form.phone' | t }}</label>
+      <input type="tel" id="{{ formId }}-phone" name="contact[phone]" pattern="[0-9\-]*" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+      <label for="{{ formId }}-message">{{ 'contact.form.message' | t }}</label>
+      <textarea rows="10" id="{{ formId }}-message" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+      <input type="submit" class="btn" value="{{ 'contact.form.submit' | t }}">
+      {% endform %}
+   </div>
+</div>
+{% endif %}
+<script>jQuery(".faq-question").click(function(){jQuery(this).siblings(".faq-answer").slideToggle(),jQuery(this).parent().toggleClass("open-state"),jQuery(this).find(".fa").hasClass("fa-plus")?(jQuery(this).find(".fa").removeClass("fa-plus"),jQuery(this).find(".fa").addClass("fa-minus")):jQuery(this).find(".fa").hasClass("fa-minus")&&(jQuery(this).find(".fa").removeClass("fa-minus"),jQuery(this).find(".fa").addClass("fa-plus"))});</script>
+{% schema %}
+  {
+    "name": {
+    "cs": "FAQ",
+    "da": "FAQ",
+    "de": "FAQ",
+    "en": "FAQ",
+    "es": "FAQ",
+    "fi": "FAQ",
+    "fr": "FAQ",
+    "it": "FAQ",
+    "ja": "FAQ",
+    "ko": "FAQ",
+    "nb": "FAQ",
+    "nl": "FAQ",
+    "pl": "FAQ",
+    "pt-BR": "FAQ",
+    "pt-PT": "FAQ",
+    "sv": "FAQ",
+    "th": "FAQ",
+    "tr": "FAQ",
+    "vi": "FAQ",
+    "zh-CN": "FAQ",
+    "zh-TW": "FAQ"
+},
+    "class": "index-faq index-section",
+    "settings": [
+{
+   "type": "radio",
+   "id": "faq-visibility",
+   "options": [
+      { "value": "medium-up--hide", 
+        "label": {
+        "cs": "Pouze mobilní zařízení",
+        "da": "Kun mobil",
+        "de": "Nur mobil",
+        "en": "Mobile only",
+        "es": "Solo móvil",
+        "fi": "Vain mobiililaite",
+        "fr": "Mobile uniquement",
+        "it": "Solo cellulare",
+        "ja": "モバイルのみ",
+        "ko": "모바일 전용",
+        "nb": "Bare mobil",
+        "nl": "Alleen mobiel",
+        "pl": "Tylko telefon komórkowy",
+        "pt-BR": "Apenas para celular",
+        "pt-PT": "Apenas para celular",
+        "sv": "Bare mobil",
+        "th": "มือถือเท่านั้น",
+        "tr": "Yalnızca mobil",
+        "vi": "Chỉ di động",
+        "zh-CN": "仅限手机",
+        "zh-TW": "僅限手機"
+        }
+        },
+      { "value": "small--hide", 
+        "label": {
+        "cs": "Pouze počítač",
+        "da": "Kun computer",
+        "de": "Nur Computer",
+        "en": "Desktop only",
+        "es": "Solo computadora",
+        "fi": "Vain tietokone",
+        "fr": "Ordinateur uniquement",
+        "it": "Solo computer",
+        "ja": "コンピューターのみ",
+        "ko": "컴퓨터 전용",
+        "nb": "Bare datamaskin",
+        "nl": "Alleen computer",
+        "pl": "Tylko komputer",
+        "pt-BR": "Apenas computador",
+        "pt-PT": "Apenas computador",
+        "sv": "Endast dator",
+        "th": "คอมพิวเตอร์เท่านั้น",
+        "tr": "sadece bilgisayar",
+        "vi": "Chỉ máy tính",
+        "zh-CN": "仅计算机",
+        "zh-TW": "僅計算機"
+        }
+      },
+      { "value": "showboth",
+                "label": {
+        "cs": "Oba",
+        "da": "Begge",
+        "de": "Beide",
+        "en": "Both",
+        "es": "Ambos",
+        "fi": "Molemmat",
+        "fr": "Les deux",
+        "it": "Tutti e due",
+        "ja": "どちらも",
+        "ko": "양자 모두",
+        "nb": "Både",
+        "nl": "Beide",
+        "pl": "Obie",
+        "pt-BR": "Ambos",
+        "pt-PT": "Ambos",
+        "sv": "Både",
+        "th": "ทั้งคู่",
+        "tr": "Her ikisi de",
+        "vi": "Cả hai",
+        "zh-CN": "两个都",
+        "zh-TW": "兩個都"
+        }
+      }
+   ],
+          "label": {
+        "cs": "Viditelnost",
+        "da": "Sigtbarhed",
+        "de": "Sichtweite",
+        "en": "Visibility",
+        "es": "Visibilidad",
+        "fi": "Näkyvyys",
+        "fr": "Visibilité",
+        "it": "Visibilità",
+        "ja": "可視性",
+        "ko": "시계",
+        "nb": "Synlighet",
+        "nl": "Zichtbaarheid",
+        "pl": "Widoczność",
+        "pt-BR": "Visibilidade",
+        "pt-PT": "Visibilidade",
+        "sv": "Synlighet",
+        "th": "ทัศนวิสัย",
+        "tr": "görünürlük",
+        "vi": "Hiển thị",
+        "zh-CN": "能见度",
+        "zh-TW": "能見度"
+        },
+"default":   "showboth"
+},
+       {
+         "type": "checkbox",
+         "id": "enable_contact",
+         "default": true,
+        "label": {
+        "cs": "Povolit kontaktní formulář",
+        "da": "Aktiver kontaktformular",
+        "de": "Kontaktformular aktivieren",
+        "en": "Enable contact form",
+        "es": "Activar formulario de contacto",
+        "fi": "Ota yhteyslomake käyttöön",
+        "fr": "Activer le formulaire de contact",
+        "it": "Abilita modulo di contatto",
+        "ja": "お問い合わせフォームを有効にする",
+        "ko": "문의 양식 활성화",
+        "nb": "Aktiver kontaktskjema",
+        "nl": "Contactformulier inschakelen",
+        "pl": "Włącz formularz kontaktowy",
+        "pt-BR": "Habilitar formulário de contato",
+        "pt-PT": "Habilitar formulário de contato",
+        "sv": "Aktivera kontaktformulär",
+        "th": "เปิดใช้งานแบบฟอร์มการติดต่อ",
+        "tr": "İletişim formunu etkinleştir",
+        "vi": "Bật biểu mẫu liên hệ",
+        "zh-CN": "启用联系表单",
+        "zh-TW": "啟用聯繫表單"
+        }
+      },
+    {
+      "type": "image_picker",
+      "id": "faq-img",
+      "label": {
+        "cs": "Obrázek",
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pl": "Obraz",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "tr": "Görsel",
+        "vi": "Hình ảnh",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"
+      }
+    },
+      {
+        "type": "text",
+        "id": "title",
+        "label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+},
+        "default": "FAQ"
+      },
+      {
+        "type": "select",
+        "id": "faq-row-h",
+        "label": {
+        "cs": "Značka nadpisu",
+        "da": "Overskriftskode",
+        "de": "Überschrift-Tag",
+        "en": "Heading tag",
+        "es": "Etiqueta de encabezado",
+        "fi": "Otsikkotunniste",
+        "fr": "Balise d'en-tête",
+        "it": "Etichetta di intestazione",
+        "ja": "見出しタグ",
+        "ko": "제목 태그",
+        "nb": "Overskrift",
+        "nl": "Koptekst",
+        "pl": "Tag nagłówka",
+        "pt-BR": "Tag de cabeçalho",
+        "pt-PT": "Tag de cabeçalho",
+        "sv": "Rubrikmärke",
+        "th": "แท็กหัวเรื่อง",
+        "tr": "başlık etiketi",
+        "vi": "Thẻ tiêu đề",
+        "zh-CN": "标题标签",
+        "zh-TW": "標題標籤"
+        },
+        "options": [
+          {
+            "value": "h1",
+            "label": {
+        "cs": "h1",
+        "da": "h1",
+        "de": "h1",
+        "en": "h1",
+        "es": "h1",
+        "fi": "h1",
+        "fr": "h1",
+        "it": "h1",
+        "ja": "h1",
+        "ko": "h1",
+        "nb": "h1",
+        "nl": "h1",
+        "pl": "h1",
+        "pt-BR": "h1",
+        "pt-PT": "h1",
+        "sv": "h1",
+        "th": "h1",
+        "tr": "h1",
+        "vi": "h1",
+        "zh-CN": "h1",
+        "zh-TW": "h1"
+            }
+          },
+          {
+            "value": "h2",
+            "label": {
+        "cs": "h2",
+        "da": "h2",
+        "de": "h2",
+        "en": "h2",
+        "es": "h2",
+        "fi": "h2",
+        "fr": "h2",
+        "it": "h2",
+        "ja": "h2",
+        "ko": "h2",
+        "nb": "h2",
+        "nl": "h2",
+        "pl": "h2",
+        "pt-BR": "h2",
+        "pt-PT": "h2",
+        "sv": "h2",
+        "th": "h2",
+        "tr": "h2",
+        "vi": "h2",
+        "zh-CN": "h2",
+        "zh-TW": "h2"
+            }
+          },
+          {
+            "value": "h3",
+            "label": {
+        "cs": "h3",
+        "da": "h3",
+        "de": "h3",
+        "en": "h3",
+        "es": "h3",
+        "fi": "h3",
+        "fr": "h3",
+        "it": "h3",
+        "ja": "h3",
+        "ko": "h3",
+        "nb": "h3",
+        "nl": "h3",
+        "pl": "h3",
+        "pt-BR": "h3",
+        "pt-PT": "h3",
+        "sv": "h3",
+        "th": "h3",
+        "tr": "h3",
+        "vi": "h3",
+        "zh-CN": "h3",
+        "zh-TW": "h3"
+            }
+          }
+        ],
+        "default": "h2"
+      },
+      {
+        "type": "color",
+        "id": "faq_h_bk",
+        "label": {
+          "cs": "Pozadí",
+          "da": "Baggrund",
+          "de": "Hintergrund",
+          "en": "Background",
+          "es": "Fondo",
+          "fi": "Tausta",
+          "fr": "Couleur de fond",
+          "it": "Sfondo",
+          "ja": "背景",
+          "ko": "배경",
+          "nb": "Bakgrunn",
+          "nl": "Achtergrond",
+          "pl": "Tło",
+          "pt-BR": "Plano de fundo",
+          "pt-PT": "Fundo",
+          "sv": "Bakgrund",
+          "th": "พื้นหลัง",
+          "tr": "Arka plan",
+          "vi": "Nền",
+          "zh-CN": "背景",
+          "zh-TW": "背景"
+        },
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "faq_h_txt",
+        "label": {
+          "cs": "Text",
+          "da": "Tekst",
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fi": "Teksti",
+          "fr": "Texte",
+          "it": "Testo",
+          "ja": "テキスト",
+          "ko": "텍스트",
+          "nb": "Tekst",
+          "nl": "Tekst",
+          "pl": "Tekst",
+          "pt-BR": "Texto",
+          "pt-PT": "Texto",
+          "sv": "Text",
+          "th": "ข้อความ",
+          "tr": "Metin",
+          "vi": "Văn bản",
+          "zh-CN": "文本",
+          "zh-TW": "文字"
+        },
+        "default": "#000000"
+      },
+      {
+        "type": "range",
+        "id": "faq-h-sz",
+        "label": {
+          "cs": "Velikost textu",
+          "da": "Tekststørrelse",
+          "de": "Textgröße",
+          "en": "Text size",
+          "es": "Tamaño del texto",
+          "fi": "Tekstin koko",
+          "fr": "Taille du texte",
+          "it": "Dimensione testo",
+          "ja": "文字サイズ",
+          "ko": "텍스트 사이즈",
+          "nb": "Tekststørrelse",
+          "nl": "Tekengrootte",
+          "pl": "Rozmiar czcionki",
+          "pt-BR": "Tamanho do texto",
+          "pt-PT": "Tamanho do texto",
+          "sv": "Textstorlek",
+          "th": "ขนาดตัวอักษร",
+          "tr": "Metin boyutu",
+          "vi": "Cỡ văn bản",
+          "zh-CN": "文本大小",
+          "zh-TW": "文字尺寸"
+        },
+        "min": 12,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      },
+     {
+      "type": "select",
+      "id": "faq_h_layout",
+      "label": {
+        "cs": "Zarovnání textu",
+        "da": "Tekstjustering",
+        "de": "Textausrichtung",
+        "en": "Text alignment",
+        "es": "Alineación de texto",
+        "fi": "Tekstin tasaus",
+        "fr": "Alignement du texte",
+        "it": "Allineamento del testo",
+        "ja": "テキストアラインメント",
+        "ko": "텍스트 정렬",
+        "nb": "Tekstjustering",
+        "nl": "Tekstuitlijning",
+        "pl": "Wyrównanie tekstu",
+        "pt-BR": "Alinhamento de texto",
+        "pt-PT": "Alinhamento de texto",
+        "sv": "Textjustering",
+        "th": "การจัดตำแหน่งข้อความ",
+        "tr": "Metin hizalaması",
+        "vi": "Căn chỉnh văn bản",
+        "zh-CN": "文本对齐方式",
+        "zh-TW": "文字對齊"
+      },
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": {
+            "cs": "Doleva",
+            "da": "Venstre",
+            "de": "Links",
+            "en": "Left",
+            "es": "Izquierda",
+            "fi": "Vasen",
+            "fr": "Gauche",
+            "it": "Sinistra",
+            "ja": "左",
+            "ko": "왼쪽",
+            "nb": "Venstre",
+            "nl": "Links",
+            "pl": "Do lewej",
+            "pt-BR": "Esquerda",
+            "pt-PT": "Esquerda",
+            "sv": "Vänster",
+            "th": "ด้านซ้าย",
+            "tr": "Sol",
+            "vi": "Bên trái",
+            "zh-CN": "左侧",
+            "zh-TW": "左方"
+          }
+        },
+         {
+          "value": "center",
+          "label": {
+            "cs": "Na střed",
+            "da": "Centreret",
+            "de": "Mittig",
+            "en": "Centered",
+            "es": "Centrada",
+            "fi": "Keskitetty",
+            "fr": "Centré",
+            "it": "Centrato",
+            "ja": "中央揃え",
+            "ko": "센터 맞추기",
+            "nb": "Sentrert",
+            "nl": "Gecentreerd",
+            "pl": "Wyśrodkowane",
+            "pt-BR": "Centralizado",
+            "pt-PT": "Centrado",
+            "sv": "Centrera",
+            "th": "ตรงกลาง",
+            "tr": "Orta",
+            "vi": "Giữa",
+            "zh-CN": "居中",
+            "zh-TW": "置中"
+          }
+        },
+        {
+          "value": "right",
+          "label": {
+                "cs": "Doprava",
+                "da": "Højre",
+                "de": "Rechts",
+                "en": "Right",
+                "es": "Derecha",
+                "fi": "Oikea",
+                "fr": "Droite",
+                "it": "Destra",
+                "ja": "右",
+                "ko": "오른쪽",
+                "nb": "Høyre",
+                "nl": "Rechts",
+                "pl": "Do prawej",
+                "pt-BR": "Direita",
+                "pt-PT": "Direita",
+                "sv": "Höger",
+                "th": "ด้านขวา",
+                "tr": "Sağ",
+                "vi": "Bên phải",
+                "zh-CN": "右侧",
+                "zh-TW": "右方"
+          }
+        }
+      ]
+    },
+      {
+        "type": "header",
+        "content": {
+        "cs": "Otázka",
+        "da": "Spørgsmål",
+        "de": "Frage",
+        "en": "Question",
+        "es": "Pregunta",
+        "fi": "Kysymys",
+        "fr": "Question",
+        "it": "Domanda",
+        "ja": "質問",
+        "ko": "질문",
+        "nb": "Spørsmål",
+        "nl": "Vraag",
+        "pl": "Pytanie",
+        "pt-BR": "Pergunta",
+        "pt-PT": "Pergunta",
+        "sv": "Fråga",
+        "th": "คำถาม",
+        "tr": "Soru",
+        "vi": "Câu hỏi",
+        "zh-CN": "问题",
+        "zh-TW": "問題"
+        }
+      },
+      {
+        "type": "color",
+        "id": "faq_q_bk",
+        "label": {
+          "cs": "Pozadí",
+          "da": "Baggrund",
+          "de": "Hintergrund",
+          "en": "Background",
+          "es": "Fondo",
+          "fi": "Tausta",
+          "fr": "Couleur de fond",
+          "it": "Sfondo",
+          "ja": "背景",
+          "ko": "배경",
+          "nb": "Bakgrunn",
+          "nl": "Achtergrond",
+          "pl": "Tło",
+          "pt-BR": "Plano de fundo",
+          "pt-PT": "Fundo",
+          "sv": "Bakgrund",
+          "th": "พื้นหลัง",
+          "tr": "Arka plan",
+          "vi": "Nền",
+          "zh-CN": "背景",
+          "zh-TW": "背景"
+        },
+        "default": "#ececec"
+      },
+      {
+        "type": "color",
+        "id": "faq_q_txt",
+        "label": {
+          "cs": "Text",
+          "da": "Tekst",
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fi": "Teksti",
+          "fr": "Texte",
+          "it": "Testo",
+          "ja": "テキスト",
+          "ko": "텍스트",
+          "nb": "Tekst",
+          "nl": "Tekst",
+          "pl": "Tekst",
+          "pt-BR": "Texto",
+          "pt-PT": "Texto",
+          "sv": "Text",
+          "th": "ข้อความ",
+          "tr": "Metin",
+          "vi": "Văn bản",
+          "zh-CN": "文本",
+          "zh-TW": "文字"
+        },
+        "default": "#000000"
+      },
+      {
+        "type": "range",
+        "id": "faq-q-sz",
+        "label": {
+          "cs": "Velikost textu",
+          "da": "Tekststørrelse",
+          "de": "Textgröße",
+          "en": "Text size",
+          "es": "Tamaño del texto",
+          "fi": "Tekstin koko",
+          "fr": "Taille du texte",
+          "it": "Dimensione testo",
+          "ja": "文字サイズ",
+          "ko": "텍스트 사이즈",
+          "nb": "Tekststørrelse",
+          "nl": "Tekengrootte",
+          "pl": "Rozmiar czcionki",
+          "pt-BR": "Tamanho do texto",
+          "pt-PT": "Tamanho do texto",
+          "sv": "Textstorlek",
+          "th": "ขนาดตัวอักษร",
+          "tr": "Metin boyutu",
+          "vi": "Cỡ văn bản",
+          "zh-CN": "文本大小",
+          "zh-TW": "文字尺寸"
+        },
+        "min": 12,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 15
+      },
+      {
+        "type": "header",
+        "content": {
+        "cs": "Odpovědět",
+        "da": "Svar",
+        "de": "Antworten",
+        "en": "Answer",
+        "es": "Respuesta",
+        "fi": "Vastaus",
+        "fr": "Réponse",
+        "it": "Risposta",
+        "ja": "答え",
+        "ko": "답변",
+        "nb": "Svar",
+        "nl": "Antwoord",
+        "pl": "Odpowiadać",
+        "pt-BR": "Responder",
+        "pt-PT": "Responder",
+        "sv": "Svar",
+        "th": "ตอบ",
+        "tr": "Cevap",
+        "vi": "Trả lời",
+        "zh-CN": "回答",
+        "zh-TW": "回答"
+        }
+      },
+      {
+        "type": "color",
+        "id": "faq_a_bk",
+        "label": {
+          "cs": "Pozadí",
+          "da": "Baggrund",
+          "de": "Hintergrund",
+          "en": "Background",
+          "es": "Fondo",
+          "fi": "Tausta",
+          "fr": "Couleur de fond",
+          "it": "Sfondo",
+          "ja": "背景",
+          "ko": "배경",
+          "nb": "Bakgrunn",
+          "nl": "Achtergrond",
+          "pl": "Tło",
+          "pt-BR": "Plano de fundo",
+          "pt-PT": "Fundo",
+          "sv": "Bakgrund",
+          "th": "พื้นหลัง",
+          "tr": "Arka plan",
+          "vi": "Nền",
+          "zh-CN": "背景",
+          "zh-TW": "背景"
+        },
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "faq_a_txt",
+        "label": {
+          "cs": "Text",
+          "da": "Tekst",
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fi": "Teksti",
+          "fr": "Texte",
+          "it": "Testo",
+          "ja": "テキスト",
+          "ko": "텍스트",
+          "nb": "Tekst",
+          "nl": "Tekst",
+          "pl": "Tekst",
+          "pt-BR": "Texto",
+          "pt-PT": "Texto",
+          "sv": "Text",
+          "th": "ข้อความ",
+          "tr": "Metin",
+          "vi": "Văn bản",
+          "zh-CN": "文本",
+          "zh-TW": "文字"
+        },
+        "default": "#000000"
+      },
+      {
+        "type": "range",
+        "id": "faq-a-sz",
+        "label": {
+          "cs": "Velikost textu",
+          "da": "Tekststørrelse",
+          "de": "Textgröße",
+          "en": "Text size",
+          "es": "Tamaño del texto",
+          "fi": "Tekstin koko",
+          "fr": "Taille du texte",
+          "it": "Dimensione testo",
+          "ja": "文字サイズ",
+          "ko": "텍스트 사이즈",
+          "nb": "Tekststørrelse",
+          "nl": "Tekengrootte",
+          "pl": "Rozmiar czcionki",
+          "pt-BR": "Tamanho do texto",
+          "pt-PT": "Tamanho do texto",
+          "sv": "Textstorlek",
+          "th": "ขนาดตัวอักษร",
+          "tr": "Metin boyutu",
+          "vi": "Cỡ văn bản",
+          "zh-CN": "文本大小",
+          "zh-TW": "文字尺寸"
+        },
+        "min": 12,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 13
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text_block",
+        "name": "Item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "question",
+            "label": {
+        "cs": "Otázka",
+        "da": "Spørgsmål",
+        "de": "Frage",
+        "en": "Question",
+        "es": "Pregunta",
+        "fi": "Kysymys",
+        "fr": "Question",
+        "it": "Domanda",
+        "ja": "質問",
+        "ko": "질문",
+        "nb": "Spørsmål",
+        "nl": "Vraag",
+        "pl": "Pytanie",
+        "pt-BR": "Pergunta",
+        "pt-PT": "Pergunta",
+        "sv": "Fråga",
+        "th": "คำถาม",
+        "tr": "Soru",
+        "vi": "Câu hỏi",
+        "zh-CN": "问题",
+        "zh-TW": "問題"
+},
+            "default": "Add Question"
+          },
+          {
+            "type": "html",
+            "id": "answer",
+            "label": {
+        "cs": "Odpovědět",
+        "da": "Svar",
+        "de": "Antworten",
+        "en": "Answer",
+        "es": "Respuesta",
+        "fi": "Vastaus",
+        "fr": "Réponse",
+        "it": "Risposta",
+        "ja": "答え",
+        "ko": "답변",
+        "nb": "Svar",
+        "nl": "Antwoord",
+        "pl": "Odpowiadać",
+        "pt-BR": "Responder",
+        "pt-PT": "Responder",
+        "sv": "Svar",
+        "th": "ตอบ",
+        "tr": "Cevap",
+        "vi": "Trả lời",
+        "zh-CN": "回答",
+        "zh-TW": "回答"
+},
+            "default": "<p>Add Answer</p>"
+          }
+        ]
+      }
+    ],
+  "presets": [
+    {
+      "name": {
+    "cs": "FAQ",
+    "da": "FAQ",
+    "de": "FAQ",
+    "en": "FAQ",
+    "es": "FAQ",
+    "fi": "FAQ",
+    "fr": "FAQ",
+    "it": "FAQ",
+    "ja": "FAQ",
+    "ko": "FAQ",
+    "nb": "FAQ",
+    "nl": "FAQ",
+    "pl": "FAQ",
+    "pt-BR": "FAQ",
+    "pt-PT": "FAQ",
+    "sv": "FAQ",
+    "th": "FAQ",
+    "tr": "FAQ",
+    "vi": "FAQ",
+    "zh-CN": "FAQ",
+    "zh-TW": "FAQ"
+      },
+      "category": {
+        "cs": "Text",
+        "da": "Tekst",
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fi": "Teksti",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "ko": "텍스트",
+        "nb": "Tekst",
+        "nl": "Tekst",
+        "pl": "Tekst",
+        "pt-BR": "Texto",
+        "pt-PT": "Texto",
+        "sv": "Text",
+        "th": "ข้อความ",
+        "tr": "Metin",
+        "vi": "Văn bản",
+        "zh-CN": "文本",
+        "zh-TW": "文字"
+      }
+    }
+  ]
+  }
+{% endschema %}
+

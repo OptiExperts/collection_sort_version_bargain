@@ -1,0 +1,7 @@
+{% if section.settings.enable_trust%}
+<style>.bdg {width : 100%;}.bdg p{font-size : {{settings.trust-txt-sz}}px;color: {{settings.trust-clr}};}</style>
+<div class="bdg text-{{settings.trust-txtslc}}">
+  <p> {{settings.trust-txt}}</p>
+      <img class="lazyload animation--{{settings.lazyloading-effect}}" data-src="{{ 'secure-badge.jpg' | asset_url }}" alt="trust badge">
+</div>  
+{% endif %}

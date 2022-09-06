@@ -1,0 +1,38 @@
+
+{% layout none %}
+{% paginate search.results by 4 %}
+
+
+<div class="product-search">
+  <h3>Related products</h3>
+  <div class="product_container">
+  
+    {% for product in search.results %}  
+      
+      <div class="product_item">
+        <a href="{{ product.url }}">
+          <div class="img_wrapper">
+                <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.featured_image.alt }}">
+          </div>
+          <div class="product_info">
+            <div class="prod_title">{{ product.title }}</div>
+            {% include 'product-price', variant: product %}
+          </div>
+        </a>
+      </div>
+    {% endfor %}    
+  </div>
+</div>
+
+{% unless search.results_count == 0 %}
+  <div class="result_footer">
+    <a href="#">View all products <span>({{ search.results_count }})</span></a>  
+  </div>
+{% else %}
+  <div class="emptyState">
+    No results
+  </div>
+{% endunless %}
+{% endpaginate %}
+ 
+

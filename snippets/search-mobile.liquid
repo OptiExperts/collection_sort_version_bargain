@@ -1,0 +1,27 @@
+<div class="search-mobile">
+    <form action="{{ routes.search_url }}" method="get" class="search-header-mobile search" role="search">
+        <input class="search-header__input search__input"
+          type="search"
+          name="q"
+          placeholder="{{ 'general.search.placeholder' | t }}"
+          aria-label="{{ 'general.search.placeholder' | t }}">
+        <button data-id="SearchMobile" class="search-header__submit search__submit btn--link site-header__icon" type="submit">
+            {% include 'icon-search' %}
+          <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
+        </button>
+      </form>
+      
+      <div class="search-result-wrapper" id="SearchMobile">
+        <div class="search-collections">
+           <h3>Related Categories</h3>
+          <div class="collection_container">
+            <ul></ul>
+          </div>
+        </div>
+        <div class="search-autocomplete-results">
+          {% include 'search-result' %}
+        </div> 
+      </div> 
+      
+      
+</div>

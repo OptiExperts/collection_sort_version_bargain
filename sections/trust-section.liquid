@@ -1,0 +1,589 @@
+<style>.three-blocks{text-align:center;margin-top:40px}.three-blocks .h3, .three-blocks .h2, .three-blocks .h1,.three-blocks h3, .three-blocks h2,.three-blocks h1{display:flex;width:100%;justify-content:center;align-items:center;text-align:center;color:{{section.settings.blocks-hd-clr}}}.three-blocks .h4,.three-blocks h4{color:{{section.settings.blocks-subhd-clr}}}.three-blocks p{color:{{section.settings.blocks-txt-clr}}}.three-blocks .h3:after,.three-blocks .h3:before,.three-blocks h3:after,.three-blocks h3:before,.three-blocks .h2:after,.three-blocks .h2:before,.three-blocks h2:after,.three-blocks h2:before,.three-blocks .h1:after,.three-blocks .h1:before,.three-blocks h1:after,.three-blocks h1:before{content:'';border-top:2px solid;margin:0 20px 0 0;flex:1 0 20px}.three-blocks .h3:after,.three-blocks h3:after{margin:0 0 0 20px}.three-blocks .content-box img{margin-bottom:15px;width:100%;height:100%}.three-blocks .content-box .h4,.three-blocks .content-box h4{margin-bottom:12px}</style>  
+{% case section.blocks.size %}
+{% when 2 %}
+{% assign trus-items = 'one-half' %}
+{% when 3 %}
+{% assign trus-items = 'one-third' %}
+{% when 4 %}
+{% assign trus-items = 'one-quarter' %}
+{% when 5 %}
+{% assign trus-items = 'one-fifth' %}
+{% when 6 %}
+{% assign trus-items = 'one-sixth' %}
+{%-endcase %}
+<div  class="three-blocks {{section.settings.trustblock-visibility}}">
+   <div class="page-width">     
+  {% if section.settings.block_big_head != blank %}  
+          {% if section.settings.trust-h == 'h1'%}
+        <h1 class="section-header text-center">{{ section.settings.block_big_head | escape }}</h1>
+      {% elsif section.settings.trust-h == 'h2' %}
+        <h2 class="section-header text-center">{{ section.settings.block_big_head | escape }}</h2>      
+      {% else %}
+        <h3 class="section-header text-center">{{ section.settings.block_big_head | escape }}</h3>      
+      {% endif %} 
+  {% endif %}          
+      <div class="grid">
+         {% for block in section.blocks %}
+         <div class="content-box grid__item small--one-whole medium-up--{{trus-items}}">
+            <img src="{{ block.settings.block_one_img | img_url: '1x1' }}" data-src="{{ block.settings.block_one_img | img_url: '' }}" alt="{{ block.settings.block_one_heading }}" class="lazyload animation--{{settings.lazyloading-effect}}" data-expand="-40">
+            <h4>{{ block.settings.block_one_heading }}</h4>
+            <p>{{ block.settings.block_one_content }}</p>
+         </div>
+         {% endfor %}
+      </div>
+   </div>
+</div>
+{% schema %}
+{
+  "name": {
+        "cs": "Sekce důvěry",
+        "da": "Tillidsafdeling",
+        "de": "Vertrauensbereich",
+        "en": "Trust section",
+        "es": "Sección de confianza",
+        "fi": "Luottamus-osio",
+        "fr": "Section de confiance",
+        "it": "Sezione fiducia",
+        "ja": "信託セクション",
+        "ko": "신뢰 섹션",
+        "nb": "Tillitsavdeling",
+        "nl": "Vertrouwen sectie",
+        "pl": "Sekcja zaufania",
+        "pt-BR": "Seção de confiança",
+        "pt-PT": "Seção de confiança",
+        "sv": "Förtroende avsnitt",
+        "th": "ส่วนความน่าเชื่อถือ",
+        "tr": "Güven bölümü",
+        "vi": "Phần tin cậy",
+        "zh-CN": "信托部分",
+        "zh-TW": "信託部分"
+  },
+  "max_blocks": 6,
+  "settings": [
+	  {
+      "type": "header",
+      "content": {
+        "cs": "Sekce důvěry",
+        "da": "Tillidsafdeling",
+        "de": "Vertrauensbereich",
+        "en": "Trust section",
+        "es": "Sección de confianza",
+        "fi": "Luottamus-osio",
+        "fr": "Section de confiance",
+        "it": "Sezione fiducia",
+        "ja": "信託セクション",
+        "ko": "신뢰 섹션",
+        "nb": "Tillitsavdeling",
+        "nl": "Vertrouwen sectie",
+        "pl": "Sekcja zaufania",
+        "pt-BR": "Seção de confiança",
+        "pt-PT": "Seção de confiança",
+        "sv": "Förtroende avsnitt",
+        "th": "ส่วนความน่าเชื่อถือ",
+        "tr": "Güven bölümü",
+        "vi": "Phần tin cậy",
+        "zh-CN": "信托部分",
+        "zh-TW": "信託部分"
+      }
+	},
+{
+   "type": "radio",
+   "id": "trustblock-visibility",
+   "options": [
+      { "value": "medium-up--hide", 
+        "label": {
+        "cs": "Pouze mobilní zařízení",
+        "da": "Kun mobil",
+        "de": "Nur mobil",
+        "en": "Mobile only",
+        "es": "Solo móvil",
+        "fi": "Vain mobiililaite",
+        "fr": "Mobile uniquement",
+        "it": "Solo cellulare",
+        "ja": "モバイルのみ",
+        "ko": "모바일 전용",
+        "nb": "Bare mobil",
+        "nl": "Alleen mobiel",
+        "pl": "Tylko telefon komórkowy",
+        "pt-BR": "Apenas para celular",
+        "pt-PT": "Apenas para celular",
+        "sv": "Bare mobil",
+        "th": "มือถือเท่านั้น",
+        "tr": "Yalnızca mobil",
+        "vi": "Chỉ di động",
+        "zh-CN": "仅限手机",
+        "zh-TW": "僅限手機"
+        }
+        },
+      { "value": "small--hide", 
+        "label": {
+        "cs": "Pouze počítač",
+        "da": "Kun computer",
+        "de": "Nur Computer",
+        "en": "Desktop only",
+        "es": "Solo computadora",
+        "fi": "Vain tietokone",
+        "fr": "Ordinateur uniquement",
+        "it": "Solo computer",
+        "ja": "コンピューターのみ",
+        "ko": "컴퓨터 전용",
+        "nb": "Bare datamaskin",
+        "nl": "Alleen computer",
+        "pl": "Tylko komputer",
+        "pt-BR": "Apenas computador",
+        "pt-PT": "Apenas computador",
+        "sv": "Endast dator",
+        "th": "คอมพิวเตอร์เท่านั้น",
+        "tr": "sadece bilgisayar",
+        "vi": "Chỉ máy tính",
+        "zh-CN": "仅计算机",
+        "zh-TW": "僅計算機"
+        }
+      },
+      { "value": "showboth",
+                "label": {
+        "cs": "Oba",
+        "da": "Begge",
+        "de": "Beide",
+        "en": "Both",
+        "es": "Ambos",
+        "fi": "Molemmat",
+        "fr": "Les deux",
+        "it": "Tutti e due",
+        "ja": "どちらも",
+        "ko": "양자 모두",
+        "nb": "Både",
+        "nl": "Beide",
+        "pl": "Obie",
+        "pt-BR": "Ambos",
+        "pt-PT": "Ambos",
+        "sv": "Både",
+        "th": "ทั้งคู่",
+        "tr": "Her ikisi de",
+        "vi": "Cả hai",
+        "zh-CN": "两个都",
+        "zh-TW": "兩個都"
+        }
+      }
+   ],
+          "label": {
+        "cs": "Viditelnost",
+        "da": "Sigtbarhed",
+        "de": "Sichtweite",
+        "en": "Visibility",
+        "es": "Visibilidad",
+        "fi": "Näkyvyys",
+        "fr": "Visibilité",
+        "it": "Visibilità",
+        "ja": "可視性",
+        "ko": "시계",
+        "nb": "Synlighet",
+        "nl": "Zichtbaarheid",
+        "pl": "Widoczność",
+        "pt-BR": "Visibilidade",
+        "pt-PT": "Visibilidade",
+        "sv": "Synlighet",
+        "th": "ทัศนวิสัย",
+        "tr": "görünürlük",
+        "vi": "Hiển thị",
+        "zh-CN": "能见度",
+        "zh-TW": "能見度"
+        },
+"default":   "showboth"
+},
+    {
+      "type": "text",
+      "id": "block_big_head",
+      "label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Überschrift",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+	  },
+    "default": "Top reasons to shop with us"
+    },
+      {
+        "type": "select",
+        "id": "trust-h",
+        "label": {
+        "cs": "Značka nadpisu",
+        "da": "Overskriftskode",
+        "de": "Überschrift-Tag",
+        "en": "Heading tag",
+        "es": "Etiqueta de encabezado",
+        "fi": "Otsikkotunniste",
+        "fr": "Balise d'en-tête",
+        "it": "Etichetta di intestazione",
+        "ja": "見出しタグ",
+        "ko": "제목 태그",
+        "nb": "Overskrift",
+        "nl": "Koptekst",
+        "pl": "Tag nagłówka",
+        "pt-BR": "Tag de cabeçalho",
+        "pt-PT": "Tag de cabeçalho",
+        "sv": "Rubrikmärke",
+        "th": "แท็กหัวเรื่อง",
+        "tr": "başlık etiketi",
+        "vi": "Thẻ tiêu đề",
+        "zh-CN": "标题标签",
+        "zh-TW": "標題標籤"
+        },
+        "options": [
+          {
+            "value": "h1",
+            "label": {
+        "cs": "h1",
+        "da": "h1",
+        "de": "h1",
+        "en": "h1",
+        "es": "h1",
+        "fi": "h1",
+        "fr": "h1",
+        "it": "h1",
+        "ja": "h1",
+        "ko": "h1",
+        "nb": "h1",
+        "nl": "h1",
+        "pl": "h1",
+        "pt-BR": "h1",
+        "pt-PT": "h1",
+        "sv": "h1",
+        "th": "h1",
+        "tr": "h1",
+        "vi": "h1",
+        "zh-CN": "h1",
+        "zh-TW": "h1"
+            }
+          },
+          {
+            "value": "h2",
+            "label": {
+        "cs": "h2",
+        "da": "h2",
+        "de": "h2",
+        "en": "h2",
+        "es": "h2",
+        "fi": "h2",
+        "fr": "h2",
+        "it": "h2",
+        "ja": "h2",
+        "ko": "h2",
+        "nb": "h2",
+        "nl": "h2",
+        "pl": "h2",
+        "pt-BR": "h2",
+        "pt-PT": "h2",
+        "sv": "h2",
+        "th": "h2",
+        "tr": "h2",
+        "vi": "h2",
+        "zh-CN": "h2",
+        "zh-TW": "h2"
+            }
+          },
+          {
+            "value": "h3",
+            "label": {
+        "cs": "h3",
+        "da": "h3",
+        "de": "h3",
+        "en": "h3",
+        "es": "h3",
+        "fi": "h3",
+        "fr": "h3",
+        "it": "h3",
+        "ja": "h3",
+        "ko": "h3",
+        "nb": "h3",
+        "nl": "h3",
+        "pl": "h3",
+        "pt-BR": "h3",
+        "pt-PT": "h3",
+        "sv": "h3",
+        "th": "h3",
+        "tr": "h3",
+        "vi": "h3",
+        "zh-CN": "h3",
+        "zh-TW": "h3"
+            }
+          }
+        ],
+        "default": "h2"
+      },
+      {
+        "type": "color",
+        "id": "blocks-hd-clr",
+        "label": {
+          "cs": "Nadpis",
+          "da": "Overskrift",
+          "de": "Titel",
+          "en": "Heading",
+          "es": "Título",
+          "fi": "Otsake",
+          "fr": "En-tête",
+          "it": "Heading",
+          "ja": "見出し",
+          "ko": "제목",
+          "nb": "Overskrift",
+          "nl": "Kop",
+          "pl": "Nagłówek",
+          "pt-BR": "Título",
+          "pt-PT": "Título",
+          "sv": "Rubrik",
+          "th": "ส่วนหัว",
+          "tr": "Başlık",
+          "vi": "Tiêu đề",
+          "zh-CN": "标题",
+          "zh-TW": "標題"
+        },
+        "default": "#A0A0A0"
+      },
+      {
+        "type": "color",
+        "id": "blocks-subhd-clr",
+        "label": {
+          "cs": "Podnadpis",
+          "da": "Underoverskrift",
+          "de": "Untertitel",
+          "en": "Subheading",
+          "es": "Subtítulo",
+          "fi": "Alaotsikko",
+          "fr": "Sous-titre",
+          "it": "Sottotitolo",
+          "ja": "小見出し",
+          "ko": "소제목",
+          "nb": "Underoverskrift",
+          "nl": "Subkop",
+          "pl": "Nagłówek podrzędny",
+          "pt-BR": "Subtítulo",
+          "pt-PT": "Subtítulo",
+          "sv": "Underrubrik",
+          "th": "หัวเรื่องย่อย",
+          "tr": "Alt başlık",
+          "vi": "Tiêu đề phụ",
+          "zh-CN": "副标题",
+          "zh-TW": "子標題"
+        },
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "blocks-txt-clr",
+        "label": {
+          "cs": "Text",
+          "da": "Tekst",
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fi": "Teksti",
+          "fr": "Texte",
+          "it": "Testo",
+          "ja": "テキスト",
+          "ko": "텍스트",
+          "nb": "Tekst",
+          "nl": "Tekst",
+          "pl": "Tekst",
+          "pt-BR": "Texto",
+          "pt-PT": "Texto",
+          "sv": "Text",
+          "th": "ข้อความ",
+          "tr": "Metin",
+          "vi": "Văn bản",
+          "zh-CN": "文本",
+          "zh-TW": "文字"
+        },
+        "default": "#A9A9A9"
+      }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": {
+        "cs": "Obrázek",
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pl": "Obraz",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "tr": "Görsel",
+        "vi": "Hình ảnh",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"
+      },
+      "settings": [
+    {
+      "type": "image_picker",
+      "id": "block_one_img",
+      "label": {
+        "cs": "Obrázek",
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pl": "Obraz",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "tr": "Görsel",
+        "vi": "Hình ảnh",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"
+	  }
+    },
+    {
+      "type": "text",
+      "id": "block_one_heading",
+      "label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Überschrift",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+	  },
+    "default": "Fast Shipping"
+    },
+   {
+      "type": "richtext",
+      "id": "block_one_content",
+      "label": {
+        "cs": "Text",
+        "da": "Tekst",
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fi": "Teksti",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "ko": "텍스트",
+        "nb": "Tekst",
+        "nl": "Tekst",
+        "pl": "Tekst",
+        "pt-BR": "Texto",
+        "pt-PT": "Texto",
+        "sv": "Text",
+        "th": "ข้อความ",
+        "tr": "Metin",
+        "vi": "Văn bản",
+        "zh-CN": "文本",
+        "zh-TW": "文字"
+	  }
+    }
+]
+}
+],
+  "presets": [
+    {
+      "name": {
+        "cs": "Sekce důvěry",
+        "da": "Tillidsafdeling",
+        "de": "Vertrauensbereich",
+        "en": "Trust section",
+        "es": "Sección de confianza",
+        "fi": "Luottamus-osio",
+        "fr": "Section de confiance",
+        "it": "Sezione fiducia",
+        "ja": "信託セクション",
+        "ko": "신뢰 섹션",
+        "nb": "Tillitsavdeling",
+        "nl": "Vertrouwen sectie",
+        "pl": "Sekcja zaufania",
+        "pt-BR": "Seção de confiança",
+        "pt-PT": "Seção de confiança",
+        "sv": "Förtroende avsnitt",
+        "th": "ส่วนความน่าเชื่อถือ",
+        "tr": "Güven bölümü",
+        "vi": "Phần tin cậy",
+        "zh-CN": "信托部分",
+        "zh-TW": "信託部分"
+      },
+      "category": {
+        "cs": "Obrázek",
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pl": "Obraz",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "tr": "Görsel",
+        "vi": "Hình ảnh",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"   
+},
+      "blocks": [
+        {
+          "type": "link_list"
+        },
+        {
+          "type": "link_list"
+        },
+        {
+          "type": "link_list"
+        }
+]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,161 @@
+<style>.site-header.logo--center .site-header__icons{width:25%}.site-header.logo--center nav{padding-left:20px;padding-right:20px}.site-header.logo--center .site-header__icons .site-header__account,.site-header.logo--center .site-header__icons .site-header__cart{padding-left:0;padding-right:8px}@media only screen and (max-width:1250px){.site-header.logo--center .site-header__icons{width:30%}}@media only screen and (min-width:750px) and (max-width:992px){.site-header.logo--center .site-header__icons{width:25%}.site-header__search-toggle{padding-left:0;}.site-header__icon i{width:18px;height:18px;}.switcher-currency .flags{display:none;}.switcher-currency{padding:0;}}</style>
+<header class="site-header border-bottom logo--center" role="banner">  
+  <div class="grid grid--no-gutters grid--table site-header__mobile-nav">
+      <nav class="grid__item medium-up--four-sixths small--hide" id="AccessibleNavLeft" role="navigation">
+          {% include 'site-nav-left' %}
+      </nav>
+      <div class="grid__item medium-up--one-sixth left h2 site-header__logo">
+          {% if section.settings.logo %}
+            {%- assign img_url = section.settings.logo | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+        <a href="{{ routes.root_url }}">      
+        {% capture logo_alt %}{{ section.settings.logo.alt | default: shop.name }}{% endcapture %}
+              <img class="lazyload js"
+                   src="{{ section.settings.logo | img_url: '' }}"
+                   data-src="{{ img_url }}"
+                   data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                   data-aspectratio="{{ section.settings.logo.aspect_ratio }}"
+                   data-sizes="auto"
+                   alt="{{ logo_alt | escape }}"
+                   style="max-width: {{ section.settings.logo_max_width }}px">
+        </a>
+          {% else %} <p>{{ shop.name }}</p> {% endif %}          
+      </div>
+        <nav class="grid__item medium-up--four-sixths small--hide" id="AccessibleNav" role="navigation">
+          {% include 'site-nav' %}
+        </nav>
+      <div class="grid__item medium-up--one-quarter text-right site-header__icons{% if shop.customer_accounts_enabled %} site-header__icons--plus{% endif %}">
+        <div class="site-header__icons-wrapper">
+          {% if settings.show_multiple_currencies and template != 'index' %}
+          <div class="site-header__icon small--hide">
+          	{% include 'currency-picker' %}
+          </div>
+          {% endif %}
+          <div class="site-header__search site-header__icon">
+            {% include 'search-form' %}
+          </div>
+          <button type="button" class="btn--link site-header__icon site-header__search-toggle js-drawer-open-top">
+<i class="fa fa-search fa-lg" aria-hidden="true" title="{{ 'layout.navigation.search' | t }}"></i>
+            <span class="icon__fallback-text">{{ 'layout.navigation.search' | t }}</span>
+          </button>
+          {% if shop.customer_accounts_enabled %}
+            {% if customer %}
+              <a href="{{ routes.account_url }}" class="site-header__icon site-header__account" title="{{ 'layout.customer.account' | t }}">
+<i class="fa fa-user fa-lg" aria-hidden="true"></i>
+                <span class="icon__fallback-text">{{ 'layout.customer.account' | t }}</span>
+              </a>
+            {% else %}
+              <a href="/account/login?url={{ theme_role | theme_url }}" class="site-header__icon site-header__account" title="{{ 'layout.customer.log_in' | t }}">
+<i class="fa fa-user fa-lg" aria-hidden="true"></i>
+                <span class="icon__fallback-text">{{ 'layout.customer.log_in' | t }}</span>
+              </a>
+            {% endif %}
+          {% endif %}
+          <a href="{{ routes.cart_url }}" class="site-header__icon site-header__cart" title="{{ 'layout.cart.title' | t }}">
+<i class="fa fa-shopping-cart fa-lg"></i>            <span class="icon__fallback-text">{{ 'layout.cart.title' | t }}</span>
+            <div id="CartCount" class="site-header__cart-count{% if cart.item_count == 0 %} hide{% endif %}" data-cart-count-bubble>
+              <span data-cart-count>{{ cart.item_count }}</span>
+              <span class="icon__fallback-text medium-up--hide">{{ 'layout.cart.items_count' | t: count: cart.item_count }}</span>
+            </div>
+          </a>
+          {% unless linklists[section.settings.main_linklist] == blank %}
+            <button type="button" class="site-header__bars btn--link site-header__icon site-header__menu js-mobile-nav-toggle mobile-nav--open" aria-controls="MobileNav"  aria-expanded="false" aria-label="{{ 'layout.navigation.menu' | t }}">
+<i class="fa fa-bars fa-lg " aria-hidden="true"></i>
+            </button>
+          {% endunless %}
+        </div>
+      </div>
+    </div>
+    <nav class="mobile-nav-wrapper medium-up--hide" role="navigation">
+                {% if settings.show_multiple_currencies and template != 'index' %}
+          	{% include 'currency-picker' %}
+      {% endif %}
+      <ul id="MobileNav" class="mobile-nav">
+        {% for link in linklists[section.settings.left_linklist].links %}
+          <li class="mobile-nav__item border-bottom"> 
+              <a href="{{ link.url }}"
+                class="mobile-nav__link{% if link.active %} mobile-nav__link--active{% endif %}"
+                {% if link.current %} aria-current="page"{% endif %} title="{{ link.title | escape }}">
+                {{ link.title | escape }}
+              </a>
+           </li>
+        {% endfor %}
+        {% for link in linklists[section.settings.main_linklist].links %}
+          {%- assign outerLoopIndex = forloop.index -%}
+          <li class="mobile-nav__item{% unless forloop.last %} border-bottom{% endunless %}">
+            {% if link.links != blank %}
+              {% capture child_list_handle %}{{ link.handle }}-{{ outerLoopIndex }}{% endcapture %}
+              <button type="button" class="btn--link js-toggle-submenu mobile-nav__link{% if link.child_active %} mobile-nav__link--active{% endif %}" data-target="{{ child_list_handle }}" data-level="1" aria-expanded="false">
+                {{ link.title | escape }}
+<i class="mobile-nav__icon fa fa-angle-right" aria-hidden="true"></i>
+              </button>
+              <ul class="mobile-nav__dropdown" data-parent="{{ child_list_handle }}" data-level="2">
+                <li class="visually-hidden" tabindex="-1" data-menu-title="2">
+                  {{- link.title }} {{ 'layout.navigation.menu' | t -}}
+                </li>
+                <li class="mobile-nav__item border-bottom">
+                  <div class="mobile-nav__table">
+                      <button class="fa fa-angle-left btn--link js-toggle-submenu mobile-nav__return-btn" type="button" aria-expanded="true" aria-label="{{ link.title }}">
+                      </button>
+                    <span class="mobile-nav__sublist-link mobile-nav__sublist-header mobile-nav__sublist-header--main-nav-parent">
+                      {{ link.title | escape }}
+                    </span>
+                  </div>
+                </li>
+                {% for childlink in link.links %}
+                  <li class="mobile-nav__item{% unless forloop.last %} border-bottom{% endunless %}">
+                    {% if childlink.links != blank %}
+                      {% capture grandchild_list_handle %}{{ childlink.handle }}-{{ outerLoopIndex }}-{{ forloop.index }}{% endcapture %}
+                      <button type="button" class="btn--link js-toggle-submenu mobile-nav__link mobile-nav__sublist-link" data-target="{{ grandchild_list_handle }}" aria-expanded="false">
+                        {{ childlink.title | escape }}
+<i class="mobile-nav__icon fa fa-angle-right" aria-hidden="true"></i>
+                      </button>
+                      <ul class="mobile-nav__dropdown" data-parent="{{ grandchild_list_handle }}" data-level="3">
+                        <li class="visually-hidden" tabindex="-1" data-menu-title="3">
+                          {{- childlink.title }} {{ 'layout.navigation.menu' | t -}}
+                        </li>
+                        <li class="mobile-nav__item border-bottom">
+                          <div class="mobile-nav__table">
+                              <button type="button" class="fa fa-angle-left btn--link js-toggle-submenu mobile-nav__return-btn" data-target="{{ child_list_handle }}" aria-expanded="true" aria-label="{{ childlink.title }}">
+                              </button>
+                            <a href="{{ childlink.url }}"
+                              class="mobile-nav__sublist-link mobile-nav__sublist-header"
+                              {% if childlink.current %} aria-current="page"{% endif %}
+                            title="{{ childlink.title | escape }}">
+                              {{ childlink.title | escape }}
+                            </a>
+                          </div>
+                        </li>
+                        {% for grandchildlink in childlink.links %}
+                          <li class="mobile-nav__item{% unless forloop.last %} border-bottom{% endunless %}">
+                            <a href="{{ grandchildlink.url }}"
+                              class="mobile-nav__sublist-link"
+                              {% if grandchildlink.current %} aria-current="page"{% endif %}
+                            title="{{ grandchildlink.title | escape }}">
+                              {{ grandchildlink.title | escape }}
+                            </a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% else %}
+                      <a href="{{ childlink.url }}"
+                        class="mobile-nav__sublist-link"
+                        {% if childlink.current %} aria-current="page"{% endif %}
+                      title="{{ childlink.title | escape }}" title="{{ link.title | escape }}">
+                        {{ childlink.title | escape }}
+                      </a>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <a href="{{ link.url }}"
+                class="mobile-nav__link{% if link.active %} mobile-nav__link--active{% endif %}"
+                {% if link.current %} aria-current="page"{% endif %} title="{{ link.title | escape }}">
+                {{ link.title | escape }}
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </header>

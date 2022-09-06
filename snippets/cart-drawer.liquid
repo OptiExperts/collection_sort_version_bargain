@@ -1,0 +1,270 @@
+<div class="cart-layer-content cart-sb">
+  <form action="/cart" method="post">
+    <div class="cart-sb-title">
+      <div class="c-close">
+        {%- include 'icon-close' -%}
+      </div>
+      <a href="/cart" class="c-title">{{ "cart.general.title" | t }}</a>
+    </div>
+
+    <div class="cart-return-policy">
+      <div class="cart-return-policy_label text-center"
+        style="color: {{settings.cart_drawer_return_policy_color}};background-color: {{settings.cart_drawer_return_policy_background}};">
+          {{settings.cart_drawer_return_policy}}
+      </div>
+    </div>
+    <div class="cart-info">
+      <div class="cart-content">
+        <div class="loading"></div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<div class="cart-layer--script hide">
+
+
+		{%- comment -%}
+			============
+				Cart empty
+			============
+		{%- endcomment-%}
+		<div id="cart-item-empty">
+			<div class="cart-item-empty"><p>{{ 'cart.general.empty' | t }}</p></div>
+
+		</div>
+
+		{%- comment -%}
+			============
+				Cart item HTML
+			============
+		{%- endcomment-%}
+		<div id="cart-item-html">
+			<div class="cart-item--content">
+				<div class="items-inner">
+					<div class="cart-item-image">
+						<a href="javascript:void(0);" class="cart-item-url">
+							<span class="image--style">
+								<img data-src=""/>
+							</span>
+						</a>
+					</div>
+					<div class="cart-item-info">
+						<div class="cart-item-main-title"><a href="javascript:void(0);" class="cart-item-url cart-item-title">Product title</a></div>
+						<div class="cart-item-variants"><span class="cart-item-variant-title">Variant title</span></div>
+
+                        <a data-cart-item-id="[item_id]" class="cart-close" title="{{ 'cart.general.remove' | t }}" href="javascript:void(0);">
+                          {{ "cart.general.remove" | t }}
+                      	</a>
+
+						<div class="cart-qty-price">
+                          <div class="cart-item-quantity d-block">
+                            <label for="Quantity-product-template">{{ 'cart.items.quantity' | t }}</label>
+                            <div class="quantity">
+                              <div class="qty-wrapper" data-id="[item_id]">
+                                <span class="qty-inner"><span class="qty-down-[item_id] qty-down ajax-down">{%- include 'icon-minus' -%}</span></span>
+
+                                <input class="replace input-cart-qty" id="[item_id]" value="[item_qty]" type="text" readonly name="item-quantity">
+
+                                <span class="qty-inner"><span class="qty-up-[item_id] qty-up ajax-up">{%- include 'icon-plus' -%}</span></span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="cart-item--price">$9.99</div>
+                        </div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		{%- comment -%}
+			============
+				Cart Footer HTML
+			============
+		{%- endcomment-%}
+		<div id="cart-layer-footer">
+          <div class="wrap-action">
+            <a href="{{settings.cart_drawer_term_condition_link}}" class="cart-term-condition">{{settings.cart_drawer_term_condition_label}}</a>
+            <div class="wrap-total">
+              <div class="total"><span>{{ "cart.general.subtotal" | t }}</span>
+                <span class="cart-item-total-price">$0.00</span>
+              </div>
+              <div class="cart-row">
+                <span>{{'cart.general.shipping' | t }}</span> <span>{{'cart.general.shipping_text' | t }}</span>
+              </div>
+              <div class="action">
+                <button class="btn btn-checkout btn-{{settings.btn_checkout_style}}" type="submit" name="checkout">
+                  <span class="buton-label">{{ "cart.general.checkout" | t }}</span>
+                </button>
+                <a href="{{routes.cart_url}}"><div class="Button cart-drawer-valerio">{{ "cart.general.view_cart" | t }}</div></a>
+              </div>
+            </div>
+          </div>
+		</div>
+
+    {%- assign _item_image_size = '180x' -%}
+
+    <script type="text/javascript">
+      Shopify.updateCartInfo = function(cart, cart_summary_id, cart_count_id, type = null) {
+
+        if (type == 'changeQty') {
+          $('.cart-item-total-price').html(Shopify.formatMoney(cart.total_price, _bc_config.money_format));
+        }
+
+        else if (typeof cart_summary_id === 'string'){
+          let cart_summary = $(cart_summary_id);
+          if (cart_summary.length) {
+
+            cart_summary.empty();
+
+            let value = cart.items;
+
+            if (!value.length) {
+              cart_summary.html($('#cart-item-empty').html())
+            }
+
+            else{
+              let item_HTML = '', animCount = 1;
+
+              for(let item of value){
+                let _item_id    = item.id
+                ,_item_image    = Shopify.resizeImage(item.image, '{{ _item_image_size }}')
+                ,_item_url      = item.url
+                ,_item_title    = item.product_title
+                ,_item_v_title  = item.variant_title || ''
+                ,_item_qty      = item.quantity
+                ,_item_price    = Shopify.formatMoney(item.price, _bc_config.money_format)
+                ,_item_layout   = $('#cart-item-html').html()
+                ,item_layout    = _item_layout.replace(/(\[item_id\])/g, _item_id).replace(/(\[item_qty\])/g, _item_qty)
+                ,_this_item     = $(item_layout);
+
+                _this_item.find('img').attr('data-src' ,_item_image).addClass('lazyload');
+                _this_item.find('.cart-item-url').attr('href',_item_url);
+                _this_item.find('.cart-item-title').html(_item_title);
+                _this_item.find('.cart-item--price').html(_item_price);
+                _this_item.find('.cart-item-variant-title').html(_item_v_title);
+
+                cart_summary.closest('.anim-delay_container').length && _this_item.addClass('anim-delay-'+(animCount++))
+
+                item_HTML += _this_item[0].outerHTML;
+              };
+              cart_summary
+              .append(`<div class="cart-item-container">${item_HTML}</div>`)
+              .append($('#cart-layer-footer').html());
+              cart_summary.closest('.anim-delay_container').length && cart_summary.find('.wrap-total').addClass('anim-delay-'+(animCount++));
+            }
+          }
+        }
+        updateCartDesc(cart, cart_summary_id);
+      };
+
+      function free_shipping_call(cart ,cart_summary_id){
+          /*let _cartSB = $('.cart-sb');
+          if (_cartSB.find('.cart-item-container').length) {
+            let h100 = _cartSB.find('form').innerHeight() || 0
+            ,h2 = _cartSB.find('.cart-sb-title').innerHeight() || 0
+            ,h3 = h2 + _cartSB.find('.wrap-total').innerHeight() || 0
+            ,maxH = h100 - h3;
+
+            if (_cartSB.find('.cart-item-container').prop('scrollHeight') > maxH) {
+              _cartSB.find('.cart-item-container').css('max-height', maxH+'px');
+            }
+            else{
+              _cartSB.find('.cart-item-container').removeAttr('style');
+            }
+          }*/
+      }
+
+      function updateCartDesc(cart, cart_summary_id = null){
+        $('.cart-target .number').length && $('.cart-target .number').html('<span class="n-item">' + cart.item_count + '</span>')
+        $('.cart-total-count').length && $('.cart-total-count').html(cart.item_count);
+        $('#CartCount span[data-cart-count]').length && $('#CartCount span[data-cart-count]').html(cart.item_count);
+
+        let $cartPrice = `${Shopify.formatMoney(cart.total_price, _bc_config.money_format)}`;
+        $('.cart-tt-price').length && $('.cart-tt-price').html(`(${$cartPrice})`);
+        $('.cart-layer-content .cart-item-total-price').html($cartPrice);
+
+        free_shipping_call(cart ,cart_summary_id);
+      }
+
+      Shopify.onCartUpdate = function(cart) {Shopify.updateCartInfo(cart, '.cart-content', 'shopping-cart');};
+
+      $(window).on('load',function() {
+        Shopify.getCart(function(cart) {Shopify.updateCartInfo(cart, '.cart-content');});
+
+        $('.cart-layer-content').on('click', '.cart-close', e=>{
+          $('body').addClass('cart-loading');
+
+          let prodId = +$(e.currentTarget).data('cart-item-id');
+
+          AT_Main._requestAjax({ quantity: 0, id: prodId })
+          .fail(err=>console.log(err))
+          .done(resp=>{
+            Shopify.updateCartInfo(resp, '.cart-content', 'shopping-cart');
+            if(typeof cartObj != "undefined") {cartObj.syncCartSB(resp, prodId)}
+              $('body').removeClass('cart-loading');
+          })
+        })
+      });
+    </script>
+
+      {%- unless template contains 'cart' -%}
+        <script src="{{ 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js' }}"></script>
+          <script>
+            var cartObj = (function($,_){
+
+              var cartPage = {
+                init: function() {
+                    this.qtyUp      = $('.qty-up');
+                    this.qtyDown    = $('.qty-down');
+                    this.totalPrice = $('.cart-total');
+                    this.actionHandle();
+                },
+                showLoading: function() {$('body').addClass('cart-loading');},
+                hideLoading: function() {$('body').removeClass('cart-loading');},
+                actionHandle: function() {
+                    let _this = this;
+                    $(document).on('click','.ajax-up',   _.debounce(function(e){cartPage.updateCart($(this));}, 250));
+                    $(document).on('click','.ajax-down', _.debounce(function(e){cartPage.updateCart($(this));}, 250));
+                },
+                updateCart: function(elem){
+                  let _this  = this
+                  ,jqElem    = $(elem)
+                  ,patt      = /\d+/g
+                  ,_class    = jqElem.attr('class')
+                  ,prodId    = patt.exec(_class)[0]
+                  ,qtyInput  = jqElem.closest('.quantity').find('.input-cart-qty')
+                  ,qtyVal    = qtyInput.val()
+
+                  _this.showLoading();
+
+                  if (_class.indexOf('up') != -1) {
+                    qtyInput.val(++qtyVal);
+                  }
+                  else {
+                    if (--qtyVal < 1) {
+                      qtyInput.val(1);
+                      /*jqElem.closest('.items-inner').find('.cart-close').trigger('click');*/
+                      return;
+                    }
+                    else{
+                      qtyInput.val(qtyVal);
+                    }
+                  }
+
+                  let postData = {quantity: qtyVal,id: prodId};
+                  AT_Main._requestAjax(postData)
+                  .always(resp=>{Shopify.updateCartInfo(resp, '.cart-content', 'shopping-cart', 'changeQty');})
+                  .fail(err=>console.log(err))
+                  .done(()=>{_this.hideLoading()})
+                }
+              };
+
+              cartPage.init();
+            })(jQuery,_)
+          </script>
+      {%- endunless -%}
+</div>

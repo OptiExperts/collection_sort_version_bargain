@@ -1,0 +1,34 @@
+<div class="">
+    <div class="drop-down-wrapper">
+      <h3 style="font-size:18px;">Delivery Estimate</h3>
+    <p>
+    Enter your state below to receive a shipping estimate
+    </p>   
+        <div class="country_dropdown">
+          <a href="#">Select your state</a>
+          <ul class="country_list">
+            {% for block in section.blocks %}
+              <li><input id="Country-{{ forloop.index }}" data-min="{{ block.settings.min_days }}" data-max="{{ block.settings.max_days }}" type="radio" name="Shipping-location"><label for="Country-1">{{ block.settings.location }}</label></li>
+            {% endfor %}       
+          </ul>
+        </div>
+        <div class="chosen_location">
+          <h4 class="location"></h4>
+          <a href="#">Edit</a>
+        </div>
+      <p>&nbsp;</p>
+      <p>Your estimated delivery date is:</p>
+        <h2 style="font-size:14px;text-align:left;">Please enter your postage details above</h2>
+    </div>
+    </div>
+    
+    <script>
+      $(document).ready(function(){ 
+            
+            $(".drop-down-wrapper select").on("change",function(){
+                var selVal = $(this).val();
+                $("h2").html(selVal);
+            });
+            
+        });
+    </script>

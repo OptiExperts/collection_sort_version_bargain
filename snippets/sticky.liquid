@@ -1,0 +1,78 @@
+<style>@media only screen and (min-width:1023px){#wrap-to-adddd .stick-prod-title{width:30%!important}#wrap-to-adddd .grid__item:last-child{width:30%!important;float:left!important;text-align:center!important}}#wrap-to-adddd .grid__item .product-form__item button{margin-top:0}#wrap-to-adddd .grid__item .product-form__item{margin-bottom:0}#wrap-to-adddd .sticky-cart-price{transform:translateY(50%);height:50px}#wrap-to-adddd .price--on-sale .price__regular,#wrap-to-adddd .price--on-sale .price__sale{display:inline-block}#wrap-to-adddd .stick-prod-title{margin-top:0!important;transform:translateY(50%);height:60px}.grid__item.medium-up--hide.stick-prod-title{display:none}#wrap-to-adddd .grid__item{width:auto}#wrap-to-adddd .medium-up--one-tenth{width:10%;padding-left:0}#wrap-to-adddd .stick-prod-title{padding-left:10px}#wrap-to-adddd .grid__item:last-child,#wrap-to-adddd .grid__item:nth-child(3){float:right}#wrap-to-adddd .grid__item:nth-child(3){padding-left:0}#wrap-to-adddd .grid__item:last-child{width:15%;padding-left:0;text-align:right}#wrap-to-adddd .grid__item:last-child .price{display:inline-block}#wrap-to-adddd .grid__item .product-form__item button{margin-left:0!important}@media only screen and (max-width:1023px){#wrap-to-adddd{width:100%;max-width:100%;left:0}#wrap-to-adddd{padding:0 15px}#wrap-to-adddd .price--on-sale .price__sale{font-size:18px}#wrap-to-adddd .grid__item:last-child{width:20%}}@media only screen and (max-width:750px){#wrap-to-adddd .price,#wrap-to-adddd .product-form__item,#wrap-to-adddd .stick-prod-title{margin-top:0!important}#wrap-to-adddd .grid__item:first-child{height:70px;display:flex;align-items:center}#wrap-to-adddd .product-single__photo{padding-bottom:0}#wrap-to-adddd .price{padding-right:0}#wrap-to-adddd .price--on-sale .price__sale{font-size:16px}#wrap-to-adddd{padding:0 10px}#wrap-to-adddd img{margin-left:0}#wrap-to-adddd .price,#wrap-to-adddd .product-form__item,#wrap-to-adddd .stick-prod-title{margin-top:20px}#wrap-to-adddd .stick-prod-title{white-space:nowrap;max-width:40%;overflow:hidden;text-overflow:ellipsis;padding-left:5px}#wrap-to-adddd .grid__item .product-form__item button{margin-right:0!important;font-size:11px}#wrap-to-adddd .price--on-sale .price__sale{font-size:15px}}@media only screen and (max-width:750px){#wrap-to-adddd .grid__item:last-child{width:auto}#wrap-to-adddd .price--on-sale .price__sale{font-size:12px}#wrap-to-adddd .stick-prod-title{max-width:35%;font-size:13px}}@media only screen and (max-width:750px){#wrap-to-adddd .price--on-sale .price__sale{font-size:12px}#wrap-to-adddd .stick-prod-title{max-width:25%;font-size:13px}}@media only screen and (max-width:750px){#wrap-to-adddd .stick-prod-title{max-width:20%}#wrap-to-adddd .grid__item .product-form__item button{font-size:10px}}</style>
+<style>.stic-cart{position:fixed;{% if settings.stick-pos == 'stick-top' %}top:0px;{% endif %}{% if settings.stick-pos == 'stick-bottom' %} bottom : 0px;{% endif %}z-index :9998;opacity : {{settings.sticky_addtocart_opacity | divided_by: 100.00}};background : {{settings.color_addtocart_sticky}};border-style: ridge;margin-left: 0px;margin-right: 0px;overflow: hidden;max-height: 90px;width: 90%;}#wrap-to-adddd .grid__item .product-form__item button {margin-left : 30px;margin-right : 30px;}</style>
+<div id="wrap-to-adddd" style="display:none;" class="page-width grid {{settings.stickyaddtocart-visibility}}">
+   <div class="grid__item medium-up--one-tenth small--one-sixth">
+      {% for media in product.media %}
+      {% if forloop.index == 1 %}
+      {% case media.media_type %}
+      {% when 'image' %}
+      {%- assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
+      {% when 'external_video' %}
+      {%- assign featured_image = media.src -%}
+      {% endcase %}
+      {% endif %}
+      {%- assign img_url = media | img_url: '' -%}
+      {% case media.media_type %}
+      {% when 'image' %}
+      <div>
+         <div            
+            class="product-single__photo {% unless featured_image == media %} hide{% endunless %}"
+            data-image-id="{{ media.id }}"
+         >
+            <img 
+               class="feature-row__image  lazyload animation--{{settings.lazyloading-effect}}{% unless featured_image == media %} lazypreload{% endunless %}"
+               data-src="{{ media | img_url: '140x140' }}"
+               data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+               data-aspectratio="{{ media.aspect_ratio }}"
+               data-sizes="auto"
+               tabindex="-1"
+               alt="{{ media.alt | escape }}">
+         </div>
+      </div>
+      {% when 'external_video' %}
+      <div>
+         <div            
+            class="product-single__photo {% unless featured_image == media.src %} hide{% endunless %}"
+            data-image-id="{{ media.id }}">
+            {{ media | external_video_tag: class: "youtube_video feature-row__image  lazyload " }}
+         </div>
+      </div>
+      {% endcase %}
+      {% endfor %}
+   </div>
+   <div class="grid__item medium-up--three-tenths stick-prod-title">
+      {{product.title| truncate : 100}}
+   </div>
+  <div class="grid__item medium-up--one-fifth small--one-half">
+      <div id="demo" class="ct-stl"> </div>
+      {% form 'product', product, class:form_classes, novalidate: 'novalidate', data-product-form: '' %}
+      <div class="product-form__error-message-wrapper product-form__error-message-wrapper--hidden" data-error-message-wrapper role="alert">
+         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <span class="product-form__error-message" data-error-message>{{ 'products.product.quantity_minimum_message' | t }}</span>
+      </div>
+      <div class="product-form__item product-form__item--submit{% if section.settings.enable_payment_button %} product-form__item--payment-button{% endif %}{% if product.has_only_default_variant %} product-form__item--no-variants{% endif %}"
+           style="padding:20px;">
+         <button type="submit" name="add"
+         {% unless current_variant.available %} aria-disabled="true"{% endunless %}
+         aria-label="{% unless current_variant.available %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endunless %}"
+         class="{% if settings.enable_shaky_addtocart %} anim-addtocart {% endif %}  btn product-form__cart-submit{% if section.settings.enable_payment_button %} btn--secondary-accent{% endif %}"
+         data-add-to-cart>
+         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+         <span data-add-to-cart-text>
+         {% unless current_variant.available %}
+         {{ 'products.product.sold_out' | t }}
+         {% else %}
+         {{ 'products.product.add_to_cart' | t }}
+         {% endunless %}
+         </span>
+         <span class="hide" data-loader>
+               <i class="fa fa-spinner icon-spinner" aria-hidden="true"></i>
+         </span>
+         </button>
+      </div>
+      {% endform %}
+   </div>
+   <div class="grid__item medium-up--one-fifth small--one-sixth sticky-cart-price">
+      {% include 'product-price', variant: current_variant, show_vendors: false %}
+   </div>
+</div>
+<script defer>$(window).scroll(function(){var s=$(window).scrollTop();$("#wrap-to-reach").offset().top<s?$("#wrap-to-adddd").css("display","block").addClass("stic-cart"):$("#wrap-to-adddd").css("display","none").removeClass("stic-cart")});</script>

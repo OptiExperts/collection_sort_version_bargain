@@ -1,0 +1,19 @@
+<style>.recent-c-container {max-height : 180px;overflow: auto;}</style>
+<div class="{{block.settings.comments-visibility}} sidebar-widget" >
+<div class="h4 ">{{block.settings.recent_comment_title}}</div>
+<ul id="scroll-bar-coll" class="recent-c-container " > 
+ {% for article in blog.articles  %}
+ {% if blog.comments_enabled? %}
+            <div id="comments">
+              <ul class="comments">
+                {% for comment in article.comments limit:5   %}
+                  <li id="{{ comment.id }}" class="comment-sp">
+                    {% include 'comment-sidebar' %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+{% endif %}
+{% endfor %}
+</ul>
+</div>

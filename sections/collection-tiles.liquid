@@ -1,0 +1,66 @@
+
+<div class="collection-tiles page-width">
+    {% if section.settings.title != blank %}
+        <h2>{{ section.settings.title }}</h2>
+    {% endif %}
+    <div class="collections-container">
+        <ul>
+            {% for block in section.blocks %}
+                <li class="collection-item">
+                    {% assign collection = collections[block.settings.collection] %}
+                    <a href="{{ collection.url }}">
+                        <div class="image-wrapper">
+                            <img src="{% if block.settings.image != blank %}{{ block.settings.image | img_url: '700x' }}{% else %}{{ collection.featured_image | img_url: '700x' }}{% endif %}" alt="{% if block.settings.image != blank %}{{ block.settings.image.alt }}{% else %}{{ collection.featured_image.alt }}{% endif %}">
+                        </div>                        
+                        <h4>{% if block.settings.heading != blank %}{{ block.settings.heading }}{% else %}{{ collection.title }}{% endif %}</h4>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection tiles",
+  "class": "index-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+    }    
+  ],
+  "blocks": [
+    {
+        "type": "collection",
+        "name": "Collection",
+        "settings": [
+            {
+                "type": "text",
+                "label": "Heading",
+                "id": "heading"
+            },
+            {
+                "type": "collection",
+                "label": "Collection",
+                "id": "collection"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            }
+        ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection tiles",
+      "category": "Collection"      
+    }
+  ]
+}
+{% endschema %}

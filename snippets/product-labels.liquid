@@ -1,0 +1,33 @@
+{% capture timenow %}
+{{'now' | date: '%s' }}
+{% endcapture %}
+{% capture productpublished %}
+{{ product.published_at | date: '%s' }}
+{% endcapture %}
+{% assign pbb = timenow | minus : productpublished | divided_by: 86400 %}
+{% assign new-day = settings.new-day %}
+{% if product.available %}
+
+  {% if product.compare_at_price == blank or product.compare_at_price == product.price %}
+{% if settings.enabl-nw %}
+    {% if pbb <= new-day %}
+    <div class="icn new {%if settings.anim-nw %} anim-label {% endif %}">
+      <div> {{ 'products.product.new_label' | t }} </div>
+      {% if pbb >= 1 %}
+            <div class="days-ago"> <strong> {{pbb}} </strong> {{ 'products.product.new_days_ago' | t }} </div>
+        {% else %}
+      <div class="days-ago"> <strong> 1 <br> </strong>{{ 'products.product.new_day_ago' | t }}</div>
+          {% endif %}
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+  {% endif %} 
+<style>
+  .icn.sale {
+    background: #D72324;
+    color: white;
+    border-radius: 11px;
+    max-inline-size: fit-content;
+  }
+</style>

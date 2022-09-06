@@ -1,0 +1,51 @@
+<style>#inventory{padding:10px 0px 0px 0px;text-transform:capitalize;overflow:auto;}#inventory table{width:100%;}#inventory table th{background: #f6f6f6;}#inventory table th, #inventory table td { padding: 3px; border-top: 1px solid #EEE; text-align: left; }</style> 
+<div id="inventory">
+  <div class="header">{{ 'products.product.inventory_available' | t }}</div>
+	{% assign options1 = product.variants | map: "option1" %}
+  	 <table>          
+		<tr>
+			{% if product.options.size > 1 %}<th>&nbsp;</th>{% endif %}
+			{% assign options1Filtered = '' %}
+			{% for option1 in options1 %}
+			{% assign option1Space = option1 | prepend: ', ' %}
+			{% unless options1Filtered  contains option1Space %}
+			<th><strong>{{ option1 }}</strong></th>	
+			{% assign options1Filtered = options1Filtered | append: ', ' | append: option1 %}            
+			{% endunless %}             
+			{% endfor %}         
+		</tr>
+		{% if product.options.size > 1 %} 
+		{% assign options2 = product.variants | map: "option2" %}
+		{% assign options2Filtered = '' %}
+		{% assign options1Split = options1Filtered | remove_first: ', '  | split: ', ' %}
+		{% assign index = 1 %}
+		{% for option2 in options2 %}
+		<tr>
+			{% assign optionSpace = option2 | prepend: ', ' %}
+			{% unless options2Filtered contains optionSpace %}                         
+			<td><strong>{{ option2 }}</strong></td>	             
+			{% for option1 in options1Split %}
+			{% assign variantFound = false %}
+			<td>
+				{% for variant in product.variants %}          	
+				{% if variant.option1 == option1 and variant.option2 == option2 %}                
+				{{ variant.inventory_quantity }}
+				{% assign variantFound = true %}
+				{% endif %} 
+				{% if forloop.last and variantFound == false %}N/A{% endif %} 
+				{% endfor %}
+			</td>          
+			{% endfor %}           
+			{% assign options2Filtered = options2Filtered | append: ', ' | append: option2 %} 
+			{% endunless %} 
+		</tr>
+		{% endfor %}        
+		{% else %}
+		<tr>
+			{% for variant in product.variants %}
+			<td>{{ variant.inventory_quantity }} </td>
+			{% endfor %}	
+		</tr>
+		{% endif %}
+	</table>     
+</div>

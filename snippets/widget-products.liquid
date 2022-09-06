@@ -1,0 +1,43 @@
+{%- if block.settings.featured_product_list_collection == blank -%}
+{%- assign side_bar_collection = collections["all"] -%}
+{%- else -%}
+{%- assign side_bar_collection = collections[block.settings.featured_product_list_collection ] -%}
+{%- endif -%}
+{%- assign limit_num = block.settings.featured_product_limit_all | plus: 0 -%}
+<div class="sidebar-widget {{ block.settings.widgetproduct-visibility }}">
+   {%- if block.settings.title != blank -%}
+  <div class="h4">{{block.settings.title}}</div>
+   {%- endif -%}
+   {%- if side_bar_collection != blank -%}
+   <ul class="product_list_widget">
+      {%- for side_bar_product in side_bar_collection.products limit:limit_num -%}
+      {%- if porduct.id != side_bar_product.id -%}
+      <li>
+         {%- assign current_variant = side_bar_product.selected_or_first_available_variant -%}
+         {%- assign featured_image = current_variant.featured_image | default: side_bar_product.featured_image -%}
+         {%- assign product_image_size = '219x' -%}
+         {%- assign on_sale = false -%}
+         {%- if current_variant.compare_at_price_min > current_variant.price_min -%}
+         {%- assign on_sale = true -%}
+         {%- endif -%}
+         {%- assign image = featured_image -%}
+         <a href="{{ side_bar_product.url | within: collection }}" title="{{ side_bar_product.title | truncate: 50 }}">
+         {%- if image != blank -%}
+         <img data-src="{{ image | img_url: '100x' }}" class="lazyload animation--{{settings.lazyloading-effect}} " alt="{{image.alt}}" >
+         {%- endif -%}
+         <span class="product-title">{{ side_bar_product.title | truncate: 50 }}</span>
+         </a>
+         <span class="amount money">
+         {%- if side_bar_product.price_varies -%}
+         {{ side_bar_product.price_min | money }} – {{ side_bar_product.price_max | money }}
+         {%- elsif on_sale -%}<del>{{ current_variant.compare_at_price  | money }}</del> <ins>{{ current_variant.price | money }}</ins>
+         {%- else -%}
+         {{ current_variant.price | money }}
+         {%- endif -%}
+         </span>
+      </li>
+      {%- endif -%}
+      {%- endfor -%}
+   </ul>
+   {%- endif -%}
+</div>

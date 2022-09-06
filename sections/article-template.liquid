@@ -1,0 +1,666 @@
+<style>.article__grid-image-wrapper img {max-width: 100%;display: block;width: 100%;height: auto;@media only screen and (min-width: 750px) {-webkit-transition: {{settings.lazyload-anim-duration}}s ease;transition: {{settings.lazyload-anim-duration}}s ease;transform: scale(1);&:hover {transform: scale(1.2) !important;}}}.article-style a {text-decoration: none !important;color: {{section.settings.blog-link}};font-weight: bold;}.article-style a:hover {color: {{section.settings.blog-link-hover}};}.article-style u {text-decoration: none !important;}.related-article {padding-top: 15px;}.author_wrap {width: 100%;border-top: 1px ridge;border-bottom: 1px ridge;min-height: 40px;padding: 15px 0;margin-top: 15px;overflow: auto;}.blog_author {width: 60%;float:left;@media only screen and (max-width: 749px) {width: 100%;border-bottom: 1px solid;padding-bottom: 15px;}}.blog_author img {width: 80px;height: 80px;border: 1px solid;float:left;margin-right: 15px;}.author_bio {text-align: left;}.author_bio p:nth-child(1) {padding-top: 0px;font-weight: bold;}.author_bio p:nth-child(2) {font-size: 0.9em;}.blog_share {width: 38%;float:right;text-align: right;@media only screen and (max-width: 749px) {width: 100%;float:left;}}.nextPreviousHolder {width: 100%;float: left;text-align: center;}.nextPreviousBtn {width: calc(50% - 20px);float: left;text-align: left;margin: 30px 0;}.nextPreviousBtn:nth-of-type(2) {float: right;margin-left: 40px;text-align: right;}.nextPreviousBtn div {float: left;}.nextPreviousBtn span {font-size: 11px;width: 100%;text-transform: uppercase;letter-spacing: 0.5px;margin-bottom: 5px;}.nextPreviousBtn p {font-weight: 700;font-size: 18px;line-height: 20px;}.nextPreviousBtn div {width: calc(100% - 10px);padding-right: 10px;}.nextPreviousBtn div:nth-of-type(2) {padding-left: 10px;padding-right: 0px;} button.collapsible-toc {background : {{section.settings.toc-btn-bk}};color: {{section.settings.toc-btn-txt}};border: none;  }button.collapsible-toc:hover {background : {{section.settings.toc-btn-hvr-bk}};color: {{section.settings.toc-btn-hvr-txt}};}.featured-article-img{width : 100%;}</style>  
+{% if article.image %}
+{% capture img_id %}ArticleImage-{{ article.image.id }}{% endcapture %}
+{% capture img_wrapper_id %}ArticleImageWrapper-{{ article.image.id }}{% endcapture %}
+{%- assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+<div>
+   <img class="lazyload animation--{{settings.lazyloading-effect}} featured-article-img" src="{{ 'blank.jpg' | asset_url }}" data-src="{{ article.image | img_url: '' }}" alt="{{ article.image.alt }}">
+</div>
+<noscript>
+   <div class="article__grid-image-wrapper">
+      {{ article | img_url: '345x345', scale: 2 | img_tag: article.title, 'article__grid-image' }}
+   </div>
+</noscript>
+{% endif %}
+<div class="section-header">
+   <h1 class="article__title">{{ article.title }}</h1>
+   {% if section.settings.blog_show_author %}
+ <span class="article__author"><i class="fa fa-user"></i>  {{ 'blogs.article.by_author' | t: author: article.author }}</span>
+  {% endif %}
+   {% if section.settings.blog_show_date %}
+   <i class="fa fa-calendar"></i>
+   <span class="article__date">
+   {{ 'blogs.article.created_on' | t }}  {{ article.published_at | time_tag: format: 'date' }}
+   </span>
+  {% endif %}
+  {% if section.settings.blog_show_update %}
+     <i class="fa fa-refresh" aria-hidden="true"></i>
+   <span class="article__date">
+   {{ 'blogs.article.last_update' | t }} {{ article.updated_at | time_tag: format: 'date' }}
+   </span>
+  {% endif %}   
+   {% if section.settings.blog_show_min %} 
+   <i class="fa fa-clock-o"></i>
+   <div class="entry-content" id="timeestimate">
+      <div class="visually-hidden" >  {{ article.content }} </div>
+   </div>
+   {% endif %}
+   {% if blog.comments_enabled? and article.comments_count > 0 %}
+   <i class="fa fa-comment"></i>
+   <span class="entry-comment">
+   <a href="{{ article.url }}#comments" class="article__comment-count btn btn--tertiary btn--small" title="{{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}">
+   {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+   </a>
+   </span>
+   {% endif %}
+</div>
+{% if section.settings.show_toc %}
+{% include 'toc' %}
+{% else %}
+      <div class="rte">{{ article.content }}</div>
+{% endif %}
+{% if section.settings.show_previous_button %}
+<div class="nextPreviousHolder">
+   {% assign current_found = false %}
+   {% assign done = false %}
+   {% for a in blog.articles %}
+   {% if current_found and done == false %}
+   {% assign next_article = a %}
+   {% assign done = true %}
+   {% endif %}
+   {% unless done %}
+   {% if a.id == article.id %}
+   {% assign current_found = true %}
+   {% else %}
+   {% assign prev_article = a %}
+   {% endif %}
+   {% endunless %}
+   {% endfor %}
+   {% if prev_article %}
+   <div class="nextPreviousBtn">
+      <a href="{{ prev_article.url }}" title="{{prev_article.title}}">
+         <div>
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            <span>{{ 'blogs.article.previous_article_html' | t}}</span>
+            <p>{{ prev_article.title }}</p>
+         </div>
+      </a>
+   </div>
+   {% endif %}
+   {% if next_article %}
+   <div class="nextPreviousBtn">
+      <a href="{{ next_article.url }}" title="{{next_article.title}}">
+         <div>
+            <span>{{ 'blogs.article.next_article_html' | t}}</span> 
+           <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            <p>{{ next_article.title }}</p>
+         </div>
+      </a>
+   </div>
+   {% endif %}
+</div>
+{% endif %}
+<div class="author_wrap">
+   {% if section.settings.blog_show_bio %}
+   <div class="blog_author">
+      <img clas="lazyload" src="//1.gravatar.com/avatar/{{ article.user.email | md5 }}" alt="{{ article.author }}" />
+      <div class="author_bio">
+         <p>{{ article.author }}</p>
+         <p>{{ article.user.bio }}</p>
+      </div>
+   </div>
+   {% endif %}
+   {% if section.settings.show_share_buttons %}
+   <div class="blog_share">
+      {% include 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+   </div>
+   {% endif %}
+</div>
+<script>function updateTime(decimalTime, wordCount, picCount) {var mins = Math.floor(Math.abs(decimalTime)),secs = Math.floor((Math.abs(decimalTime) * 60) % 60),timeEst = mins + ":" + (secs < 10 ? "0" : "") + secs;var timeestimate = document.createElement("p");timeestimate.id = "timeestimate";if (reportMethod == "roundedTime" || reportMethod == "preciseTime") {var timeTag = document.createElement("time");timeTag.setAttribute("datetime", mins + "m " + secs + "s");if (reportMethod == "roundedTime") {timeTag.innerHTML = (decimalTime > 0.5 ? Math.round(decimalTime) + " min" : secs + " secs");} else {timeTag.innerHTML = mins + ":" + (secs < 10 ? "0" : "") + secs;}timeestimate.appendChild(timeTag);timeestimate.innerHTML += " {{'blogs.article.min_read' | t}}";}if (reportMethod == "wordCount") {timeestimate.innerHTML = "Article length: "+wordCount+" words";if (picCount > 0) {timeestimate.innerHTML += ", "+picCount+" figure"+(picCount > 1 ? "s" : "");    }}articleText.insertBefore(timeestimate, articleText.firstChild);}function addEmUp(element) {var checkTag = articleText.getElementsByTagName(element);for (var i = 0; i < checkTag.length; i++) {wordCount = checkTag[i].innerHTML.split(' ').length;totalCount = totalCount + wordCount;}}function estimateTime() {elementsToCount.forEach(addEmUp);var pictures = articleText.getElementsByTagName("img");completeCount = totalCount + (pictures.length * ((wpm / 60) * secsPerPic));updateTime(completeCount / wpm, totalCount, pictures.length);}var wpm = 200,elementsToCount = ["p", "li", "dd"],secsPerPic = 5,wordCount = 0,totalCount = 0,reportMethod = "roundedTime";articleText = document.getElementsByClassName("entry-content")[0];estimateTime();  </script>  
+{% schema %}
+{
+  "name": {
+    "cs": "Příspěvky",
+    "da": "Opslag",
+    "de": "Posts",
+    "en": "Posts",
+    "es": "Publicaciones",
+    "fi": "Julkaisut",
+    "fr": "Articles",
+    "it": "Articoli",
+    "ja": "投稿",
+    "ko": "게시물",
+    "nb": "Innlegg",
+    "nl": "Berichten",
+    "pl": "Posty",
+    "pt-BR": "Posts",
+    "pt-PT": "Publicações",
+    "sv": "Inlägg",
+    "th": "โพสต์",
+    "tr": "Gönderiler",
+    "vi": "Bài viết",
+    "zh-CN": "文章",
+    "zh-TW": "貼文"
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "blog_show_author",
+      "label": {
+        "cs": "Zobrazit autora",
+        "da": "Vis forfatter",
+        "de": "Autor anzeigen",
+        "en": "Show author",
+        "es": "Mostrar autor",
+        "fi": "Näytä tekijä",
+        "fr": "Afficher l'auteur",
+        "it": "Mostra autore",
+        "ja": "執筆者を表示する",
+        "ko": "작성자 표시",
+        "nb": "Vis forfatter",
+        "nl": "Auteur weergeven",
+        "pl": "Pokaż autora",
+        "pt-BR": "Exibir autor",
+        "pt-PT": "Mostrar autor",
+        "sv": "Visa författare",
+        "th": "แสดงผู้เขียน",
+        "tr": "Yazarı göster",
+        "vi": "Hiển thị tác giả",
+        "zh-CN": "显示作者",
+        "zh-TW": "顯示作者"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": {
+        "cs": "Zobrazit datum",
+        "da": "Vis dato",
+        "de": "Datum anzeigen",
+        "en": "Show date",
+        "es": "Mostrar fecha",
+        "fi": "Näytä päivämäärä",
+        "fr": "Afficher la date",
+        "it": "Mostra data",
+        "ja": "日付を表示する",
+        "ko": "날짜 표시",
+        "nb": "Vis dato",
+        "nl": "Datum weergeven",
+        "pl": "Pokaż datę",
+        "pt-BR": "Exibir data",
+        "pt-PT": "Mostrar data",
+        "sv": "Visa datum",
+        "th": "แสดงวันที่",
+        "tr": "Tarihi göster",
+        "vi": "Hiển thị ngày",
+        "zh-CN": "显示日期",
+        "zh-TW": "顯示日期"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_update",
+      "label": {
+        "cs": "Zobrazit „poslední aktualizaci“",
+        "da": "Vis 'sidste opdatering'",
+        "de": "Letztes 'Update anzeigen'",
+        "en": "Show 'last update'",
+        "es": "Mostrar 'última actualización'",
+        "fi": "Näytä viimeisin päivitys",
+        "fr": "Afficher 'dernière mise à jour'",
+        "it": "Mostra 'ultimo aggiornamento'",
+        "ja": "「最終更新」を表示",
+        "ko": "'마지막 업데이트' 표시",
+        "nb": "Vis siste oppdatering",
+        "nl": "Laatste update tonen",
+        "pl": "Pokaż ostatnią aktualizację",
+        "pt-BR": "Mostrar última atualização",
+        "pt-PT": "Mostrar última atualização",
+        "sv": "Visa senaste uppdatering",
+        "th": "แสดงการปรับปรุงล่าสุด",
+        "tr": "Son güncellemeyi göster",
+        "vi": "Hiển thị bản cập nhật cuối cùng",
+        "zh-CN": "显示最后更新",
+        "zh-TW": "顯示最後更新"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_min",
+      "label": {
+        "cs": "Zobrazit minuty ke čtení",
+        "da": "Vis minutter at læse",
+        "de": "Zeige Minuten zum Lesen",
+        "en": "Show minutes to read",
+        "es": "Mostrar minutos para leer",
+        "fi": "Näytä minuutit lukemiseen",
+        "fr": "Afficher les minutes à lire",
+        "it": "Mostra i minuti da leggere",
+        "ja": "読む分を表示する",
+        "ko": "읽을 시간 표시",
+        "nb": "Vis referat å lese",
+        "nl": "Minuten om te lezen weergeven",
+        "pl": "Pokaż minuty do przeczytania",
+        "pt-BR": "Mostrar minutos para ler",
+        "pt-PT": "Mostrar minutos para ler",
+        "sv": "Visa protokoll att läsa",
+        "th": "แสดงนาทีในการอ่าน",
+        "tr": "Okunacak dakikaları göster",
+        "vi": "Hiển thị số phút để đọc",
+        "zh-CN": "显示分钟阅读",
+        "zh-TW": "顯示分鐘閱讀"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_bio",
+      "label": {
+        "cs": "Zobrazit autora bio",
+        "da": "Vis biograf forfatter",
+        "de": "Autor anzeigen Bio",
+        "en": "Show author bio",
+        "es": "Mostrar biografía del autor",
+        "fi": "Näytä kirjoittajan elämä",
+        "fr": "Afficher la biographie de l'auteur",
+        "it": "Mostra la biografia dell'autore",
+        "ja": "著者の経歴を表示",
+        "ko": "작성자 약력 표시",
+        "nb": "Vis forfatterbio",
+        "nl": "Biografie van auteur weergeven",
+        "pl": "Pokaż biografię autora",
+        "pt-BR": "Mostrar biografia do autor",
+        "pt-PT": "Mostrar biografia do autor",
+        "sv": "Visa författarens bio",
+        "th": "แสดงผู้เขียน bio",
+        "tr": "Yazar biyografisini göster",
+        "vi": "Hiển thị tiểu sử tác giả",
+        "zh-CN": "显示作者简介",
+        "zh-TW": "顯示作者簡介"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": {
+        "cs": "Zobrazit tlačítka pro sdílení na sociálních sítích",
+        "da": "Vis knapper til deling på sociale medier",
+        "de": "Buttons für Social Media anzeigen",
+        "en": "Show social sharing buttons",
+        "es": "Mostrar botones para compartir en redes sociales",
+        "fi": "Näytä sosiaalisen median jakamispainikkeet",
+        "fr": "Afficher les boutons de partage sur les médias sociaux",
+        "it": "Mostra i pulsanti per la condivisione sui social",
+        "ja": "ソーシャルメディアでの共有ボタンを表示する",
+        "ko": "소셜 공유 버튼 표시",
+        "nb": "Vis knapper for deling på sosiale medier",
+        "nl": "Knoppen voor sociaal delen weergeven",
+        "pl": "Pokaż przyciski udostępniania w mediach społecznościowych",
+        "pt-BR": "Exibir botões de compartilhamento em redes sociais",
+        "pt-PT": "Mostrar botões de partilha nas redes sociais",
+        "sv": "Visa knappar för delning i sociala medier",
+        "th": "แสดงปุ่มสำหรับแชร์ลงโซเชียล",
+        "tr": "Sosyal medya paylaşım düğmelerini göster",
+        "vi": "Hiển thị nút chia sẻ qua mạng xã hội",
+        "zh-CN": "显示社交分享按钮",
+        "zh-TW": "顯示社群分享按鈕"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_previous_button",
+      "label": {
+        "cs": "Zobrazit tlačítko předchozí / následující",
+        "da": "Vis forrige / næste knap",
+        "de": "Vorherige / Nächste Schaltfläche anzeigen",
+        "en": "Show previous/next button",
+        "es": "Mostrar botón anterior / siguiente",
+        "fi": "Näytä edellinen / seuraava painike",
+        "fr": "Afficher le bouton précédent / suivant",
+        "it": "Mostra pulsante precedente/successivo",
+        "ja": "前/次のボタンを表示",
+        "ko": "이전/다음 버튼 표시",
+        "nb": "Vis forrige / neste knapp",
+        "nl": "Toon vorige/volgende knop",
+        "pl": "Pokaż poprzedni/następny przycisk",
+        "pt-BR": "Mostrar botão anterior / próximo",
+        "pt-PT": "Mostrar botão anterior / próximo",
+        "sv": "Visa föregående / nästa knapp",
+        "th": "แสดงปุ่มก่อนหน้า/ถัดไป",
+        "tr": "Önceki/sonraki düğmesini göster",
+        "vi": "Hiển thị nút trước đó / tiếp theo",
+        "zh-CN": "显示上一个/下一个按钮",
+        "zh-TW": "顯示上一個/下一個按鈕"
+      },
+      "default": true
+    },
+      {
+        "type": "color",
+        "id": "blog-link",
+        "label": {
+            "cs": "Odkaz",
+            "da": "Link",
+            "de": "Link",
+            "en": "Link",
+            "es": "Enlace",
+            "fi": "Linkki",
+            "fr": "Lien",
+            "it": "Link",
+            "ja": "リンク",
+            "ko": "링크",
+            "nb": "Kobling",
+            "nl": "Link",
+            "pl": "Link",
+            "pt-BR": "Link",
+            "pt-PT": "Ligação",
+            "sv": "Länk",
+            "th": "ลิงก์",
+            "tr": "Bağlantı",
+            "vi": "Liên kết",
+            "zh-CN": "链接",
+            "zh-TW": "連結"
+        },
+        "default": "#A0A0A0"
+      },
+      {
+        "type": "color",
+        "id": "blog-link-hover",
+        "label": {
+        "cs": "Odkaz při najetí myší",
+        "da": "Link på svæver",
+        "de": "Link auf Schwebeflug",
+        "en": "Link on hover",
+        "es": "Enlace al pasar el mouse",
+        "fi": "Linkki hiirellä",
+        "fr": "Lien en survol",
+        "it": "Link al passaggio del mouse",
+        "ja": "ホバー上のリンク",
+        "ko": "마우스 오버 시 링크",
+        "nb": "Link på sveve",
+        "nl": "Link op hover",
+        "pl": "Link po najechaniu myszką",
+        "pt-BR": "Link ao pairar",
+        "pt-PT": "Link ao pairar",
+        "sv": "Länk på svävar",
+        "th": "ลิงก์บนโฮเวอร์",
+        "tr": "Fareyle üzerine gelindiğinde bağlantı",
+        "vi": "Liên kết khi di chuột",
+        "zh-CN": "悬停链接",
+        "zh-TW": "懸停鏈接"
+        },
+        "default": "#A0A0A0"
+      },
+      {
+        "type": "header",
+        "content": {
+        "cs": "Obsah",
+        "da": "Indholdsfortegnelse",
+        "de": "Inhaltsverzeichnis",
+        "en": "Table of content",
+        "es": "Tabla de contenidos",
+        "fi": "Sisällysluettelo",
+        "fr": "Table des matières",
+        "it": "Tabella dei contenuti",
+        "ja": "目次",
+        "ko": "내용의 테이블",
+        "nb": "Innholdsfortegnelse",
+        "nl": "Inhoudsopgave",
+        "pl": "Spis treści",
+        "pt-BR": "Tabela de conteúdo",
+        "pt-PT": "Tabela de conteúdo",
+        "sv": "Innehållsförteckning",
+        "th": "สารบัญ",
+        "tr": "İçerik tablosu",
+        "vi": "Mục lục",
+        "zh-CN": "表中的内容",
+        "zh-TW": "表中的內容"
+        },
+        "info": {
+"cs": "[Potřebovat pomoc?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"da": " [Brug for hjælp?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"de": " [Hulp nodig?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"en": " [Need help?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"es": " [Necesitas ayuda?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"fi": " [Tarvitsetko apua?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"fr": " [Besoin d'aide?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"it": " [Ho bisogno di aiuto?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"ja": " [助けが必要?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"ko": " [도움이 필요하다?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"nb": " [Trenger hjelp?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"nl": " [Hulp nodig?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"pl": " [Potrzebuję pomocy?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"pt-BR": " [Preciso de ajuda?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"pt-PT": " [Preciso de ajuda?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"sv": " [Behövs hjälp?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"th": " [ต้องการความช่วยเหลือ?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"tr": " [yardıma ihtiyacım var?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"vi": " [Cần giúp đỡ?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"zh-CN": " [需要帮忙?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)",
+"zh-TW": " [需要幫忙?](https:\/\/plaktheme.com\/knowledge-kozen\/blog-template---kozen)"
+        }
+      },
+    {
+      "type": "checkbox",
+      "id": "show_toc",
+      "label": {
+        "cs": "Umožnit",
+        "da": "Aktiver",
+        "de": "Aktivieren",
+        "en": "Enable",
+        "es": "Habilitar",
+        "fi": "ota käyttöön",
+        "fr": "Activer",
+        "it": "Abilitare",
+        "ja": "有効",
+        "ko": "할 수있게하다",
+        "nb": "Muliggjøre",
+        "nl": "Inschakelen",
+        "pl": "Włączyć",
+        "pt-BR": "Habilitar",
+        "pt-PT": "Habilitar",
+        "sv": "Gör det möjligt",
+        "th": "เปิดใช้งาน",
+        "tr": "etkinleştirme",
+        "vi": "Cho phép",
+        "zh-CN": "使能够",
+        "zh-TW": "使能夠"
+      },
+      "default": true
+    },
+      {
+        "type": "text",
+        "id": "toc_hd",
+        "label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+        },
+        "default": "Table of Content"
+      },
+      {
+        "type": "range",
+        "id": "toc-hd-sz",
+        "label": {
+        "cs": "Velikost textu",
+        "da": "Tekststørrelse",
+        "de": "Textgröße",
+        "en": "Text size",
+        "es": "Tamaño del texto",
+        "fi": "Tekstin koko",
+        "fr": "Taille du texte",
+        "it": "Dimensione testo",
+        "ja": "文字サイズ",
+        "ko": "텍스트 사이즈",
+        "nb": "Tekststørrelse",
+        "nl": "Tekengrootte",
+        "pl": "Rozmiar czcionki",
+        "pt-BR": "Tamanho do texto",
+        "pt-PT": "Tamanho do texto",
+        "sv": "Textstorlek",
+        "th": "ขนาดตัวอักษร",
+        "tr": "Metin boyutu",
+        "vi": "Cỡ văn bản",
+        "zh-CN": "文本大小",
+        "zh-TW": "文字尺寸"
+        },
+        "min": 12,
+        "max": 30,
+        "step": 1,
+        "default": 18
+      },
+      {
+        "type": "color",
+        "id": "toc-ctn-bk",
+        "label": {
+          "cs": "Pozadí",
+          "da": "Baggrund",
+          "de": "Hintergrund",
+          "en": "Background",
+          "es": "Fondo",
+          "fi": "Tausta",
+          "fr": "Couleur de fond",
+          "it": "Sfondo",
+          "ja": "背景",
+          "ko": "배경",
+          "nb": "Bakgrunn",
+          "nl": "Achtergrond",
+          "pl": "Tło",
+          "pt-BR": "Plano de fundo",
+          "pt-PT": "Fundo",
+          "sv": "Bakgrund",
+          "th": "พื้นหลัง",
+          "tr": "Arka plan",
+          "vi": "Nền",
+          "zh-CN": "背景",
+          "zh-TW": "背景"
+        },
+        "default": "#f1f1f1"
+      },
+      {
+        "type": "color",
+        "id": "toc-btn-bk",
+        "label": {
+        "cs": "pozadí tlačítka",
+        "da": "knap baggrund",
+        "de": "Schaltflächenhintergrund",
+        "en": "button background",
+        "es": "fondo del botón",
+        "fi": "painikkeen tausta",
+        "fr": "fond de bouton",
+        "it": "sfondo del pulsante",
+        "ja": "ボタンの背景",
+        "ko": "버튼 배경",
+        "nb": "knapp bakgrunn",
+        "nl": "knop achtergrond",
+        "pl": "tło przycisku",
+        "pt-BR": "fundo do botão",
+        "pt-PT": "fundo do botão",
+        "sv": "knapp bakgrund",
+        "th": "พื้นหลังปุ่ม",
+        "tr": "düğme arka planı",
+        "vi": "nút nền",
+        "zh-CN": "按钮背景",
+        "zh-TW": "按鈕背景"
+        },
+        "default": "#3fb9fc"
+      },
+      {
+        "type": "color",
+        "id": "toc-btn-txt",
+        "label": {
+        "cs": "text tlačítka",
+        "da": "knaptekst",
+        "de": "Schaltflächentext",
+        "en": "button text",
+        "es": "botón de texto",
+        "fi": "painikkeen teksti",
+        "fr": "texte du bouton",
+        "it": "testo del pulsante",
+        "ja": "ボタンテキスト",
+        "ko": "버튼 텍스트",
+        "nb": "knappetekst",
+        "nl": "knop tekst",
+        "pl": "Przycisk tekstowy",
+        "pt-BR": "botão de texto",
+        "pt-PT": "botão de texto",
+        "sv": "knapp-text",
+        "th": "ข้อความปุ่ม",
+        "tr": "düğme metni",
+        "vi": "nút văn bản",
+        "zh-CN": "按钮文字",
+        "zh-TW": "按鈕文字"
+        },
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "toc-btn-hvr-bk",
+        "label": {
+        "cs": "pozadí tlačítka při najetí myší",
+        "da": "knap baggrund på svæve",
+        "de": "Tastenhintergrund beim Schweben",
+        "en": "button background on hover",
+        "es": "fondo del botón al pasar el mouse",
+        "fi": "painikkeen tausta hiirellä",
+        "fr": "arrière-plan du bouton au survol",
+        "it": "sfondo del pulsante al passaggio del mouse",
+        "ja": "ホバーのボタンの背景",
+        "ko": "마우스 오버 시 버튼 배경",
+        "nb": "knapp bakgrunn på sveve",
+        "nl": "knopachtergrond bij zweven",
+        "pl": "tło przycisku po najechaniu kursorem",
+        "pt-BR": "fundo do botão ao pairar",
+        "pt-PT": "fundo do botão ao pairar",
+        "sv": "knapp bakgrund på svävar",
+        "th": "พื้นหลังปุ่มบนโฮเวอร์",
+        "tr": "fareyle üzerine gelindiğinde düğme arka planı",
+        "vi": "nút nền khi di chuột",
+        "zh-CN": "悬停按钮背景",
+        "zh-TW": "懸停按鈕背景"
+        },
+        "default": "#0E32C7"
+      },
+      {
+        "type": "color",
+        "id": "toc-btn-hvr-txt",
+        "label": {
+        "cs": "text tlačítka při najetí myší",
+        "da": "knaptekst på markøren",
+        "de": "Schaltflächentext beim Hover",
+        "en": "button text on hover",
+        "es": "texto del botón al pasar el mouse",
+        "fi": "painikkeen teksti hiirellä",
+        "fr": "texte du bouton au survol",
+        "it": "testo del pulsante al passaggio del mouse",
+        "ja": "ホバーのボタンテキスト",
+        "ko": "마우스 오버 시 버튼 텍스트",
+        "nb": "knapptekst på sveve",
+        "nl": "knoptekst bij zweven",
+        "pl": "tekst przycisku po najechaniu kursorem",
+        "pt-BR": "texto do botão ao pairar",
+        "pt-PT": "texto do botão ao pairar",
+        "sv": "knapptext på svävaren",
+        "th": "ข้อความปุ่มบนโฮเวอร์",
+        "tr": "fareyle üzerine gelindiğinde düğme metni",
+        "vi": "nút văn bản khi di chuột",
+        "zh-CN": "悬停按钮文本",
+        "zh-TW": "懸停按鈕文本"
+        },
+        "default": "#FFFFFF"
+      }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,14 @@
+
+<ul class="site-nav list--inline" id="SiteNav">
+  {% for link in linklists[section.settings.left_linklist].links %}
+  	<li {% if link.active %} class="site-nav--active"{% endif %}> 
+        <a href="{{ link.url }}"
+          class="site-nav__label site-nav__link site-nav__link--main{% if link.active %} site-nav__link--active{% endif %}"
+          {% if link.current %} aria-current="page"{% endif %}
+        title="{{ link.title | escape }}">
+		  {% if link.title == "Home" %} <i class="fa fa-home" aria-hidden="true"></i>{% endif %} 
+          {{ link.title | escape }}
+        </a>
+     </li>
+  {% endfor %}
+</ul> 

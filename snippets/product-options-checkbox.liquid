@@ -1,0 +1,18 @@
+{% assign array_checkbox = block.settings.checkbox-buttons | split: ',' %}
+<div class="product-options {{block.settings.product-option-checkbox-visibility}}">
+   <div style="display:block;">
+      <label  class="{% if block.settings.checkbox-required %} required-icon {% endif %} {% if block.settings.checkbox-tooltip != blank %} tooltip {% endif %}"> {{block.settings.checkbox-header}} {% if block.settings.checkbox-tooltip != blank %} <i class="fa fa-info-circle" aria-hidden="true"></i>{% endif %}
+      {% if block.settings.checkbox-tooltip != blank %}
+      <span class="tooltiptext ">{{block.settings.checkbox-tooltip}}</span>
+      {% endif %}
+      </label>
+   </div>
+   {% for t in array_checkbox %}
+   {% assign check = t | strip %}
+   <div class="{{block.settings.checkbox-display}}">
+      <input {% if block.settings.checkbox-required %} required class="required" {% endif %} type="checkbox" id="{{''| append: check}}" hidden-data="{{block.settings.checkbox-header}}" onchange="fillHidden('{{block.settings.checkbox-header}}')"  value="{{''| append: check}}"> <label for="{{''| append: check}}">{{''| append: check}}</label>
+  </div>
+   {% endfor %}
+     <input {% if block.settings.checkbox-required %} required class="required" {% endif%} type="hidden" id="{{block.settings.checkbox-header}}" name="properties[{{block.settings.checkbox-header}}]">
+</div>
+<script>function fillHidden(e){var l,a=document.querySelectorAll('[hidden-data="'+e+'"]'),u=document.getElementById(e);for(u.value="",l=0;l<a.length;l++){var d=a[l];d.checked&&(""==u.value?u.value=d.value:u.value=u.value+", "+d.value)}}</script>

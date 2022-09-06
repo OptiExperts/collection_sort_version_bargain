@@ -1,0 +1,16 @@
+{% assign array_radio = block.settings.radio-buttons | split: ',' %}
+<div class="product-options {{block.settings.product-option-radio-visibility}}">
+   <div style="display:block;">
+      <label class="{% if block.settings.radio-tooltip != blank %} tooltip {% endif %}"> {{block.settings.radio-header}} {% if block.settings.radio-tooltip != blank %} <i class="fa fa-info-circle" aria-hidden="true"></i>{% endif %}
+      {% if block.settings.radio-tooltip != blank %}
+      <span class="tooltiptext ">{{block.settings.radio-tooltip}}</span>
+      {% endif %}
+      </label>
+   </div>
+   {% for t in array_radio %}
+   {% assign rad = t | strip %}
+   <div class=" required {{block.settings.radio-display}}">
+      <input type="radio" name="properties[{{block.settings.radio-header}}]" value="{{''| append: rad}}" checked> <span>{{''| append: rad}}</span>
+   </div>
+   {% endfor %}
+</div>

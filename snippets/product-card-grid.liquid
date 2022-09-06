@@ -1,0 +1,122 @@
+<style>
+  .tooltiptext.add-to-wishlist{top:50px!important}.product-hover-icon-container .btn,.product-hover-icon-container .tooltiptext{position:relative!important;top:0!important;transform:translateX(0)!important;padding-top:8px;padding-bottom:8px}.product-hover-icon-container .add-to-wishlist{margin-left:5px}
+  .product-card 
+  @media (min-width: 769px) and (max-width: 4096px) {
+    .tooltipp.anim-hover{overflow:hidden} 
+  }
+  .product-hover-icon-container{transform:translateY(50px);visibility:hidden;transition:all .4s ease}
+  @media (min-width: 769px) and (max-width: 4096px) {
+    .tooltipp.anim-hover:hover .product-hover-icon-container{transform:translateY(0);visibility:visible}
+  }
+  @media only screen and (min-width:750px){.product-hover-icon-container{position:absolute;bottom:0;left:0;display:flex;align-items:center;height:45px;width:100%;background:rgba(0,0,0,.4);justify-content:center}}@media only screen and (max-width:950px){.product-hover-icon-container .btn,.product-hover-icon-container .tooltiptext{font-size:10px}}@media only screen and (max-width:800px){.product-hover-icon-container .btn,.product-hover-icon-container .tooltiptext{font-size:9px}}@media only screen and (max-width:750px){.tooltipp .add-to-wishlist{display:none}}@media screen and (min-width:767px){.tooltipp{position: relative;display: inline-block;}.tooltipp .tooltiptext{visibility: none;width: auto;text-align: center;border-radius: 6px;padding: 5px;position: absolute;z-index: 1;top: 10px;}.tooltipp .tooltiptext{display:none;}.tooltipp .tooltip-addtocart{display: none;}.tooltipp:hover .tooltip-addtocart{display: inline-block;}.tooltipp:hover .tooltiptext{display:inline-block;}}.has-secondary.grid-view-item__link img.secondary{display:none;transition:1s;}.quick-view-button{transition:.3s!important}.quick-view-button:hover{transform:translateX(7px)}@media screen and (min-width:767px){.has-secondary.grid-view-item__link:hover img.grid-view-item__image{display:none;transition : 2s;}.has-secondary.grid-view-item__link img.secondary{display:none;transition : 2s;}.has-secondary.grid-view-item__link:hover img.secondary{display:block;}.has-secondary.grid-view-item__link:hover img.grid-view-item__image{display:none}}@media screen and (max-width:767px){.has-secondary.grid-view-item__link img.secondary{display:none}}@media screen and (max-width:767px){.has-secondary.grid-view-item__link p.secondary{display:none}}
+  
+  @media (min-width: 769px) and (max-width: 4096px) {
+    .anim-hover img{transition:1.4s;opacity : 1;}
+    .anim-hover:hover img{opacity: 0.8;}
+  }
+</style>
+{% unless grid_image_width %}
+{%- assign grid_image_width = '275x275' -%}
+{% endunless %}
+<div class="  grid-view-item{% unless product.available %} grid-view-item--sold-out{% endunless %} product-card" data-product-card>
+  
+  {% if product.compare_at_price > product.price %}
+  {% if settings.enabl-sale %}
+  <div class="icn sale {%if settings.anim-sale %} anim-label {% endif %}"><h3 style="padding: 4px;">{{ 'products.product.on_sale' | t }}</h3></div> 
+  {% else %} 
+  {% if settings.enabl-nw %}
+  {% if pbb <= new-day %}
+  <div class="icn new {%if settings.anim-nw %} anim-label {% endif %}">
+    <div> {{ 'products.product.new_label' | t }} </div>
+    {% if pbb != 0 %}
+    <div class="days-ago"> <strong> {{pbb}} </strong> {{ 'products.product.new_days_ago' | t }} </div>
+    {% else %}
+    <div class="days-ago"> <strong> 1 <br> </strong>{{ 'products.product.new_day_ago' | t }}</div>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% endif %}
+  {% endif %}
+  {% endif %}
+  
+
+  
+  <a class=" grid-view-item__link {% if product.images.size > 1 and settings.enable_hover_button %} has-secondary{% endif %}" href="{{ product.url | within: collection }}" title="{{ product.title | truncate: 35  }}">
+      <div class="{% if settings.enable_hover_button%} tooltipp {% endif %} anim-hover ">
+         {% for media in product.media limit:1%}
+         {% case media.media_type %}
+         {% when 'image' %}
+        
+
+        {% if product.compare_at_price > product.price %}
+
+        	<img  class="grid-view-item__image lazyload animation--{{settings.lazyloading-effect}}" src="{{ 'blank.jpg' | asset_url }}" data-src="{{ product.featured_image.src | img_url: grid_image_width }}" alt="{{ product.featured_image.alt }}" data-expand="-40">
+        
+        {% else %}
+			<img style="margin-top: 48px;" class="grid-view-item__image lazyload animation--{{settings.lazyloading-effect}}" src="{{ 'blank.jpg' | asset_url }}" data-src="{{ product.featured_image.src | img_url: grid_image_width }}" alt="{{ product.featured_image.alt }}" data-expand="-40">
+        {% endif %}
+         {% if product.images.size > 1 %}
+         {% if settings.enable_hover_button %}
+         <img class="lazy2 secondary small--hide lazyload lazypreload" data-src="{{ product.images.last | img_url: grid_image_width }}" alt="{{ product.images.last.alt | escape }}">
+         {% endif %}
+         {% endif %}
+         {% when 'external_video' %}
+         {{ media | external_video_tag: class: "grid-view-item__image lazyload" }}
+         {% when 'video' %}
+         {{ media | video_tag: loop: true, autoplay: true, muted: true , class: "grid-view-item__image lazyload" }}
+         {% endcase %}
+         {% endfor %}
+         {% include 'product-labels' %}
+         {% if settings.enable_hover_button and product.available %}
+          <div class="product-hover-icon-container">
+         {%- if product.variants.size > 1 -%}
+         {% if template != 'index' %}
+   <a class="btn tooltiptext quick-view quick-view-button small--hide" data-handle="{{ product.handle }}" href="javascript:void(0);" title="select options" > select options</a>
+   {% endif %}
+   {%- else -%}
+   <form method="post" action="/cart/add" class="small--hide tooltip-addtocart ">
+   <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+   {% if product.template_suffix == "preorder" %}
+   <input type="submit" value="{{ 'products.product.preorder' | t }}" class="btn" />
+   {% else %}
+   <input type="submit" value="{{ 'products.product.add_to_cart' | t }}" class="btn" />
+   {% endif %}
+   </form>
+   {%- endif -%}
+   {%- endif -%}
+   {% if settings.enable_wishlist and true %}
+      <a href="#" data-product-handle="{{ product.handle }}" class="btn tooltiptext add-to-wishlist" title="{{ 'customer.account.my_wishlist' | t }}">
+        <i class="fa fa-heart-o"></i>
+      </a>
+   {% endif %}
+   {% if settings.enable_hover_button and product.available %}
+        </div>
+   {% endif %}
+   </div>
+
+   <a href="{{ product.url | within: collection }}">
+   <div class="h4 grid-view-item__title">
+      {{product.title}}
+   </div>
+   {%- if template.name == 'collection' -%}
+      {%- liquid
+        assign colours_available_number = product.metafields.c_f.colour_available_image | size
+      -%}
+      {%- if colours_available_number > 0  -%}
+         <span class="colours-available">{{ 'collections.general.colours_available' | t: count: colours_available_number}}</span>
+      {%- endif -%}
+   {%- endif -%}
+
+   <div class="grid-view-item__meta">
+      {% include 'product-price', variant: product, show_vendors: section.settings.show_vendor %}
+   </div>
+   </a>
+</div>
+<style>
+  .icn.sale {
+    background: #D72324;
+    color: white;
+    border-radius: 11px;
+    max-inline-size: fit-content;
+  }
+</style>

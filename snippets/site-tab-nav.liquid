@@ -1,0 +1,15 @@
+{% if section.settings.title_linklist_1 != blank and section.settings.main_linklist_1 != blank %}
+  	<div id="tabindoor" style="display: block;" class="content-tab-menu" >
+		{% include 'site-nav' with _select_menu: section.settings.main_linklist_1 %}
+    </div>
+  {% endif %}
+  {% if section.settings.title_linklist_2 != blank and section.settings.main_linklist_2 != blank %}
+  	<div id="taboutdoor" style="display: none;" class="content-tab-menu">
+		{% include 'site-nav' with _select_menu: section.settings.main_linklist_2 %}
+    </div>
+  {% endif %}
+  {% if section.settings.title_linklist_3 != blank and section.settings.main_linklist_3 != blank %}
+  	<div id="tabdiy" style="display: none;" class="content-tab-menu" >
+		{% include 'site-nav' with _select_menu: section.settings.main_linklist_3 %}
+    </div>
+  {% endif %}

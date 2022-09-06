@@ -1,0 +1,318 @@
+<div class="filter-tag-group" id="coll-filter">
+   <div class="row-header medium-up--hide">
+      <div class="back-btn" onclick="backFunction()">
+         <i class="icon fa fa-angle-down" aria-hidden="true"></i>
+         Cancel
+      </div>
+      {% if current_tags.size > 0 %}
+      <div class="clear-btn">
+         {% if collection.sort_by != blank %}
+         {% assign link_clear_filter = '/collections/' | append: collection.handle | append: '?sort_by=' | append: collection.sort_by %}
+         {% else %}
+         {% assign link_clear_filter = '/collections/' | append: collection.handle %}
+         {% endif %}
+         <li><a class="js-clear" href="{{ link_clear_filter }}">Clear all</a></li>
+      </div>
+      {% endif %}
+   </div>
+   <div class="tag-group {{block.settings.filter-visibility}}" id="megantic-sidebar-desktop">
+     {% for block in section.blocks %}
+			{% if collection.handle == block.settings.collection-handle %}
+                {% assign subcollections = block.settings.subcollections | split: ',' %} 
+                {% assign subcollectionstitles = block.settings.subcolltitles | split: ',' %}  
+               <div class="title collapsible-arrow ">
+                  Categories
+                  <i class="icon fa fa-angle-down" aria-hidden="true"></i>
+               </div>
+              
+
+               <ul class="content" id="scroll-bar-coll">
+                  {% for item in subcollections %}
+               
+                 <li class=" active-tag">          
+                                  <a href="/collections/{{item}}">
+                                   	 {% if subcollectionstitles.size > 0 %}
+                                         {{subcollectionstitles[forloop.index0]}}
+                                        {% else %}
+                                      		{{ item | split: '-' | uniq  | join: ' ' }}
+                                        {% endif %}
+                                    
+                                    </a>          
+                               </li>
+                 {% endfor %}
+                   </ul>
+     
+                  {% elsif collection.handle == block.settings.collhandle2 %}
+                   {% assign subcollections = block.settings.subcolllist2 | split: ',' %}
+                {% assign subcollectionstitles = block.settings.subcolltitles2 | split: ',' %}
+              <div class="title collapsible-arrow ">
+                  Categories
+                  <i class="icon fa fa-angle-down" aria-hidden="true"></i>
+               </div>
+                  <ul class="content" id="scroll-bar-coll">
+                  {% for item in subcollections %}
+               
+                 <li class=" active-tag">          
+                                  <a href="/collections/{{item}}">
+                                   	    {% if subcollectionstitles.size > 0 %}
+                                        {{subcollectionstitles[forloop.index0]}}
+                                    {% else %}
+                                        {{ item | split: '-' | uniq  | join: ' ' | capitalize }}
+                                    {% endif %}
+                                    
+                                    </a>          
+                               </li>
+                 {% endfor %}
+                   </ul>
+     
+      		{% elsif collection.handle == block.settings.collhandle3 %}
+                   {% assign subcollections = block.settings.subcolllist3 | split: ',' %}
+                {% assign subcollectionstitles = block.settings.subcolltitles3 | split: ',' %}
+              <div class="title collapsible-arrow ">
+                  Categories
+                  <i class="icon fa fa-angle-down" aria-hidden="true"></i>
+               </div>
+                  <ul class="content" id="scroll-bar-coll">
+                  {% for item in subcollections %}
+               
+                 <li class=" active-tag">          
+                                  <a href="/collections/{{item}}">
+                                   	    {% if subcollectionstitles.size > 0 %}
+                                        {{subcollectionstitles[forloop.index0]}}
+                                    {% else %}
+                                        {{ item | split: '-' | uniq  | join: ' ' | capitalize }}
+                                    {% endif %}
+                                    
+                                    </a>          
+                               </li>
+                 {% endfor %}
+                   </ul>
+     
+     		{% elsif collection.handle == block.settings.collhandle4 %}
+                   {% assign subcollections = block.settings.subcolllist4 | split: ',' %}
+                {% assign subcollectionstitles = block.settings.subcolltitles4 | split: ',' %}
+              <div class="title collapsible-arrow ">
+                  Categories
+                  <i class="icon fa fa-angle-down" aria-hidden="true"></i>
+               </div>
+                  <ul class="content" id="scroll-bar-coll">
+                  {% for item in subcollections %}
+               
+                 <li class=" active-tag">          
+                                  <a href="/collections/{{item}}">
+                                   	    {% if subcollectionstitles.size > 0 %}
+                                        {{subcollectionstitles[forloop.index0]}}
+                                    {% else %}
+                                        {{ item | split: '-' | uniq  | join: ' ' | capitalize }}
+                                    {% endif %}
+                                    
+                                    </a>          
+                               </li>
+                 {% endfor %}
+                   </ul>
+     
+    		 {% elsif collection.handle == block.settings.collhandle5 %}
+                   {% assign subcollections = block.settings.subcolllist5 | split: ',' %}
+                {% assign subcollectionstitles = block.settings.subcolltitles5 | split: ',' %}
+              <div class="title collapsible-arrow ">
+                  Categories
+                  <i class="icon fa fa-angle-down" aria-hidden="true"></i>
+               </div>
+                  <ul class="content" id="scroll-bar-coll">
+                  {% for item in subcollections %}
+               
+                 <li class=" active-tag">          
+                                  <a href="/collections/{{item}}">
+                                   	    {% if subcollectionstitles.size > 0 %}
+                                        {{subcollectionstitles[forloop.index0]}}
+                                    {% else %}
+                                        {{ item | split: '-' | uniq  | join: ' ' | capitalize }}
+                                    {% endif %}
+                                    
+                                    </a>          
+                               </li>
+                 {% endfor %}
+                   </ul>
+   
+     {% endif %}
+		{% endfor %}
+  </div>
+ 
+
+   {% for block in section.blocks limit: section.blocks.size %}
+      {% assign array_tag1 = block.settings.group_tag_1 | split: ',' %}
+
+      {% if block.settings.group_tag_1_label == 'color' or block.settings.group_tag_1_label == 'colour' %}
+         {% assign color_type = true %}
+      {% endif %}
+
+         {% assign count = 0 %}
+         {% assign list = blank %}
+         {% for tag in collection.all_tags %}
+            {% assign tag_handle = tag | strip | handleize %}
+            {% for tag1 in array_tag1 %}
+               {% assign tag1_handle = tag1 | strip | handleize %}
+               {% if tag1_handle == tag_handle %}
+                  {% assign count = count | plus: 1 %}
+                  {%- if current_tags contains tag -%}
+                     {% assign list = list | append: tag | append: '/' %}
+                  {%- endif -%}
+               {% endif %}
+            {% endfor %}
+         {% endfor %}
+         {% assign list = list | split: '/' %}
+
+         {% if count > 0 %}
+            <div class="tag-group {{block.settings.filter-visibility}}">
+               <div class="title collapsible-arrow ">
+                  {{ block.settings.group_tag_1_label }}
+                  <i class="icon fa fa-angle-down" aria-hidden="true"></i>
+               </div>
+               <div class="medium-up--hide list-current-tag">
+                  {{ list | join: ', '}}
+               </div>
+
+               <ul class="content {% if color_type %}content-color{% endif %}" id="scroll-bar-coll">
+                  {% for tag in collection.all_tags %}
+                     {% assign tag_handle = tag | strip | handleize %}
+                     {% for tag1 in array_tag1 %}
+                        {% assign tag1_handle = tag1 | strip | handleize %}
+                        {% if tag1_handle == tag_handle %}
+                           {% if current_tags contains tag %}
+                              <li data-href="{{ tag | handleize }}" class="{% if color_type %}type-color{% endif %} active-tag color-{{ tag | handleize }}">
+                                 {% if color_type %}
+                                    {{ '<span class="box"></span>' | append: '' | link_to_remove_tag: tag }}
+                                 {% else %}
+                                    {{ '<span class="box"></span>' | append: tag | link_to_remove_tag: tag }}
+                                 {% endif %}
+                                 {% style %}
+                                 .color-{{ tag | handleize }} .box{
+                                    background: {%- render 'custom-color' value: tag -%};
+                                 }
+                                 {% endstyle %}
+                              </li>
+                           {% else %}
+                              <li data-href="{{ tag | handleize }}" class="{% if color_type %}type-color{% endif %} color-{{ tag | handleize }}">
+                                 {% if color_type %}
+                                    {{ '<span class="box"></span>' | append: '' | link_to_add_tag: tag }}
+                                 {% else %}
+                                    {{ '<span class="box"></span>' | append: tag | link_to_add_tag: tag }}
+                                 {% endif %}
+                                 {% style %}
+                                 .color-{{ tag | handleize }} .box{
+                                    background: {%- render 'custom-color' value: tag -%};
+                                 }
+                                 {% endstyle %}
+                              </li>
+                           {% endif %}
+                        {% endif %}
+                     {% endfor %}
+                  {% endfor %}
+               </ul>
+            </div>
+         {% endif %}
+
+      {% assign color_type = false %}
+   {% endfor %}
+   <div class="footer-filter medium-up--hide">
+      <button onclick="applyFunction()">Apply</button>
+   </div>
+</div>
+{%comment%}
+<div id="megantic-sidebar-desktop">
+		{% for block in section.blocks %}
+			{% if collection.handle == block.settings.collection-handle %}
+                {% assign subcollections = block.settings.subcollections | split: ',' %} 
+                {% assign subcollectionstitles = block.settings.subcolltitles | split: ',' %}      
+                <div class="megantic-sidebar-title">Subcategories</div>  
+                  <div class="megantic-sidebar-list">
+                      <ul>
+                          {% for item in subcollections %}
+                               <li>          
+                                  <a href="/collections/{{item}}">
+                                   	 {% if subcollectionstitles.size > 0 %}
+                                         {{subcollectionstitles[forloop.index0]}}
+                                        {% else %}
+                                      		{{ item | split: '-' | uniq  | join: ' ' }}
+                                        {% endif %}
+                                    
+                                    </a>          
+                               </li>
+                          {% endfor %}
+                      </ul>    
+                  </div>                   			
+			{% endif %}
+		{% endfor %}
+          </div>
+
+{%endcomment%}
+
+<script>
+   $(function () {
+      $('#coll-filter li a').click(function (l) {
+         l.preventDefault();
+         if ($(window).width() > 749) {
+            var t = $(this).attr("href");
+            ajaxFilter(t);
+         } else {
+            $(this).parent().toggleClass('active-tag')
+            if($(this).hasClass('js-clear')){
+               ajaxFilter($(this).attr("href"))
+            }
+         }
+      })
+
+      $('#sort-desktop li span').click(function () {
+         var valHref = $(this).data('href');
+         $('#SortBy').val(valHref);
+         $("#SortBy").change();
+      })
+   });
+
+   var i, coll = document.getElementsByClassName("collapsible-arrow");
+   for (i = 0; i < coll.length; i++) coll[i].addEventListener("click", function () {
+      this.classList.toggle("active");
+      // var l = this.nextElementSibling;
+      // l.toggleClass('show')
+   });
+
+   window.scrollTo({
+      top: 110,
+      behavior: 'smooth'
+   });
+
+   function ajaxFilter(href) {
+      $.ajax({
+         type: "GET",
+         url: href,
+         data: {},
+         beforeSend: function (l) {
+            $("#tags-load").show()
+         },
+         complete: function (l) {
+            $("#collection").html($("#collection", l.responseText).html()), history
+               .pushState({
+                  page: href
+               }, href, href), $("#tags-load").hide()
+         }
+      })
+   }
+
+   function backFunction() {
+      document.getElementById("myDIV").classList.remove("show-filter");
+      document.body.style.overflow = '';
+   }
+
+   function applyFunction() {
+      let tagArr = [];
+      $('#coll-filter li').each(function(e){
+         if($(this).hasClass('active-tag')){
+            tagArr.push($(this).data('href'))
+         }
+      })
+      let listTag = tagArr.join('+')
+      if(tagArr.length > 0) listTag = '/'+listTag
+      let href = location.origin + '/collections/' + '{{ collection.handle }}' + listTag + location.search
+      ajaxFilter(href)
+   }
+</script>

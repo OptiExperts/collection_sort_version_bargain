@@ -1,0 +1,41 @@
+<style>.collection-grid{margin-bottom:-22px;overflow:auto}.collection-grid-item{position:relative;width:100%;padding-bottom:100%;margin-bottom:22px}@media only screen and (min-width:769px){.collection-grid-item{margin-bottom:20px}}.collection-grid-item__title{color:var(--color-overlay-title-text);position:absolute;text-align:center;width:100%;top:50%;padding:0 5px;transform:translateY(-50%);transition:.1s cubic-bezier(.44,.13,.48,.87);text-shadow:0 0 4px var(--color-text-shadow);hyphens:auto;font-weight:700}@media only screen and (min-width:768px){.collection-grid-item__title{padding:0 15px}}.collection-grid-item__link{position:absolute;top:0;left:0;bottom:0;right:0}.collection-grid-item__link:focus .collection-grid-item__title-wrapper::before,.collection-grid-item__link:hover .collection-grid-item__title-wrapper::before{opacity:var(--hover-overlay-opacity)}.collection-grid-item__link:focus{opacity:1}.collection-grid-item__overlay{position:relative;display:block;height:100%;width:100%;background-size:fill;background-repeat:no-repeat;background-position:center center}.collection-grid-item__title-wrapper::before{content:'';position:absolute;top:0;right:0;bottom:0;left:0;height:105%;background-color:var(--color-image-overlay);opacity:var(--opacity-image-overlay)}</style>  
+{% if collection.image %}
+  {%- assign collection_image = collection.image -%}
+{% elsif collection.products.first and collection.products.first.images != empty %}
+  {%- assign collection_image = collection.products.first.featured_image -%}
+{% else %}
+  {% assign collection_image = blank %}
+{% endif %}
+<div class="collection-grid-item">
+  <a href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}" class="collection-grid-item__link" title="{{ collection_image.alt | escape }}">
+    {% unless collection_image == blank %}
+      <div class="collection-grid-item__overlay box ratio-container js lazyload animation--{{settings.lazyloading-effect}}"
+        data-bgset="{% include 'bgset', image: collection_image %}"
+        data-sizes="auto"
+        data-parent-fit="cover"
+        data-src="{{ collection_image | img_url: '300x300' }}">
+      </div>
+      <noscript>
+        <div class="collection-grid-item__overlay lazyload animation--{{settings.lazyloading-effect}}" style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
+      </noscript>
+    {% else %}
+      {% if collection == empty %}
+        <div class="collection-grid-item__overlay">
+          {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
+          {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {% else %}
+        <div class="collection-grid-item__overlay animation--{{settings.lazyloading-effect}}" style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
+      {% endif %}
+    {% endunless %}
+    <div class="collection-grid-item__title-wrapper">
+      <div class="collection-grid-item__title h3">
+        {% if collection.title == blank %}
+          {{ 'homepage.onboarding.collection_title' | t }}
+        {% else %}
+          {{ collection.title }}
+        {% endif %}
+      </div>
+    </div>
+  </a>
+</div>

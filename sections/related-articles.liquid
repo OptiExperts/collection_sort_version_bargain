@@ -1,0 +1,187 @@
+ {% if section.settings.related_articles %} {% if section.settings.nb_related_articles == '2' %} {% assign number_rl = 'medium-up--two-fifths' %} {% endif %} {% if section.settings.nb_related_articles == '3' %} {% assign number_rl = 'medium-up--four-fifteen' %} {% endif %} {% if section.settings.nb_related_articles == '4' %} {% assign number_rl = 'medium-up--one-fifth' %} {% endif %} {% assign blogarticletitle = article.title %} {% assign articles_limit = section.settings.nb_related_articles | plus: 1 %} {% for article in blog.articles limit: articles_limit %} {% if article.title == blogarticletitle %} {% else %}
+<div class="grid__item {{number_rl}}">
+   <a href="{{ article.url }}" class="article__grid-image-container" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100}}%;" title="{{article.title}}">
+      <img id="{{ img_id }}" class="article__grid-image lazyload animation--{{settings.lazyloading-effect}}"  src="{{ 'blank.jpg' | asset_url }}" data-src="{{ article.image | img_url: '' }}" alt="{{ article.image.alt | escape }}" data-expand="-40">
+      <div class="h4 related-title">{{ article.title }}</div>
+   </a>
+   {% if section.settings.blog_rl_show_author %}
+   <i class="fa fa-user"></i>
+   <p class="article__author">{{ 'blogs.article.by_author' | t: author: article.author }}</p>
+   {% endif %} {% if section.settings.blog_rl_show_date %}
+   <br> <i class="fa fa-calendar" aria-hidden="true"></i>
+   <p class="article__date">
+      {{ article.published_at | time_tag: format: 'date' }}
+   </p>
+   {% endif %}
+   <ul class="related__meta-buttons">
+      <li>
+         <a href="{{ article.url }}" class="btn btn--tertiary btn--small" aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title }}" title="{{ 'blogs.article.read_more' | t }}">
+         {{ 'blogs.article.read_more' | t }}
+         </a>
+      </li>
+      {% if blog.comments_enabled? and article.comments_count > 0 %}
+      <li>
+         <a href="{{ article.url }}#comments" class="article__comment-count btn btn--tertiary btn--small" title="{{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}">
+         {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+         </a>
+      </li>
+      {% endif %}
+   </ul>
+</div>
+{% endif %} {% endfor %} {% endif %}
+{% schema %}
+{
+  "name": {
+        "cs": "Související články",
+        "da": "Relaterede artikler",
+        "de": "In Verbindung stehende Artikel",
+        "en": "Related articles",
+        "es": "Artículos relacionados",
+        "fi": "Aiheeseen liittyvät artikkelit",
+        "fr": "les articles connexes",
+        "it": "Articoli Correlati",
+        "ja": "関連記事",
+        "ko": "관련 기사",
+        "nb": "Relaterte artikler",
+        "nl": "Gerelateerde artikelen",
+        "pl": "Powiązane artykuły",
+        "pt-BR": "Artigos relacionados",
+        "pt-PT": "Artigos relacionados",
+        "sv": "Relaterade artiklar",
+        "th": "บทความที่เกี่ยวข้อง",
+        "tr": "İlgili Makaleler",
+        "vi": "Những bài viết liên quan",
+        "zh-CN": "相关文章",
+        "zh-TW": "相關文章"
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "related_articles",
+      "label": {
+        "cs": "Zobrazit související články",
+        "da": "Vis relaterede artikler",
+        "de": "Verwandte Artikel anzeigen",
+        "en": "Show related articles",
+        "es": "Mostrar artículos relacionados",
+        "fi": "Näytä aiheeseen liittyvät artikkelit",
+        "fr": "Afficher les articles connexes",
+        "it": "Mostra articoli correlati",
+        "ja": "関連記事を表示する",
+        "ko": "관련 기사 보기",
+        "nb": "Vis relaterte artikler",
+        "nl": "Toon gerelateerde artikelen",
+        "pl": "Pokaż powiązane artykuły",
+        "pt-BR": "Mostrar artigos relacionados",
+        "pt-PT": "Mostrar artigos relacionados",
+        "sv": "Visa relaterade artiklar",
+        "th": "แสดงบทความที่เกี่ยวข้อง",
+        "tr": "İlgili makaleleri göster",
+        "vi": "Hiển thị các bài viết liên quan",
+        "zh-CN": "显示相关文章",
+        "zh-TW": "顯示相關文章"
+      },
+      "default": true
+    },
+      {
+        "type": "select",
+        "id": "nb_related_articles",
+        "label": {
+        "cs": "Počet článků",
+        "da": "Antal artikler",
+        "de": "Art auswählen",
+        "en": "Number of articles",
+        "es": "Seleccione tipo",
+        "fi": "Artikkelien lukumäärä",
+        "fr": "Sélectionner le genre",
+        "it": "Numero di articoli",
+        "ja": "記事の数",
+        "ko": "기사 수",
+        "nb": "Antall artikler",
+        "nl": "Aantal artikelen",
+        "pl": "Liczba artykułów",
+        "pt-BR": "Número de artigos",
+        "pt-PT": "Número de artigos",
+        "sv": "Antal artiklar",
+        "th": "จำนวนบทความ",
+        "tr": "makale sayısı",
+        "vi": "Số lượng bài báo",
+        "zh-CN": "文章数",
+        "zh-TW": "文章數"
+        },
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          }
+        ],
+        "default": "4"
+      },
+    {
+      "type": "checkbox",
+      "id": "blog_rl_show_author",
+      "label": {
+        "cs": "Zobrazit autora",
+        "da": "Vis forfatter",
+        "de": "Autor anzeigen",
+        "en": "Show author",
+        "es": "Mostrar autor",
+        "fi": "Näytä tekijä",
+        "fr": "Afficher l'auteur",
+        "it": "Mostra autore",
+        "ja": "執筆者を表示する",
+        "ko": "작성자 표시",
+        "nb": "Vis forfatter",
+        "nl": "Auteur weergeven",
+        "pl": "Pokaż autora",
+        "pt-BR": "Exibir autor",
+        "pt-PT": "Mostrar autor",
+        "sv": "Visa författare",
+        "th": "แสดงผู้เขียน",
+        "tr": "Yazarı göster",
+        "vi": "Hiển thị tác giả",
+        "zh-CN": "显示作者",
+        "zh-TW": "顯示作者"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_rl_show_date",
+      "label": {
+        "cs": "Zobrazit datum",
+        "da": "Vis dato",
+        "de": "Datum anzeigen",
+        "en": "Show date",
+        "es": "Mostrar fecha",
+        "fi": "Näytä päivämäärä",
+        "fr": "Afficher la date",
+        "it": "Mostra data",
+        "ja": "日付を表示する",
+        "ko": "날짜 표시",
+        "nb": "Vis dato",
+        "nl": "Datum weergeven",
+        "pl": "Pokaż datę",
+        "pt-BR": "Exibir data",
+        "pt-PT": "Mostrar data",
+        "sv": "Visa datum",
+        "th": "แสดงวันที่",
+        "tr": "Tarihi göster",
+        "vi": "Hiển thị ngày",
+        "zh-CN": "显示日期",
+        "zh-TW": "顯示日期"
+      },
+      "default": true
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,48 @@
+<style>ul.tabs{border-bottom:1px solid #ddd;display:block;margin:0 0 20px;padding:0}ul.tabs li{display:block;float:left;height:30px;margin-bottom:0;padding:0;width:auto}.tabs li p{color:{{ settings.tabs-txt }};}.tabs li p:active{color:{{settings.tabs-active-txt}} !important;}.tabs li p:focus{color:{{ settings.tabs-click-txt }} !important;}.tabs li a{-moz-border-bottom-colors:none;-moz-border-image:none;-moz-border-left-colors:none;-moz-border-right-colors:none;-moz-border-top-colors:none;background:none repeat scroll 0 0 {{ settings.tabs-bk }};color:{{ settings.tabs-txt }};border-color:#ddd!important;border-style:solid;border-width:1px 1px 0 1px;display:block;font-size:{{settings.tabs-sz}}px;height:29px;line-height:30px;margin:0;padding:0 20px;text-decoration:none;width:auto;border-bottom:none!important}ul.tabs li a.active{background:none repeat scroll 0 0 {{ settings.tabs-click-btn }};border-left-width:1px;border-top-left-radius:2px;border-top-right-radius:2px;color:{{ settings.tabs-click-txt }} !important;height:30px;margin:0 0 0 -1px;padding-top:4px;position:relative;top:-4px}ul.tabs li a.active p{background:transparent;color:{{settings.tabs-active-txt}};}ul.tabs li:first-child a.active{margin-left:0}ul.tabs li:first-child a{border-top-left-radius:2px;border-width:1px 1px 0}ul.tabs li:last-child a{border-top-right-radius:2px}ul.tabs:after,ul.tabs:before{content:" ";display:block;height:0;overflow:hidden;visibility:hidden;width:0}ul.tabs:after{clear:both}</style>
+<ul class="tabs">
+  <li><a href="#tabdesc" title="{{ 'cart.label.product_details' | t }}">{{ 'cart.label.product_details' | t }}</a></li>
+  {% if settings.enable_wishlist %}
+    <li class="wishlist-button">
+      <div class="add-to-wishlist show-test_82" data-product-handle="{{ product.handle }}" data-add-to-wishlist="{{ settings.add_to_wishlist_text }}"
+      data-added-to-wishlist="{{ settings.added_to_wishlist_text }}">
+        <i class="fa fa-heart-o"></i>
+      </div>
+    </li>
+  {% endif %}
+
+  {% for block in section.blocks %}
+    {%- case block.type -%}
+      {%- when 'text' -%}
+        <li><a href="#tab-{{ forloop.index0 }}">{{block.settings.tab-name}}</a></li>
+    {% endcase %}
+  {% endfor %}
+</ul>
+
+<div id="tabdesc">
+  {% if section.settings.enable_readmore %}
+    <div class=" product-showmore" itemprop="description">
+      {{ product.description }}
+    </div>
+    <a class="readmore" href="#" title="{{ 'blogs.article.read_more' | t }}">{{ 'blogs.article.read_more' | t }}...</a>
+  {% else %}
+    {{ product.description }}
+  {% endif %}
+</div>
+
+{% for block in section.blocks %}
+  {%- case block.type -%}
+    {%- when 'text' -%}
+      <div id="tab-{{ forloop.index0 }}">
+        {{ block.settings.description-tab }}
+      </div>
+  {% endcase %}
+{% endfor %}
+
+<script type="text/javascript">
+  jQuery(document).ready(function(e){
+  e(".readmore").insertAfter(".product-showmore"),e(".readmore").click(function(t){t.preventDefault();
+  var o=document.querySelector(".product-showmore");
+  console.log(o.style.height);
+  ""===o.style.height?o.style.height="auto":"auto"===o.style.height?o.style.height="":o.style.height="92px";
+  e(this).text("{{ 'blogs.article.read_less' | t }}..."==e(this).text()?"{{ 'blogs.article.read_more' | t }}...":"{{ 'blogs.article.read_less' | t }}...")})});
+</script>

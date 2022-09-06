@@ -1,0 +1,55 @@
+<style>
+     @media (min-width: 750px) {
+
+  span.ship-desktop {
+    display: block;
+    text-align:center!important;
+}
+              span.ship-mobile {
+    display: none;
+}
+     }
+   @media (max-width: 749px) {
+
+
+       span.ship-desktop {
+    display: none;
+}
+   } 
+</style>  
+{% assign announc-bfr-prc = section.settings.announc-bfr %}
+{% assign free-ship = section.settings.free-shipping %}
+{% assign announc-aftr-prc = section.settings.announc-aftr %}
+{% assign announc-freshp = section.settings.announc-freshp %}
+{% assign ship-prc-bfr = free-ship | times: 100.0 | minus: cart.total_price %}
+{% assign phone_b = section.settings.phone_enable %}
+{% assign ship_b = section.settings.freeship_bar_enable %}
+{% assign mail_b = section.settings.mail_enable %}
+<div class="shipping-bar grid">
+  {% if phone_b %}
+ <div  class="small--hide grid__item {% if mail_b and ship_b %}one-third {% endif %} {% if mail_b or ship_b %} one-half {% endif %} ">
+   <a href="tel:{{ section.settings.phone_txt | replace: ' ', '' | replace: '-', '' | replace: '(', '' | replace:')', '' }}"> <p> <i class="fa fa-phone" aria-hidden="true"></i>{{section.settings.phone_txt}} </p> </a>   
+  </div>
+  {% endif %}
+  {% if ship_b %}         
+     <div  class="grid__item {% if mail_b and phone_b %}one-third {% endif %} {% if mail_b or phone_b %}one-half {% endif %}" {% if section.settings.ship_txt_select == 'ship_dynamic_bar_enable' %} data-totaltarget="{{ free-ship }}"  id="shipbarUnique"{% endif %}>
+       <div id="bounce">
+{% if section.settings.ship_txt_select == 'ship_static_bar_enable' %}        
+         <p class="grid__item"> <span class="ship-desktop">{{section.settings.static_txt}}</span><span class="ship-mobile">Australia's Best Selection. Free Delivery on Eligible Orders.</span></p>
+{% endif %} 
+{% if section.settings.ship_txt_select == 'ship_dynamic_bar_enable' %}        
+       {% if ship-prc-bfr > 0 %} 
+   <p class="grid__item " >{{ announc-bfr-prc }} <strong data-cart-item-price>{{ship-prc-bfr | money }}</strong> {{ announc-aftr-prc }} </p>
+   {% else %}
+   <p class="grid__item anounc-free">{{ announc-freshp }}</p>
+   {% endif %}
+            {% endif %}
+         </div>
+       </div>
+         {% endif %}
+    <!--{% if mail_b %}
+     <div  class="small--hide grid__item {% if ship_b and phone_b %}one-third {% endif %} {% if ship_b or phone_b %}one-half {% endif %}">
+       <a href="mailto:{{ section.settings.mail_txt}}"><p class="grid__item " ><i class="fa fa-envelope" aria-hidden="true"></i> {{section.settings.mail_txt}} </p></a>
+  </div> 
+    {% endif %}-->
+</div>

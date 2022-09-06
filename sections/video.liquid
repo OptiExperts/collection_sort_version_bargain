@@ -1,0 +1,712 @@
+<style>[data-section-type=video-section]{margin:0 auto}@media only screen and (max-width:749px){[data-section-type=video-section]{transition:width .6s cubic-bezier(.44,.13,.48,.87),height .6s cubic-bezier(.44,.13,.48,.87),padding .6s cubic-bezier(.44,.13,.48,.87)}}.video-section-wrapper{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%}@media only screen and (min-width:768px){.video-section-wrapper{overflow:hidden}}@media only screen and (max-width:749px){.video-section-wrapper{overflow:visible!important}.video-section-wrapper.video-is-playing{margin:0}.video-section-wrapper.video-is-loaded{transition:margin .6s cubic-bezier(.44,.13,.48,.87)}}.video-section-wrapper--small.video-section-wrapper--min-height{min-height:175px}@media only screen and (min-width:768px){.video-section-wrapper--small.video-section-wrapper--min-height{min-height:475px}}.video-section-wrapper--medium.video-section-wrapper--min-height{min-height:270px}@media only screen and (min-width:768px){.video-section-wrapper--medium.video-section-wrapper--min-height{min-height:650px}}.video-section-wrapper--large.video-section-wrapper--min-height{min-height:375px}@media only screen and (min-width:768px){.video-section-wrapper--large.video-section-wrapper--min-height{min-height:775px}}.video-section-wrapper iframe.youtube-iframe{height:100%;position:absolute;top:0;left:0}.video-section-wrapper iframe.vimeo-video{min-height:100%;position:absolute;top:0;left:0;right:0;margin:0 auto}</style>  
+<style>.videoWrapper{position:relative;width:100%;height:0;background-color:#000}.videoIframe{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;background-color:transparent}.videoPoster{position:absolute;top:0;right:0;left:0;width:100%;height:100%;margin:0;padding:0;cursor:pointer;border:0;outline:0;background-position:50% 50%;background-size:100% 100%;background-size:cover;text-indent:-999em;overflow:hidden;opacity:1;-webkit-transition:opacity .8s,height 0s;-moz-transition:opacity .8s,height 0s;transition:opacity .8s,height 0s;-webkit-transition-delay:0s,0s;-moz-transition-delay:0s,0s;transition-delay:0s,0s}.videoPoster:before{content:"";position:absolute;top:50%;left:50%;width:80px;height:80px;margin:-40px 0 0 -40px;border:5px solid #fff;border-radius:100%;-webkit-transition:border-color .3s;-moz-transition:border-color .3s;transition:border-color .3s}.videoPoster:after{content:"";position:absolute;top:50%;left:50%;width:0;height:0;margin:-25px 0 0 -12px;border-left:40px solid #fff;border-top:25px solid transparent;border-bottom:25px solid transparent;-webkit-transition:border-color .3s;-moz-transition:border-color .3s;transition:border-color .3s}.videoPoster:focus:before,.videoPoster:hover:before{border-color:rgba(255,255,255,.7)}.videoPoster:focus:after,.videoPoster:hover:after{border-left-color:rgba(255,255,255,.7)}.videoWrapperActive .videoPoster{opacity:0;height:0;-webkit-transition-delay:0s,.8s;-moz-transition-delay:0s,.8s;transition-delay:0s,.8s}</style>
+{%- case section.settings.height -%}
+  {%- when 'small' -%}
+    {%- assign mobile_height = 175 -%}
+    {%- assign desktop_height = 475 -%}
+  {%- when 'medium' -%}
+    {%- assign mobile_height = 270 -%}
+    {%- assign desktop_height = 650 -%}
+	{%- if section.settings.video_link contains "youtube" or section.settings.video_link contains "vimeo" -%}
+		<style>@media only screen and (min-width: 768px){.js-videoWrapper{min-height: 580px !important;}}</style>
+	{% endif %}
+  {%- when 'large' -%}
+    {%- assign mobile_height = 375 -%}
+    {%- assign desktop_height = 775 -%}
+	{%- if section.settings.video_link contains "youtube" or section.settings.video_link contains "vimeo" -%}
+      <style>@media only screen and (min-width: 768px){.js-videoWrapper{min-height: inherit !important;}}.js-videoWrapper{padding-bottom: 56.25%;}</style>
+	{% endif %}
+{%- endcase -%} 
+<div class="{% if section.settings.fullwidth-vid == false %} page-width {% endif %} {{section.settings.video-visibility}}" >
+ {% if section.settings.title != blank %}
+  <div class="section-header text-center">
+          {% if section.settings.video-h == 'h1'%}
+        <h1 class="h2">{{ section.settings.title | escape }}</h1>
+      {% elsif section.settings.video-h == 'h2' %}
+        <h2 class="h2">{{ section.settings.title | escape }}</h2>      
+      {% else %}
+        <h3 class="h2">{{ section.settings.title | escape }}</h3>      
+      {% endif %}          
+   </div> 
+  {% endif %}
+  {%- if section.settings.video_link != blank -%}
+      {% assign flag = 0 %}
+      {%- if section.settings.video_link contains "youtube" -%}
+  			<div class="video-section-wrapper 
+                        video-section-wrapper--{{ section.settings.height }} 
+                        video-section-wrapper--min-height 
+                        video-section-wrapper--{{ section.id }} 
+                        videoWrapper 
+                        videoWrapper169 
+                        js-videoWrapper" 
+                 data-desktop-height="{{ desktop_height }}" 
+                 data-mobile-height="{{ mobile_height }}">
+        {% assign youtube_url = section.settings.video_link | split: '?' %}
+        {% assign params = youtube_url[1] | split: '&' %}
+        {% assign video_id = '' %}
+        {% for param in params %}
+          {%- if param contains 'v=' -%}
+            {% assign video_id = param | remove: "v=" %}
+            {% break %}
+          {%- endif -%}
+        {% endfor %}
+        {%- if video_id != '' -%}
+          {% assign flag = 1 %}
+            <iframe data-src="https://www.youtube.com/embed/{{ video_id }}?autoplay=1& modestbranding=1&rel=0&hl=sv" class="youtube-iframe videoIframe js-videoIframe" width="100%" height="315" src="" allowTransparency="true" frameborder="0" allowfullscreen></iframe>
+            <button class="videoPoster js-videoPoster lazyload"  title="{{section.settings.poster.alt | escape }}" data-bgset="{{ section.settings.poster | img_url: '' }}">Play video</button>   
+        {%- endif -%}
+              </div>
+      {%- endif -%}
+      {%- if section.settings.video_link contains "vimeo" -%}
+              <div class="video-section-wrapper
+                          video-section-wrapper--{{ section.settings.height }} 
+                          video-section-wrapper--min-height 
+                          video-section-wrapper--{{ section.id }} 
+                          videoWrapper 
+                          videoWrapper169 
+                          js-videoWrapper" 
+                   data-desktop-height="{{ desktop_height }}" 
+                   data-mobile-height="{{ mobile_height }}">
+        {% assign url = section.settings.video_link | split: 'vimeo.com/' %}
+        {% assign video_id = url[1] %}
+        {%- if video_id != blank -%}
+            {% assign flag = 1 %}
+              <iframe src="" data-src="https://player.vimeo.com/video/{{ video_id }}" class="vimeo-video videoIframe js-videoIframe" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
+              <button class="videoPoster js-videoPoster lazyload" title="{{section.settings.poster.alt | escape }}" data-bgset="{{ section.settings.poster | img_url: '' }}">Play video</button>
+        {%- endif -%}
+                </div>
+      {%- endif -%}
+      {%- if flag == 0 -%}
+            <div class="video-section-wrapper 
+                        video-section-wrapper--{{ section.settings.height }} 
+                        video-section-wrapper--min-height 
+                        video-section-wrapper--{{ section.id }}" 
+                 data-desktop-height="{{ desktop_height }}" 
+                 data-mobile-height="{{ mobile_height }}">
+        <video width="100%" height="100%" {%- if section.settings.poster != blank -%}poster="{{ section.settings.poster | img_url: '' }}" title="{{ section.settings.poster.alt | escape }}"{%- endif -%}  {%- if section.settings.preload_video -%}preload="auto" {% else %}preload="none"{%- endif -%} controls>
+          <source src="{{ section.settings.video_link }}" >
+        </video>
+              </div>
+      {%- endif -%}
+  {%- else -%}
+    <div class="placeholder-noblocks">
+      {{ 'homepage.onboarding.no_content' | t }}
+    </div>
+  {%- endif -%}
+</div>
+<script>$(document).ready(function(){$(document).on("click",".js-videoPoster",function(e){e.preventDefault();var t,r=$(this).closest(".js-videoWrapper");e=(t=r).find(".js-videoIframe"),r=e.data("src"),t.addClass("videoWrapperActive"),e.attr("src",r)})});</script>
+{% schema %}
+{
+  "name": {
+    "cs": "Video",
+    "da": "Video",
+    "de": "Video",
+    "en": "Video",
+    "es": "Video",
+    "fi": "Video",
+    "fr": "Vidéo",
+    "it": "Video",
+    "ja": "動画",
+    "ko": "동영상",
+    "nb": "Video",
+    "nl": "Video",
+    "pl": "Film",
+    "pt-BR": "Vídeo",
+    "pt-PT": "Vídeo",
+    "sv": "Video",
+    "th": "วิดีโอ",
+    "tr": "Video",
+    "vi": "Video",
+    "zh-CN": "视频",
+    "zh-TW": "影片"
+  },
+  "class": "index-section video-section",
+  "settings": [
+{
+"type": "header",
+"content": {
+"cs": "Video [Potřebovat pomoc?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"da": "Video [Brug for hjælp?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"de": "Video [Hulp nodig?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"en": "Video [Need help?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"es": "Video [Necesitas ayuda?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"fi": "Video [Tarvitsetko apua?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"fr": "Video [Besoin d'aide?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"it": "Video [Ho bisogno di aiuto?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"ja": "動画 [助けが必要?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"ko": "동영상 [도움이 필요하다?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"nb": "Video [Trenger hjelp?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"nl": "Video [Hulp nodig?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"pl": "Film [Potrzebuję pomocy?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"pt-BR": "Vídeo [Preciso de ajuda?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"pt-PT": "Vídeo [Preciso de ajuda?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"sv": "Video [Behövs hjälp?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"th": "วิดีโอ [ต้องการความช่วยเหลือ?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"tr": "Video [yardıma ihtiyacım var?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"vi": "Video [Cần giúp đỡ?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"zh-CN": "视频 [需要帮忙?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)",
+"zh-TW": "影片 [需要幫忙?](https:\/\/plaktheme.com\/knowledge-base\/featured-video-section)"
+}
+},
+{
+   "type": "radio",
+   "id": "video-visibility",
+   "options": [
+      {
+"value": "medium-up--hide", 
+        "label": {
+        "cs": "Pouze mobilní zařízení",
+        "da": "Kun mobil",
+        "de": "Nur mobil",
+        "en": "Mobile only",
+        "es": "Solo móvil",
+        "fi": "Vain mobiililaite",
+        "fr": "Mobile uniquement",
+        "it": "Solo cellulare",
+        "ja": "モバイルのみ",
+        "ko": "모바일 전용",
+        "nb": "Bare mobil",
+        "nl": "Alleen mobiel",
+        "pl": "Tylko telefon komórkowy",
+        "pt-BR": "Apenas para celular",
+        "pt-PT": "Apenas para celular",
+        "sv": "Bare mobil",
+        "th": "มือถือเท่านั้น",
+        "tr": "Yalnızca mobil",
+        "vi": "Chỉ di động",
+        "zh-CN": "仅限手机",
+        "zh-TW": "僅限手機"
+        }
+        },
+      { "value": "small--hide", 
+        "label": {
+        "cs": "Pouze počítač",
+        "da": "Kun computer",
+        "de": "Nur Computer",
+        "en": "Desktop only",
+        "es": "Solo computadora",
+        "fi": "Vain tietokone",
+        "fr": "Ordinateur uniquement",
+        "it": "Solo computer",
+        "ja": "コンピューターのみ",
+        "ko": "컴퓨터 전용",
+        "nb": "Bare datamaskin",
+        "nl": "Alleen computer",
+        "pl": "Tylko komputer",
+        "pt-BR": "Apenas computador",
+        "pt-PT": "Apenas computador",
+        "sv": "Endast dator",
+        "th": "คอมพิวเตอร์เท่านั้น",
+        "tr": "sadece bilgisayar",
+        "vi": "Chỉ máy tính",
+        "zh-CN": "仅计算机",
+        "zh-TW": "僅計算機"
+        }
+      },
+      { "value": "showboth",
+                "label": {
+        "cs": "Oba",
+        "da": "Begge",
+        "de": "Beide",
+        "en": "Both",
+        "es": "Ambos",
+        "fi": "Molemmat",
+        "fr": "Les deux",
+        "it": "Tutti e due",
+        "ja": "どちらも",
+        "ko": "양자 모두",
+        "nb": "Både",
+        "nl": "Beide",
+        "pl": "Obie",
+        "pt-BR": "Ambos",
+        "pt-PT": "Ambos",
+        "sv": "Både",
+        "th": "ทั้งคู่",
+        "tr": "Her ikisi de",
+        "vi": "Cả hai",
+        "zh-CN": "两个都",
+        "zh-TW": "兩個都"
+        }
+      }
+   ],
+          "label": {
+        "cs": "Viditelnost",
+        "da": "Sigtbarhed",
+        "de": "Sichtweite",
+        "en": "Visibility",
+        "es": "Visibilidad",
+        "fi": "Näkyvyys",
+        "fr": "Visibilité",
+        "it": "Visibilità",
+        "ja": "可視性",
+        "ko": "시계",
+        "nb": "Synlighet",
+        "nl": "Zichtbaarheid",
+        "pl": "Widoczność",
+        "pt-BR": "Visibilidade",
+        "pt-PT": "Visibilidade",
+        "sv": "Synlighet",
+        "th": "ทัศนวิสัย",
+        "tr": "görünürlük",
+        "vi": "Hiển thị",
+        "zh-CN": "能见度",
+        "zh-TW": "能見度"
+        },
+"default":   "showboth"
+},
+{
+"type": "text",
+"id": "title",
+"label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+},
+"default": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Featured video optimized for speed and SEO",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+}
+},
+      {
+        "type": "select",
+        "id": "video-h",
+        "label": {
+        "cs": "Značka nadpisu",
+        "da": "Overskriftskode",
+        "de": "Überschrift-Tag",
+        "en": "Heading tag",
+        "es": "Etiqueta de encabezado",
+        "fi": "Otsikkotunniste",
+        "fr": "Balise d'en-tête",
+        "it": "Etichetta di intestazione",
+        "ja": "見出しタグ",
+        "ko": "제목 태그",
+        "nb": "Overskrift",
+        "nl": "Koptekst",
+        "pl": "Tag nagłówka",
+        "pt-BR": "Tag de cabeçalho",
+        "pt-PT": "Tag de cabeçalho",
+        "sv": "Rubrikmärke",
+        "th": "แท็กหัวเรื่อง",
+        "tr": "başlık etiketi",
+        "vi": "Thẻ tiêu đề",
+        "zh-CN": "标题标签",
+        "zh-TW": "標題標籤"
+        },
+        "options": [
+          {
+            "value": "h1",
+            "label": {
+        "cs": "h1",
+        "da": "h1",
+        "de": "h1",
+        "en": "h1",
+        "es": "h1",
+        "fi": "h1",
+        "fr": "h1",
+        "it": "h1",
+        "ja": "h1",
+        "ko": "h1",
+        "nb": "h1",
+        "nl": "h1",
+        "pl": "h1",
+        "pt-BR": "h1",
+        "pt-PT": "h1",
+        "sv": "h1",
+        "th": "h1",
+        "tr": "h1",
+        "vi": "h1",
+        "zh-CN": "h1",
+        "zh-TW": "h1"
+            }
+          },
+          {
+            "value": "h2",
+            "label": {
+        "cs": "h2",
+        "da": "h2",
+        "de": "h2",
+        "en": "h2",
+        "es": "h2",
+        "fi": "h2",
+        "fr": "h2",
+        "it": "h2",
+        "ja": "h2",
+        "ko": "h2",
+        "nb": "h2",
+        "nl": "h2",
+        "pl": "h2",
+        "pt-BR": "h2",
+        "pt-PT": "h2",
+        "sv": "h2",
+        "th": "h2",
+        "tr": "h2",
+        "vi": "h2",
+        "zh-CN": "h2",
+        "zh-TW": "h2"
+            }
+          },
+          {
+            "value": "h3",
+            "label": {
+        "cs": "h3",
+        "da": "h3",
+        "de": "h3",
+        "en": "h3",
+        "es": "h3",
+        "fi": "h3",
+        "fr": "h3",
+        "it": "h3",
+        "ja": "h3",
+        "ko": "h3",
+        "nb": "h3",
+        "nl": "h3",
+        "pl": "h3",
+        "pt-BR": "h3",
+        "pt-PT": "h3",
+        "sv": "h3",
+        "th": "h3",
+        "tr": "h3",
+        "vi": "h3",
+        "zh-CN": "h3",
+        "zh-TW": "h3"
+            }
+          }
+        ],
+        "default": "h2"
+      },
+    {
+      "type": "text",
+      "id": "video_link",
+      "label": {
+        "cs": "Odkaz na video",
+        "da": "Videolink",
+        "de": "Video-Link",
+        "en": "Video link",
+        "es": "Enlace de video",
+        "fi": "Videolinkki",
+        "fr": "Lien de la vidéo",
+        "it": "Link video",
+        "ja": "ビデオリンク",
+        "ko": "동영상 링크",
+        "nb": "Videokobling",
+        "nl": "Videolink",
+        "pl": "Link filmu",
+        "pt-BR": "Link do vídeo",
+        "pt-PT": "Ligação do vídeo",
+        "sv": "Videolänk",
+        "th": "ลิงก์วิดีโอ",
+        "tr": "Video bağlantısı",
+        "vi": "Liên kết video",
+        "zh-CN": "视频链接",
+        "zh-TW": "影片連結"
+      },
+      "default": "https://www.youtube.com/watch?v=yjoVWJ-DhxI"
+    },
+      {
+        "type": "checkbox",
+        "id": "fullwidth-vid",
+        "label": {
+            "cs": "Plná šířka",
+            "da": "Fuld bredde",
+            "de": "Volle Breite",
+            "en": "Full width",
+            "es": "Ancho completo",
+            "fi": "Täysi leveys",
+            "fr": "Pleine largeur",
+            "it": "Intera larghezza",
+            "ja": "全幅",
+            "ko": "전체 폭",
+            "nb": "Full bredde",
+            "nl": "Volledige breedte",
+            "pl": "Pełna szerokość",
+            "pt-BR": "Largura completa",
+            "pt-PT": "Largura total",
+            "sv": "Full bredd",
+            "th": "เต็มความกว้าง",
+            "tr": "Tam genişlik",
+            "vi": "Độ rộng đầy đủ",
+            "zh-CN": "全宽",
+            "zh-TW": "全寬度"
+        },
+        "default": false
+      },
+    {
+      "type": "select",
+      "id": "height",
+      "label": {
+        "cs": "Výška videa",
+        "da": "Videohøjde",
+        "de": "Videohöhe",
+        "en": "Video height",
+        "es": "Altura del video",
+        "fi": "Videon korkeus",
+        "fr": "Hauteur de la vidéo",
+        "it": "Altezza video",
+        "ja": "ビデオの高さ",
+        "ko": "동영상 높이",
+        "nb": "Videohøyde",
+        "nl": "Videohoogte",
+        "pl": "Wysokość filmu",
+        "pt-BR": "Altura do vídeo",
+        "pt-PT": "Altura do vídeo",
+        "sv": "Bildhöjd",
+        "th": "ความสูงของวิดีโอ",
+        "tr": "Video yüksekliği",
+        "vi": "Chiều cao video",
+        "zh-CN": "视频高度",
+        "zh-TW": "影片高度"
+      },
+      "default": "medium",
+      "options": [
+        {
+          "label": {
+            "cs": "Malá",
+            "da": "Lille",
+            "de": "Klein",
+            "en": "Small",
+            "es": "Pequeña",
+            "fi": "Pieni",
+            "fr": "Petite",
+            "it": "Piccolo",
+            "ja": "スモール",
+            "ko": "스몰",
+            "nb": "Liten",
+            "nl": "Klein",
+            "pl": "Mała",
+            "pt-BR": "Pequeno",
+            "pt-PT": "Pequeno",
+            "sv": "Liten",
+            "th": "เล็ก",
+            "tr": "Küçük",
+            "vi": "Nhỏ",
+            "zh-CN": "小",
+            "zh-TW": "小型"
+          },
+          "value": "small"
+        },
+        {
+          "label": {
+            "cs": "Střední",
+            "da": "Medium",
+            "de": "Mittel",
+            "en": "Medium",
+            "es": "Mediana",
+            "fi": "Keskisuuri",
+            "fr": "Moyenne",
+            "it": "Medio",
+            "ja": "中",
+            "ko": "보통",
+            "nb": "Middels",
+            "nl": "Gemiddeld",
+            "pl": "Średnia",
+            "pt-BR": "Médio",
+            "pt-PT": "Médio",
+            "sv": "Medium",
+            "th": "ปานกลาง",
+            "tr": "Orta",
+            "vi": "Trung bình",
+            "zh-CN": "中等",
+            "zh-TW": "中等"
+          },
+          "value": "medium"
+        },
+        {
+          "label": {
+            "cs": "Velká",
+            "da": "Stor",
+            "de": "Groß",
+            "en": "Large",
+            "es": "Grande",
+            "fi": "Suuri",
+            "fr": "Grande",
+            "it": "Grande",
+            "ja": "ラージ",
+            "ko": "라지",
+            "nb": "Stor",
+            "nl": "Groot",
+            "pl": "Duża",
+            "pt-BR": "Grande",
+            "pt-PT": "Grande",
+            "sv": "Stor",
+            "th": "ใหญ่",
+            "tr": "Büyük",
+            "vi": "Lớn",
+            "zh-CN": "大",
+            "zh-TW": "大型"
+          },
+          "value": "large"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": {
+        "cs": "Titulní obrázek",
+        "da": "Coverbillede",
+        "de": "Titelbild",
+        "en": "Cover image",
+        "es": "Imagen de portada",
+        "fi": "Kansikuva",
+        "fr": "Image de couverture",
+        "it": "Immagine di copertina",
+        "ja": "表紙画像",
+        "ko": "커버 이미지",
+        "nb": "Forsidebilde",
+        "nl": "Coverafbeelding",
+        "pl": "Obraz w tle",
+        "pt-BR": "Imagem de capa",
+        "pt-PT": "Imagem de capa",
+        "sv": "Omslagsbild",
+        "th": "รูปภาพหน้าปก",
+        "tr": "Kapak görseli",
+        "vi": "Ảnh bìa",
+        "zh-CN": "封面图片",
+        "zh-TW": "封面圖片"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "preload_video",
+      "label": {
+        "cs": "Předinstalovat video",
+        "da": "Forudindlæs video",
+        "de": "Video vorladen",
+        "en": "Preload video",
+        "es": "Precargar video",
+        "fi": "Esitäytä video",
+        "fr": "Précharger la vidéo",
+        "it": "Precarica video",
+        "ja": "ビデオのプリロード",
+        "ko": "비디오 미리 로드",
+        "nb": "Last inn video på forhånd",
+        "nl": "Video vooraf laden",
+        "pl": "Wstępnie wczytaj wideo",
+        "pt-BR": "Pré-carregar vídeo",
+        "pt-PT": "Pré-carregar vídeo",
+        "sv": "Förinstallera video",
+        "th": "โหลดวิดีโอล่วงหน้า",
+        "tr": "Videoyu önceden yükle",
+        "vi": "Tải trước video",
+        "zh-CN": "预载视频",
+        "zh-TW": "預載視頻"
+      },
+      "info": {
+        "cs": "Pokud není zaškrtnuto, video se nenačte, dokud uživatel nestiskne Přehrát, tím se optimalizuje rychlost stránky",
+        "da": "Når dette ikke er markeret, indlæses videoen ikke, før en bruger trykker på Afspil, hvilket optimerer sidehastigheden",
+        "de": "Wenn das Kontrollkästchen deaktiviert ist, wird das Video erst geladen, wenn ein Benutzer auf Wiedergabe drückt. Dadurch wird die Geschwindigkeit der Website optimiert",
+        "en": "When unchecked the video will not load until a user press Play, this will optimize the page speed",
+        "es": "Cuando está desmarcado, el video no se cargará hasta que un usuario presione Reproducir, esto optimizará la velocidad del sitio",
+        "fi": "Kun valitset videon, video latautuu vasta, kun käyttäjä painaa Toista-painiketta, tämä optimoi sivun nopeuden",
+        "fr": "Lorsqu'elle n'est pas cochée, la vidéo ne se chargera pas tant qu'un utilisateur n'aura pas appuyé sur Lecture, cela optimisera la vitesse du site",
+        "it": "Se deselezionato, il video non verrà caricato fino a quando un utente non preme Riproduci, questo ottimizzerà la velocità della pagina page",
+        "ja": "チェックを外すと、ユーザーが[再生]を押すまで動画が読み込まれません。これにより、ページ速度が最適化されます。",
+        "ko": "선택하지 않으면 사용자가 재생을 누를 때까지 비디오가 로드되지 않으며 페이지 속도가 최적화됩니다.",
+        "nb": "Når det ikke er merket av, vil ikke videoen lastes inn før en bruker trykker på Spill av, dette vil optimalisere sidehastigheten",
+        "nl": "Indien uitgeschakeld, wordt de video niet geladen totdat een gebruiker op Afspelen drukt, dit zal de paginasnelheid optimaliseren",
+        "pl": "Gdy ta opcja nie jest zaznaczona, wideo nie zostanie załadowane, dopóki użytkownik nie naciśnie przycisku Odtwórz, co zoptymalizuje szybkość strony page",
+        "pt-BR": "Quando desmarcado, o vídeo não carregará até que um usuário pressione Play, isso otimizará a velocidade da página",
+        "pt-PT": "Quando desmarcado, o vídeo não carregará até que um usuário pressione Play, isso otimizará a velocidade da página",
+        "sv": "Om det inte är markerat laddas videon inte förrän en användare trycker på Spela, detta kommer att optimera sidhastigheten",
+        "th": "เมื่อยกเลิกการเลือกวิดีโอจะไม่โหลดจนกว่าผู้ใช้จะกด Play จะเป็นการเพิ่มประสิทธิภาพความเร็วของหน้า",
+        "tr": "İşareti kaldırıldığında, kullanıcı Oynat'a basana kadar video yüklenmez, bu sayfa hızını optimize eder",
+        "vi": "Khi bỏ chọn, video sẽ không tải cho đến khi người dùng nhấn Play, điều này sẽ tối ưu hóa tốc độ trang",
+        "zh-CN": "取消选中时，视频不会加载，直到用户按下播放，这将优化页面速度",
+        "zh-TW": "取消選中時，視頻將不會加載，直到用戶按下播放，這將優化頁面速度"
+},
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+    "cs": "Video",
+    "da": "Video",
+    "de": "Video",
+    "en": "Video",
+    "es": "Video",
+    "fi": "Video",
+    "fr": "Vidéo",
+    "it": "Video",
+    "ja": "動画",
+    "ko": "동영상",
+    "nb": "Video",
+    "nl": "Video",
+    "pl": "Film",
+    "pt-BR": "Vídeo",
+    "pt-PT": "Vídeo",
+    "sv": "Video",
+    "th": "วิดีโอ",
+    "tr": "Video",
+    "vi": "Video",
+    "zh-CN": "视频",
+    "zh-TW": "影片"
+      },
+      "category": {
+    "cs": "Video",
+    "da": "Video",
+    "de": "Video",
+    "en": "Video",
+    "es": "Video",
+    "fi": "Video",
+    "fr": "Vidéo",
+    "it": "Video",
+    "ja": "動画",
+    "ko": "동영상",
+    "nb": "Video",
+    "nl": "Video",
+    "pl": "Film",
+    "pt-BR": "Vídeo",
+    "pt-PT": "Vídeo",
+    "sv": "Video",
+    "th": "วิดีโอ",
+    "tr": "Video",
+    "vi": "Video",
+    "zh-CN": "视频",
+    "zh-TW": "影片"
+      },
+      "settings": {
+        "height": "medium"
+      }
+    }
+  ]
+}
+{% endschema %}

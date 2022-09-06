@@ -1,0 +1,849 @@
+<div class="page-width" data-section-id="{{ section.id }}" data-section-type="cart-template" data-ajax-enabled="{{ section.settings.cart_ajax_enable }}">
+  <div {% if cart.item_count == 0 %}class="hide" {% endif %}data-cart-wrapper>
+    <div class="cart-header">
+      <h1 class="cart-header__title">{{ 'cart.general.title' | t }}</h1>
+      <h4>Shipped directly from Melbourne or Sydney</h4>
+      <a href="/">Continue Shopping</a>
+      {% if section.settings.cntd-pl == 'bfr-cart' %}        
+         {% include 'countdown-cart' %}
+         {% endif %}         
+    </div>
+    <form action="{{ routes.cart_url }}" method="post" novalidate class="cart">
+      <table style="margin-bottom:0;">
+        <thead class="cart__row">
+          <th scope="col">{{ 'cart.label.product' | t }}</th>
+          <th scope="col"></th>
+          <th class="text-right" scope="col">{{ 'cart.label.price' | t }}</th>
+          <th class="text-right small--hide" scope="col">{{ 'cart.label.quantity' | t }}</th>
+          <th class="text-right small--hide" scope="col">{{ 'cart.label.total' | t }}</th>
+        </thead>
+        <tbody data-cart-line-items>
+          {%- for item in cart.items -%}
+            <tr class="cart__row" data-cart-item data-cart-item-key="{{ item.key }}" data-cart-item-url="{{ item.url }}" data-cart-item-title="{{ item.title }}" data-cart-item-index="{{ forloop.index }}" data-cart-item-quantity="{{ item.quantity }}">
+              <td class="cart__meta small--text-left" data-cart-table-cell>
+                <div class="cart__product-information">
+                  <div class="cart__image-wrapper">
+                    <img class="cart__image{% if item.image == null %} hide{% endif %}" src="{{ item | img_url: 'x190' }}" alt="{{ item.image.alt | escape }}" data-cart-item-image>
+
+                    <div class="show-test_83">
+                      {%- assign dimension_content = blank -%}
+                      {%- for tag in item.product.tags -%}
+                        {%- assign tag_downcase = tag | downcase -%}
+                        {%- if tag_downcase == 'outdoor' or tag_downcase == 'outdoor living' -%}
+                          {%- assign dimension_content = item.product.description -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      <div class="cart__dimension-button {% if dimension_content == blank -%}hide{%- endif -%}">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.70432 7.76541C9.55787 7.91186 9.55787 8.1493 9.70432 8.29574C9.85076 8.44219 10.0882 8.44219 10.2346 8.29574L9.70432 7.76541ZM14.1629 4.2122C14.1629 4.0051 13.995 3.8372 13.7879 3.8372L10.4129 3.8372C10.2058 3.8372 10.0379 4.0051 10.0379 4.2122C10.0379 4.41931 10.2058 4.5872 10.4129 4.5872H13.4129V7.5872C13.4129 7.79431 13.5808 7.9622 13.7879 7.9622C13.995 7.9622 14.1629 7.79431 14.1629 7.5872L14.1629 4.2122ZM10.2346 8.29574L14.053 4.47737L13.5227 3.94704L9.70432 7.76541L10.2346 8.29574Z" fill="black"/><path d="M8.48807 10.4223C8.63451 10.2759 8.63451 10.0384 8.48807 9.89197C8.34162 9.74552 8.10418 9.74552 7.95774 9.89197L8.48807 10.4223ZM4.02952 13.9755C4.02952 14.1826 4.19742 14.3505 4.40452 14.3505L7.77952 14.3505C7.98663 14.3505 8.15452 14.1826 8.15452 13.9755C8.15452 13.7684 7.98663 13.6005 7.77952 13.6005H4.77952V10.6005C4.77952 10.3934 4.61163 10.2255 4.40452 10.2255C4.19742 10.2255 4.02952 10.3934 4.02952 10.6005L4.02952 13.9755ZM7.95774 9.89197L4.13936 13.7103L4.66969 14.2407L8.48807 10.4223L7.95774 9.89197Z" fill="black"/><circle cx="9" cy="9" r="8.5" stroke="#5B8BA9"/></svg>
+                        <span>{{ 'cart.items.see_dimensions' | t}}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </td>
+              <td class="product-info"><div>
+                <div class="list-view-item__title">
+                  <a href="{{ item.url }}" class="cart__product-title" data-cart-item-title>
+                    {{ item.product.title }}
+                  </a>
+                </div>
+                {%- assign variant_options = 'template ' | split: ' ' -%}
+                {%- if item.product.has_only_default_variant != true -%}
+                  {%- assign variant_options = item.options_with_values -%}
+                {%- endif -%}
+                {%- assign property_size = item.properties | size -%}
+                <ul class="product-details{% if item.product.has_only_default_variant and property_size == 0 %} hide{% endif %}" data-cart-item-details aria-label="{{ 'cart.label.product_details' | t }}">
+                  {%- for option in variant_options -%}
+                    <li class="product-details__item product-details__item--variant-option{% if item.product.has_only_default_variant %} hide{% endif %}" data-cart-item-option>{{ option.name }}: {{ option.value }}</li>
+                  {%- endfor -%}
+                  {%- assign properties = 'template ' | split: ' ' -%}
+                  {%- if property_size > 0 -%}
+                    {%- assign properties = item.properties -%}
+                  {%- endif -%}
+                  {%- for p in properties -%}
+                    {%- unless p.last == blank -%}
+                      <li class="product-details__item product-details__item--property{%if property_size == 0%} hide{% endif %}" data-cart-item-property>
+                        <span class="product-details__item-label" data-cart-item-property-name>{{ p.first }}: </span>
+                        <span data-cart-item-property-value>
+                          {%- if p.last contains '/uploads/' -%}
+                            <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                          {%- else -%}
+                            {{ p.last }}
+                          {%- endif -%}
+                        </span>
+                      </li>
+                    {%- endunless -%}
+                  {%- endfor -%}
+                </ul>
+                <p class="cart__remove">
+                  <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0" class="text-link text-link--accent" aria-label="{{ 'cart.label.remove' | t: product: item.title }}" data-cart-remove>{{ 'cart.general.remove' | t }}</a>
+                </p>
+              </div></td>
+              <td class="cart__price text-right">
+                {%- assign hasDiscount = false -%}
+                {%- if item.variant.compare_at_price  > item.final_price -%}
+                  {%- assign hasDiscount = true -%}
+                {%- endif -%}
+                <div data-cart-item-price>
+                  <dl data-cart-item-price-list>
+
+                    <div {% unless hasDiscount %}class="hide" {% endunless %}data-cart-item-discounted-price-group>
+                      <dt>
+                        <span class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
+                      </dt>
+                      <dt>
+                        <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                      </dt>
+                      <dd>
+                        <span class="order-discount" data-cart-item-final-price><span class="money">{{ item.final_price | money }}</span></span>
+                      </dd>
+                      <dd>
+                        <s data-cart-item-original-price class="original-price"><span class="money">{{ item.variant.compare_at_price | money }}</span></s>
+                      </dd>
+
+                    </div>
+                    <div {% if hasDiscount %}class="hide" {% endif %}data-cart-item-regular-price-group>
+                      <dt>
+                        <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                      </dt>
+                      <dd data-cart-item-regular-price>
+                        <span class="money">
+                        {{ item.original_price | money }}
+                        </span>
+
+
+                      </dd>
+                    </div>
+                    <div {% unless item.unit_price_measurement %}class="hide" {% endunless %}data-unit-price-group>
+                      <dt>
+                        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>
+                      </dt>
+                      <dd>
+                        <span class="price-unit-price">
+                          {%- capture unit_price_separator -%}
+                            <span aria-hidden="true">/</span><span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
+                          {%- endcapture -%}
+                          {%- capture unit_price_base_unit -%}
+                            {%- if item.unit_price_measurement.reference_value != 1 -%}
+                              {{- item.unit_price_measurement.reference_value -}}
+                            {%- endif -%}
+                            {{ item.unit_price_measurement.reference_unit }}
+                          {%- endcapture -%}
+                          <span data-unit-price><span class="money">{{ item.unit_price | money }}</span></span>{{- unit_price_separator -}}<span data-unit-price-base-unit>{{- unit_price_base_unit -}}</span>
+                        </span>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+                {%- assign itemDiscounts = 'template ' | split: ' ' -%}
+                {%- if item.line_level_discount_allocations != blank -%}
+                  {%- assign itemDiscounts = item.line_level_discount_allocations -%}
+                {%- endif -%}
+                <ul class="order-discount order-discount--list order-discount--title order-discount--cart{% if item.line_level_discount_allocations == blank %} hide{% endif %}" aria-label="{{ 'customer.order.discount' | t }}" data-cart-item-discount-list>
+                  {%- for discount_allocation in itemDiscounts -%}
+                    <li class="order-discount__item" data-cart-item-discount>
+                      <i class="fa fa-tag" aria-hidden="true"></i> <span data-cart-item-discount-title>{{ discount_allocation.discount_application.title }}</span> (-<span data-cart-item-discount-amount><span class="money">{{ discount_allocation.amount | money }}</span></span>)
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                <div class="cart__qty medium-up--hide">
+                  <label for="updates_{{ item.key }}" class="cart__qty-label" aria-label="{{ 'cart.label.quantity' | t }}" data-quantity-label-mobile>
+                    {{ 'cart.label.qty' | t }}
+                  </label>
+                  <input id="updates_{{ item.key }}" class="cart__qty-input" type="number"
+                    value="{{ item.quantity }}" min="0" pattern="[0-9]*"
+                    data-quantity-input data-quantity-item="{{ forloop.index }}" data-quantity-input-mobile>
+                </div>
+                <div class="cart__qty-error-message-wrapper cart__qty-error-message-wrapper--mobile hide" role="alert" data-cart-quantity-error-message-wrapper>
+                  <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                  <span class="cart__qty-error-message" data-cart-quantity-error-message></span>
+                </div>
+              </td>
+              <td class="cart__quantity-td text-right small--hide">
+                <div class="cart__qty">
+                  <label for="updates_large_{{ item.key }}" class="cart__qty-label" data-quantity-label-desktop>{{ 'cart.label.quantity' | t }}</label>
+                  <input id="updates_large_{{ item.key }}" class="cart__qty-input" type="number"
+                    name="updates[]" value="{{ item.quantity }}" min="0" pattern="[0-9]*"
+                    data-quantity-input data-quantity-item="{{ forloop.index }}" data-quantity-input-desktop>
+                </div>
+                <div class="cart__qty-error-message-wrapper cart__qty-error-message-wrapper--desktop hide" role="alert" data-cart-quantity-error-message-wrapper>
+                  <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+                  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                  <span class="cart__qty-error-message" data-cart-quantity-error-message></span>
+                </div>
+              </td>
+              <td class="cart__final-price text-right small--hide" data-cart-item-line-price>
+                <dl {% unless item.original_line_price != item.final_line_price %}class="hide" {% endunless %}data-cart-item-discounted-price-group>
+                  <dt>
+                    <span class="visually-hidden">{{ 'cart.label.regular_total' | t }}</span>
+                  </dt>
+                  <dd>
+                    <s data-cart-item-original-price><span class="money">{{ item.original_line_price | money }}</span></s>
+                  </dd>
+                  <dt>
+                    <span class="visually-hidden">{{ 'cart.label.discounted_total' | t }}</span>
+                  </dt>
+                  <dd>
+                    <span class="order-discount" data-cart-item-final-price><span class="money">{{ item.final_line_price | money }}</span></span>
+                  </dd>
+                </dl >
+                <div {% if item.original_line_price != item.final_line_price %}class="hide" {% endif %}data-cart-item-regular-price-group>
+                  <span data-cart-item-regular-price><span class="money">{{ item.original_line_price | money }}</span></span>
+                </div>
+              </td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+      {% if section.settings.cntd-pl == 'aftr-cart' %}        
+         {% include 'countdown-cart' %}
+         {% endif %}  
+      <div class="cart__footer">
+        <div class="grid">
+          {%- if section.settings.cart_notes_enable -%}
+            <div class="grid__item medium-up--one-half cart-note">
+              <label for="CartSpecialInstructions" class="cart-note__label small--text-center">{{ 'cart.general.note' | t }}</label>
+              <textarea name="note" id="CartSpecialInstructions" class="cart-note__input" data-cart-notes>{{ cart.note }}</textarea>
+            </div>
+          {%- endif -%}
+          <div class="grid__item text-right small--text-center{% if section.settings.cart_notes_enable %} medium-up--one-half{% endif %}">
+            {%- assign cartDiscounts = 'template ' | split: ' ' -%}
+            {%- if cart.cart_level_discount_applications.size > 0 -%}
+              {%- assign cartDiscounts = cart.cart_level_discount_applications -%}
+            {%- endif -%}
+            <div{% if cart.cart_level_discount_applications.size == 0 %} class="hide"{% endif %} data-cart-discount-wrapper>
+              <div class="order-discount-card-wrapper" data-cart-discount>
+                {%- for discount_application in cartDiscounts -%}
+                  <span class="order-discount order-discount--title order-discount--cart">
+                    <i class="fa fa-tag" aria-hidden="true"></i><span class="visually-hidden">{{ 'customer.order.discount' | t }}:</span><span data-cart-discount-title>{{- discount_application.title -}}</span>
+                  </span>
+                  <span class="order-discount order-discount--cart order-discount--cart-total">
+                    -<span data-cart-discount-amount><span class="money">{{ discount_application.total_allocated_amount | money }}</span></span>
+                  </span>
+                {%- endfor -%}
+              </div>
+            </div>
+			{% include 'delivery-estimate' %}
+            <div class="cart-subtotal">
+              <span class="cart-subtotal__title">{{ 'cart.general.subtotal' | t }}</span>
+              <span class="cart-subtotal__price" data-cart-subtotal><span class="money">{{ cart.total_price | money }}</span></span>
+            </div>
+            <div class="cart__shipping rte">{{ taxes_shipping_checkout }}</div>
+            {% if section.settings.cntd-pl == 'bfr-check' %}
+         {% include 'countdown-cart' %}
+         {% endif %}
+
+            <div class="cart__submit-controls">
+              {%- unless section.settings.cart_ajax_enable -%}
+               <input type="submit" name="update"
+                class="btn btn--secondary cart__submit cart__submit--ajax-disabled cart__submit-control"
+                value="{{ 'cart.general.update' | t }}">
+              {%- endunless -%}
+              <input type="submit" name="checkout"
+                class="btn btn cart__submit cart__submit-control" style="width: 100%;"
+                value="{{ 'cart.general.checkout' | t }}">
+                          {% if section.settings.cntd-pl == 'aftr-check' %}
+         {% include 'countdown-cart' %}
+         {% endif %}
+                          {% if section.settings.enabl-trust-cart %}
+                    <img class="trust-badge-cart lazyload animation--{{settings.lazyloading-effect}}" data-src="{{ section.settings.secure-badge-checkout | img_url: '' }}" alt="trust badge">
+              {% endif %}              
+            </div>
+            <div class="cart__error-message-wrapper hide" role="alert" data-cart-error-message-wrapper>
+              <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <span class="cart__error-message" data-cart-error-message></span>
+            </div>
+            {%- if additional_checkout_buttons -%}
+              <div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </form>
+    <div id="dimensions-popup-list" class="show-test_83">
+      {%- for item in cart.items -%}
+        {%- assign dimension_content = blank -%}
+        {%- for tag in item.product.tags -%}
+          {%- assign tag_downcase = tag | downcase -%}
+          {%- if tag_downcase == 'outdoor' or tag_downcase == 'outdoor living' -%}
+            {%- assign dimension_content = item.product.description -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if dimension_content != blank -%}
+          <div class="dimensions-popup" data-cart-item-key="{{item.key}}">
+            <div class="dimensions-popup_wrapper">
+              <div class="dimensions-popup_box">
+                <button type="button" class="btn-close dimensions-popup_close">
+                  <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.936 13L7.104 9.04L4.176 13H0.096L5.064 6.496L0.264 0.0879989H4.464L7.2 3.856L10.008 0.0879989H13.992L9.192 6.4L14.184 13H9.936Z" fill="black"/></svg>
+                </button>
+                <h2 class="dimensions-popup_heading">{{item.product.title}}</h2>
+                <div class="dimensions-popup_body">
+                  <div class="dimensions-popup_media">
+                    <div class="dimensions-popup_media_main">
+                      <div class="dimensions-popup_media--large">
+                        <div class="media-item" data-position="{{image.position}}">
+                          <img src="{{item.product.images[0] | img_url: '500x'}}"class="js-btn-zoom-in" data-position="{{item.product.images[0].position}}">
+                          <a href="javascript:void(0)" class="btn-zoom btn-zoom-in js-btn-zoom-in" data-position="{{item.product.images[0].position}}">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.70432 7.76541C9.55787 7.91186 9.55787 8.1493 9.70432 8.29574C9.85076 8.44219 10.0882 8.44219 10.2346 8.29574L9.70432 7.76541ZM14.1629 4.2122C14.1629 4.0051 13.995 3.8372 13.7879 3.8372L10.4129 3.8372C10.2058 3.8372 10.0379 4.0051 10.0379 4.2122C10.0379 4.41931 10.2058 4.5872 10.4129 4.5872H13.4129V7.5872C13.4129 7.79431 13.5808 7.9622 13.7879 7.9622C13.995 7.9622 14.1629 7.79431 14.1629 7.5872L14.1629 4.2122ZM10.2346 8.29574L14.053 4.47737L13.5227 3.94704L9.70432 7.76541L10.2346 8.29574Z" fill="black"/><path d="M8.48807 10.4223C8.63451 10.2759 8.63451 10.0384 8.48807 9.89197C8.34162 9.74552 8.10418 9.74552 7.95774 9.89197L8.48807 10.4223ZM4.02952 13.9755C4.02952 14.1826 4.19742 14.3505 4.40452 14.3505L7.77952 14.3505C7.98663 14.3505 8.15452 14.1826 8.15452 13.9755C8.15452 13.7684 7.98663 13.6005 7.77952 13.6005H4.77952V10.6005C4.77952 10.3934 4.61163 10.2255 4.40452 10.2255C4.19742 10.2255 4.02952 10.3934 4.02952 10.6005L4.02952 13.9755ZM7.95774 9.89197L4.13936 13.7103L4.66969 14.2407L8.48807 10.4223L7.95774 9.89197Z" fill="black"/><circle cx="9" cy="9" r="8.5" stroke="#5B8BA9"/></svg>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="dimensions-popup_media--small">
+                         <div class="media-item" data-position="{{image.position}}">
+                          <img src="{{item.product.images[1] | img_url: '500x'}}"class="js-btn-zoom-in" data-position="{{item.product.images[1].position}}">
+                          <a href="javascript:void(0)" class="btn-zoom btn-zoom-in js-btn-zoom-in" data-position="{{item.product.images[1].position}}">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.70432 7.76541C9.55787 7.91186 9.55787 8.1493 9.70432 8.29574C9.85076 8.44219 10.0882 8.44219 10.2346 8.29574L9.70432 7.76541ZM14.1629 4.2122C14.1629 4.0051 13.995 3.8372 13.7879 3.8372L10.4129 3.8372C10.2058 3.8372 10.0379 4.0051 10.0379 4.2122C10.0379 4.41931 10.2058 4.5872 10.4129 4.5872H13.4129V7.5872C13.4129 7.79431 13.5808 7.9622 13.7879 7.9622C13.995 7.9622 14.1629 7.79431 14.1629 7.5872L14.1629 4.2122ZM10.2346 8.29574L14.053 4.47737L13.5227 3.94704L9.70432 7.76541L10.2346 8.29574Z" fill="black"/><path d="M8.48807 10.4223C8.63451 10.2759 8.63451 10.0384 8.48807 9.89197C8.34162 9.74552 8.10418 9.74552 7.95774 9.89197L8.48807 10.4223ZM4.02952 13.9755C4.02952 14.1826 4.19742 14.3505 4.40452 14.3505L7.77952 14.3505C7.98663 14.3505 8.15452 14.1826 8.15452 13.9755C8.15452 13.7684 7.98663 13.6005 7.77952 13.6005H4.77952V10.6005C4.77952 10.3934 4.61163 10.2255 4.40452 10.2255C4.19742 10.2255 4.02952 10.3934 4.02952 10.6005L4.02952 13.9755ZM7.95774 9.89197L4.13936 13.7103L4.66969 14.2407L8.48807 10.4223L7.95774 9.89197Z" fill="black"/><circle cx="9" cy="9" r="8.5" stroke="#5B8BA9"/></svg>
+                          </a>
+                        </div>
+                         <div class="media-item" data-position="{{image.position}}">
+                          <img src="{{item.product.images[2] | img_url: '500x'}}"class="js-btn-zoom-in" data-position="{{item.product.images[2].position}}">
+                          <a href="javascript:void(0)" class="btn-zoom btn-zoom-in js-btn-zoom-in" data-position="{{item.product.images[2].position}}">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.70432 7.76541C9.55787 7.91186 9.55787 8.1493 9.70432 8.29574C9.85076 8.44219 10.0882 8.44219 10.2346 8.29574L9.70432 7.76541ZM14.1629 4.2122C14.1629 4.0051 13.995 3.8372 13.7879 3.8372L10.4129 3.8372C10.2058 3.8372 10.0379 4.0051 10.0379 4.2122C10.0379 4.41931 10.2058 4.5872 10.4129 4.5872H13.4129V7.5872C13.4129 7.79431 13.5808 7.9622 13.7879 7.9622C13.995 7.9622 14.1629 7.79431 14.1629 7.5872L14.1629 4.2122ZM10.2346 8.29574L14.053 4.47737L13.5227 3.94704L9.70432 7.76541L10.2346 8.29574Z" fill="black"/><path d="M8.48807 10.4223C8.63451 10.2759 8.63451 10.0384 8.48807 9.89197C8.34162 9.74552 8.10418 9.74552 7.95774 9.89197L8.48807 10.4223ZM4.02952 13.9755C4.02952 14.1826 4.19742 14.3505 4.40452 14.3505L7.77952 14.3505C7.98663 14.3505 8.15452 14.1826 8.15452 13.9755C8.15452 13.7684 7.98663 13.6005 7.77952 13.6005H4.77952V10.6005C4.77952 10.3934 4.61163 10.2255 4.40452 10.2255C4.19742 10.2255 4.02952 10.3934 4.02952 10.6005L4.02952 13.9755ZM7.95774 9.89197L4.13936 13.7103L4.66969 14.2407L8.48807 10.4223L7.95774 9.89197Z" fill="black"/><circle cx="9" cy="9" r="8.5" stroke="#5B8BA9"/></svg>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dimensions-popup_media_thumbnail">
+                      <div class="dimensions-popup_media_slider">
+                        {%- for i in (3..item.product.images.size) -%}
+                          {%- unless forloop.last -%}
+                            <a href="javascript:void(0)" class="btn-zoom btn-zoom-in js-btn-zoom-in" data-position="{{item.product.images[i].position}}">
+                              {{item.product.images[i] | image_url: width: 200 | image_tag}}
+                            </a>
+                          {%- endunless -%}
+                        {%- endfor -%}
+                      </div>
+                      <div class="dimensions-popup_media_arrows">
+                        <div class="prev">
+                          <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.99987 9C2.55216 9.00007 2.99993 8.55241 3 8.00013C3.00007 7.44784 2.55241 7.00007 2.00013 7L1.99987 9ZM0.292983 7.29268C-0.0975908 7.68315 -0.0976711 8.31632 0.292803 8.70689L6.65596 15.0717C7.04643 15.4622 7.6796 15.4623 8.07017 15.0718C8.46074 14.6814 8.46083 14.0482 8.07035 13.6576L2.41421 8.00005L8.07179 2.34392C8.46236 1.95344 8.46244 1.32028 8.07196 0.929702C7.68149 0.539128 7.04832 0.539048 6.65775 0.929523L0.292983 7.29268ZM2.00013 7L1.00013 6.99987L0.999873 8.99987L1.99987 9L2.00013 7Z" fill="#5B8BA9"/>
+                          </svg>
+                        </div>
+                        <div class="next">
+                          <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.01144 7.00007C6.45919 6.99375 6.00638 7.43631 6.00007 7.98856C5.99375 8.54081 6.43631 8.99362 6.98856 8.99993L7.01144 7.00007ZM8.69891 8.72658C9.09387 8.34055 9.10111 7.70743 8.71508 7.31246L2.42432 0.876137C2.03828 0.481172 1.40516 0.473931 1.0102 0.859964C0.615231 1.246 0.60799 1.87912 0.994023 2.27408L6.58581 7.99526L0.864635 13.5871C0.46967 13.9731 0.462429 14.6062 0.848462 15.0012C1.23449 15.3961 1.86762 15.4034 2.26258 15.0173L8.69891 8.72658ZM6.98856 8.99993L7.9885 9.01137L8.01137 7.0115L7.01144 7.00007L6.98856 8.99993Z" fill="#5B8BA9"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dimensions-popup_media_zoom">
+                      <div class="dimensions-popup_media_zoom_slider">
+                        {%- for image in item.product.images -%}
+                          <div class="media-item" data-position="{{image.position}}">
+                            {{image | image_url: width: 500 | image_tag}}
+                            <a href="javascript:void(0)" class="btn-zoom btn-zoom-out js-btn-zoom-out" data-position="{{image.position}}">
+                              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.5851 4.94546C15.7316 4.79902 15.7316 4.56158 15.5851 4.41513C15.4387 4.26869 15.2012 4.26869 15.0548 4.41513L15.5851 4.94546ZM10.7023 8.92294C10.7023 9.13005 10.8702 9.29794 11.0773 9.29794L14.4523 9.29794C14.6594 9.29794 14.8273 9.13005 14.8273 8.92294C14.8273 8.71583 14.6594 8.54794 14.4523 8.54794H11.4523V5.54794C11.4523 5.34083 11.2844 5.17294 11.0773 5.17294C10.8702 5.17294 10.7023 5.34083 10.7023 5.54794L10.7023 8.92294ZM15.0548 4.41513L10.8121 8.65777L11.3425 9.1881L15.5851 4.94546L15.0548 4.41513Z" fill="black"/><path d="M4.62863 15.2633C4.48219 15.4097 4.48219 15.6472 4.62863 15.7936C4.77508 15.9401 5.01252 15.9401 5.15896 15.7936L4.62863 15.2633ZM9.51144 11.2858C9.51144 11.0787 9.34355 10.9108 9.13644 10.9108L5.76144 10.9108C5.55433 10.9108 5.38644 11.0787 5.38644 11.2858C5.38644 11.4929 5.55433 11.6608 5.76144 11.6608H8.76144V14.6608C8.76144 14.8679 8.92933 15.0358 9.13644 15.0358C9.34355 15.0358 9.51144 14.8679 9.51144 14.6608L9.51144 11.2858ZM5.15896 15.7936L9.4016 11.551L8.87127 11.0206L4.62863 15.2633L5.15896 15.7936Z" fill="black"/><circle cx="10" cy="10" r="9.5" stroke="#5B8BA9"/></svg>
+                            </a>
+                          </div>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dimensions-popup_content">
+                    {{dimension_content}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <p class="visually-hidden" data-cart-status
+      aria-live="polite"
+      role="status"
+    ></p>
+  </div>
+
+  <div class="empty-page-content{% if cart.item_count > 0 %} hide{% endif %} text-center" data-empty-page-content>
+    <h1>{{ 'cart.general.title' | t }}</h1>
+    <p class="cart--empty-message">{{ 'cart.general.empty' | t }}</p>
+    <div class="cookie-message">
+      <p>{{ 'cart.general.cookies_required' | t }}</p>
+    </div>
+    <a href="{{ routes.root_url }}" class="btn btn--has-icon-after cart__continue-btn">{{ 'general.404.link' | t }} <i class="fa fa-angle-left fa-lg" aria-hidden="true"></i></a>
+  </div>
+</div>
+{% include '3-blocks' %}
+
+<script>
+
+  (function(){
+      const popup = {
+          open: document.querySelectorAll('.cart-template .three-blocks .openPopup'),
+          openElement: openElement,
+          wrapper: document.querySelectorAll('.cart-template .popUpWrapper'),
+          close: document.querySelectorAll('.cart-template .closePopup'),
+          closeElement: closeElement
+      }
+      function openElement() {
+        const self = this;
+          this.open.forEach(element => {
+              element.addEventListener('click', e => {
+                  e.preventDefault();
+                  self.wrapper.forEach(item => {
+                    item.classList.remove('active');
+                  });
+                  const popupWrapper = document.querySelector(`#${element.dataset.id}`);
+                  popupWrapper.classList.add('active');
+
+              })
+          });
+      };
+
+      function closeElement() {
+        this.close.forEach(el => {
+          el.addEventListener('click', e => {
+            const popupWrapper = document.querySelector(`#${el.dataset.id}`);
+            popupWrapper.classList.remove('active');
+          })
+        });
+      };
+
+      console.log('blin');
+
+      popup.openElement();
+      popup.closeElement();
+
+      const target = document.querySelector('.template-cart');
+      function callback() {
+        if (target.classList.contains('test_14')) {
+          const hideEl = document.querySelector('#shopify-section-footer .three-blocks');
+          hideEl.style.display = "none";
+        }
+      };
+
+      const config = {
+        attributes: true,
+        childList: false,
+        subtree: false
+      }
+
+      const observer = new MutationObserver(callback);
+      observer.observe(target, config);
+
+
+  }());
+</script>
+{% schema %}
+{
+  "name": {
+    "de": "Warenkorb-Seite",
+    "en": "Cart page",
+    "es": "Página de carrito",
+    "fr": "Page du panier"
+  },
+  "class": "cart-template",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "cart_ajax_enable",
+      "label": {
+        "de": "Automatische Warenkorbaktualisierungen aktivieren",
+        "en": "Enable automatic cart updates",
+        "es": "Habilitar las actualizaciones automáticas del carrito de compra",
+        "fr": "Activer les mises à jour automatiques"
+      },
+      "info": {
+        "de": "Aktualisiert den Warenkorb, sobald Kundenänderungen vorgenommen werden",
+        "en": "Updates the cart as soon as customer changes are made",
+        "es": "Actualiza el carrito de compra tan pronto como el cliente realice cambios",
+        "fr": "Mise à jour du panier dès que les modifications apportées aux clients ont été effectuées"
+      },
+      "default": true
+    },
+      {
+        "type": "checkbox",
+        "id": "enabl-trust-cart",
+        "label": {
+      "de": "Vertrauensabzeichen",
+      "en": "Trust badge",
+      "es": "insignia de confianza",
+      "fr": "Badge de confiance"
+        },
+        "default": false
+      },
+      {
+        "type": "image_picker",
+        "id": "secure-badge-checkout",
+        "label": "image"
+      },
+    {
+      "type": "checkbox",
+      "id": "ctdn-enable",
+      "label": {
+      "de": "Countdown",
+      "en": "Enable countdown",
+      "es": "cuenta regresiva",
+      "fr": "Compte à rebours"
+      },
+      "default": false
+    },
+	{
+        "type": "select",
+        "id": "cntd-pl",
+        "label": {
+          "de": "Platzierung",
+          "en": "Placement",
+          "es": "posición",
+          "fr": "Placement"
+        },
+        "options": [
+          {
+            "value": "bfr-cart",
+        "label": {
+          "de": "Oben Wagen",
+          "en": "Above cart",
+          "es": "Sobre el carro",
+          "fr": "Au-dessus du panier"
+        }
+          },
+          {
+            "value": "aftr-cart",
+        "label": {
+          "de": "Unter Warenkorb",
+          "en": "Below cart",
+          "es": "Debajo del carro",
+          "fr": "Au-dessous du panier"
+        }
+          },
+		  {
+            "value": "bfr-check",
+        "label": {
+          "de": "Über dem Knopf",
+          "en": "Above checkout",
+          "es": "Encima del botón",
+          "fr": "Au-dessus du bouton"
+        }
+          },
+          {
+            "value": "aftr-check",
+        "label": {
+          "de": "Unter dem Button",
+          "en": "Below checkout",
+          "es": "Debajo del botón",
+          "fr": "Au-dessous du bouton"
+        }
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "promo_hd",
+        "label": {
+          "de": "Vor dem Timer",
+          "en": "Before timer",
+          "es": "Antes del temporizador",
+          "fr": "Avant la minuterie"
+        },
+        "default": "10% discount Store Wide"
+      },
+      {
+        "type": "range",
+        "id": "cntdwn-rg",
+        "label": {
+          "de": "Protokoll",
+          "en": "Minutes",
+          "es": "Minutos",
+          "fr": "Minutes"
+        },
+        "min": 1,
+        "max": 60,
+        "step": 1,
+        "default": 10
+      },
+      {
+        "type": "text",
+        "id": "ctdn-txt",
+        "label": {
+          "de": "Nach dem Timer",
+          "en": "After timer",
+          "es": "Después del temporizador",
+          "fr": "Après la minuterie"
+        },
+         "default": "Special offer ends in :"
+	  },
+      {
+        "type": "range",
+        "id": "cntdwn-txt",
+        "label": {
+          "de": "Textgröße",
+          "en": "Text size",
+          "es": "Tamano del texto",
+          "fr": "Taille du texte"
+        },
+        "min": 10,
+        "max": 40,
+        "step": 1,
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "cntdwn-dt",
+        "label": {
+          "de": "das Datum",
+          "en": "Timer Size",
+          "es": "la fecha",
+          "fr": "Taille de la date"
+        },
+        "min": 10,
+        "max": 45,
+        "step": 1,
+        "default": 16
+      },
+      {
+        "type": "color",
+        "id": "ctdn_bkclr_cart",
+        "label": {
+          "de": "Hintergrundfarbe",
+          "en": "Background color",
+          "es": "Fondo",
+          "fr": "Couleur de fond"
+        },
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "ctdn_txtclr_cart",
+        "label": {
+          "de": "Textfarbe",
+          "en": "Text color",
+          "es": "Texto",
+          "fr": "Couleur du texte"
+        },
+        "default": "#FA8072"
+      },
+      {
+        "type": "color",
+        "id": "ctdn_dtclr",
+        "label": {
+          "de": "das Datum",
+          "en": "Timer color",
+          "es": "la fecha",
+          "fr": "Date"
+        },
+        "default": "#FF0000"
+      },
+    {
+      "type": "checkbox",
+      "id": "cart_notes_enable",
+      "label": {
+        "de": "Warenkorb-Notifikationen erlauben",
+        "en": "Enable cart notes",
+        "es": "Habilitar notas de carrito",
+        "fr": "Activer les notes de panier"
+      },
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "block_big_head",
+      "label": {
+            "de": "Blokerer titel",
+            "en": "Blocks header",
+            "es": "Título de bloques",
+            "fr": "Titre des blocs"
+	  },
+    "default": "Top reasons to shop with us"
+    },
+    {
+      "type": "image_picker",
+      "id": "block_one_img",
+      "label": {
+          "de": "Foto",
+          "en": "Block 1 image",
+          "es": "Imagen",
+          "fr": "Image"
+	  }
+    },
+    {
+      "type": "html",
+      "id": "block_one_img_svg",
+      "label": {
+          "de": "Foto",
+          "en": "Block 1 image",
+          "es": "Imagen",
+          "fr": "Image"
+	  }
+    },
+    {
+      "type": "text",
+      "id": "block_one_heading",
+      "label": {
+          "de": "Titel",
+          "en": "Header",
+          "es": "título",
+          "fr": "Titre"
+	  },
+    "default": "Fast Shipping"
+    },
+   {
+      "type": "richtext",
+      "id": "block_one_content",
+      "label": {
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fr": "Texte"
+	  }
+    },
+    {
+      "type": "url",
+      "id": "block_one_link",
+      "label": "Block link"
+    },
+    {
+      "type": "image_picker",
+      "label": "Popup content",
+      "id": "popup_one_content"
+    },
+    {
+      "type": "richtext",
+      "label": "Popup content",
+      "id": "popup_one_text"
+    },
+        {
+      "type": "image_picker",
+      "id": "block_two_img",
+      "label": {
+          "de": "Foto",
+          "en": "Block 2 image",
+          "es": "Imagen",
+          "fr": "Image"
+	  }
+    },
+    {
+      "type": "html",
+      "id": "block_two_img_svg",
+      "label": {
+          "de": "Foto",
+          "en": "Block 2 image",
+          "es": "Imagen",
+          "fr": "Image"
+	  }
+    },
+    {
+      "type": "text",
+      "id": "block_two_heading",
+      "label": {
+          "de": "Titel",
+          "en": "Header",
+          "es": "título",
+          "fr": "Titre"
+	  },
+   "default": "Shop safe"
+    },
+   {
+      "type": "richtext",
+      "id": "block_two_content",
+      "label": {
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fr": "Texte"
+	  }
+    },
+    {
+      "type": "url",
+      "id": "block_two_link",
+      "label": "Block link"
+    },
+    {
+      "type": "image_picker",
+      "label": "Popup content",
+      "id": "popup_two_content"
+    },
+    {
+      "type": "richtext",
+      "label": "Popup content",
+      "id": "popup_two_text"
+    },
+        {
+      "type": "image_picker",
+      "id": "block_three_img",
+      "label": {
+          "de": "Foto",
+          "en": "Block 3 image",
+          "es": "Imagen",
+          "fr": "Image"
+	  }
+    },
+    {
+      "type": "html",
+      "id": "block_three_img_svg",
+      "label": {
+          "de": "Foto",
+          "en": "Block 3 image",
+          "es": "Imagen",
+          "fr": "Image"
+	  }
+    },
+    {
+      "type": "text",
+      "id": "block_three_heading",
+      "label": {
+          "de": "Titel",
+          "en": "Header",
+          "es": "título",
+          "fr": "Titre"
+	  },
+     "default": "trust"
+    },
+   {
+      "type": "richtext",
+      "id": "block_three_content",
+      "label": {
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fr": "Texte"
+	  }
+  },
+  {
+    "type": "url",
+    "id": "block_three_link",
+    "label": "Block link"
+  },
+  {
+    "type": "image_picker",
+    "label": "Popup content",
+    "id": "popup_three_content"
+  },
+  {
+    "type": "richtext",
+    "label": "Popup content",
+    "id": "popup_three_text"
+  }
+  ],
+  "blocks": [
+  {
+    "type": "location",
+    "name": "Location",
+    "settings": [
+      {
+        "type": "text",
+        "id": "location",
+        "label": "Location"
+      },
+      {
+        "type": "text",
+        "id": "min_days",
+        "label": "Min days"
+      },
+      {
+        "type": "text",
+        "id": "max_days",
+        "label": "Max days"
+      }
+    ]
+  }
+
+  ]
+}
+{% endschema %}

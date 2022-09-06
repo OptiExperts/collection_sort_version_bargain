@@ -1,0 +1,98 @@
+<div class="three-blocks">
+    <div class="page-width">
+      <p class="h3"> {{section.settings.block_big_head}} </p> 
+        <div class="grid">
+                 <div class="content-box grid__item small--one-whole medium-up--one-third">
+                    <a class="image_wrapper" href="{{ section.settings.block_one_link }}">
+                     {% if section.settings.block_one_img != blank %}
+                        <img data-src="{{ section.settings.block_one_img | img_url: '100x' }}" alt="{{ section.settings.block_one_heading }}" class="lazyload animation--{{settings.lazyloading-effect}}"/>
+                    {% endif %}
+                        {{ section.settings.block_one_img_svg }}
+                    </a>
+                    <div class="three_block_content">
+                        <span class="h4">{{ section.settings.block_one_heading }}</span>
+                        <div class="content-text">{{ section.settings.block_one_content }}</div>
+                        {% if section.settings.block_one_link != blank %}
+                           <a data-id="popupWrapper--1" class="openPopup" href="#">Learn more</a>
+                        
+                           <div id="popupWrapper--1" class="popUpWrapper">
+                               <span data-id="popupWrapper--1" class="closePopup">
+                                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                       <path d="M12 2L2 12" stroke="#d72324" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"/>
+                                       <path d="M2 2L12 12" stroke="#d72324" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"/>
+                                       </svg>
+                                       
+                               </span>
+                               {{ section.settings.block_one_img_svg }}
+                               <img src="{{ section.settings.popup_one_content | img_url:'1200x' }}" alt="{{ section.settings.popup_one_content.alt }}">
+                               <div class="text">
+                                   {{ section.settings.popup_one_text }}
+                               </div>
+                           </div>                                         
+                    {% endif %}
+                </div>
+            </div>
+            
+                 <div class="content-box grid__item small--one-whole medium-up--one-third">
+                    <a  class="image_wrapper" href="{{ section.settings.block_two_link }}">
+                        {% if section.settings.block_two_img != blank %}
+                            <img data-src="{{ section.settings.block_two_img | img_url: '100x' }}" alt="{{ section.settings.block_two_heading }}" class="lazyload animation--{{settings.lazyloading-effect}}"/>
+                        {% endif %}
+                        {{ section.settings.block_two_img_svg }}
+                    </a>
+                     <div class="three_block_content">
+                        <span class="h4">{{ section.settings.block_two_heading }}</span>
+                        <div class="content-text">{{ section.settings.block_two_content }}</div>
+                         {% if section.settings.block_two_link != blank %}
+                            <a data-id="popupWrapper--2" class="openPopup" href="#">Learn more</a>
+                     
+                            <div id="popupWrapper--2" class="popUpWrapper">
+                                <span data-id="popupWrapper--2" class="closePopup">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2L2 12" stroke="#d72324" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"/>
+                                        <path d="M2 2L12 12" stroke="#d72324" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"/>
+                                        </svg>
+                                        
+                                </span>
+                                {{ section.settings.block_two_img_svg }}
+                                <img src="{{ section.settings.popup_two_content | img_url:'1200x' }}" alt="{{ section.settings.popup_one_content.alt }}">
+                                <div class="text">
+                                    {{ section.settings.popup_two_text }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                 </div>
+                 <div class="content-box grid__item small--one-whole medium-up--one-third">
+                    <a class="image_wrapper" href="{{ section.settings.block_three_link }}">
+                        {% if section.settings.block_three_img != blank %}
+                            <img data-src="{{ section.settings.block_three_img | img_url: '100x' }}" alt="{{ section.settings.block_three_heading }}" class="lazyload animation--{{settings.lazyloading-effect}}"/>
+                        {% endif %}
+                        {{ section.settings.block_three_img_svg }}
+                    </a>
+                     <div class="three_block_content">
+                        <span class="h4">{{ section.settings.block_three_heading }}</span>
+                        <div class="content-text">{{ section.settings.block_three_content }}</div>
+                        {% if section.settings.block_three_link != blank %}
+                            <a data-id="popupWrapper--3" class="openPopup" href="#">Learn more</a>
+                            
+                            <div id="popupWrapper--3" class="popUpWrapper">
+                                <span data-id="popupWrapper--3" class="closePopup">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2L2 12" stroke="#d72324" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"/>
+                                        <path d="M2 2L12 12" stroke="#d72324" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"/>
+                                        </svg>
+                                        
+                                </span>
+                                {{ section.settings.block_three_img_svg }}
+                                <img src="{{ section.settings.popup_three_content | img_url:'1200x' }}" alt="{{ section.settings.popup_one_content.alt }}">
+                                <div class="text">
+                                    {{ section.settings.popup_three_text }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                 </div>
+        </div>
+    </div>
+</div>

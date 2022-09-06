@@ -1,0 +1,6 @@
+<style>.table-oc{margin:0px 0px 20px 0px}.table-oc ol{margin:10px 10px;background:{{section.settings.toc-ctn-bk}};width:fit-content;margin-bottom:10px}html{scroll-behavior:smooth}.table-oc li::before{content:"\2022";color:grey;font-weight:700;display:inline-block;width:1em;margin-left:-1em}.active,.collapsible-toc:hover{background-color:#555}.content-toc{padding:0 18px;display:block;overflow:hidden;background-color:{{section.settings.toc-ctn-bk}}}@media only screen and (max-width: 667px) {:target:before {content: "";display: block;height: 100px;margin: -30px 0 0;}}</style>
+<button type="button" class=" collapsible-toc h3" style="font-size:{{section.settings.toc-hd-sz}}px;">{{section.settings.toc_hd}} <i class="fa fa-bars "></i></button>
+<div class="content-toc table-oc" data-toc></div>
+<div class="rte" data-content >{{ article.content }}</div>
+<script type="text/javascript" src="{{ 'table-of-contents.js' | asset_url }}"></script>  
+<script>tableOfContents("[data-content]","[data-toc]",{listType:"ol",levels:"h2, h3, h4, h5, h6"});for(var coll=document.getElementsByClassName("collapsible-toc"),i=0;i<coll.length;i++)coll[i].addEventListener("click",function(){this.classList.toggle("active");var l=this.nextElementSibling;"none"===l.style.display?l.style.display="block":l.style.display="none"});</script>

@@ -1,0 +1,19 @@
+<style>.rc-container {max-height : 180px;overflow: auto;}</style>  
+{% if blog.all_tags.size > 0 and block.settings.sidebar_tag_title != blank %}
+<div   class="{{block.settings.tags-visibility}}  sidebar-widget">
+   <div class="h4"> {{block.settings.sidebar_tag_title}}</div>
+    <ul id="scroll-bar-coll" class="rc-container">
+      {% for tag in blog.all_tags %}
+        {% assign count = 0 %}
+        {% for article in blogs[blog.handle].articles %}
+          {% if article.tags contains tag %}
+            {% capture count %}{{ count | plus: 1 }}{% endcapture %}
+          {% endif %}
+        {% endfor %}    
+        <li>
+          <a href="{{ shop.url}}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title }} tagged {{ tag | escape }}">{{ tag }} <span class="label count">({{ count }})</span></a>
+        </li>
+      {% endfor %}
+    </ul>
+</div>
+{% endif %}

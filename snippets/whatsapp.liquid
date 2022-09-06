@@ -1,0 +1,21 @@
+<style>.fa-whatsapp:before{content:"\f232"}.float{position:fixed;width:60px;height:60px;bottom:40px;line-height:1;text-align:center;font-size:30px;z-index:100}.float i{width:40px;height:40px;color:green;margin-left: 24px;display: block;}.float-right{right:40px}.float-left{left:40px}.my-float{margin-top:16px}.float-txt{font-size:14px;color:#fff;background-color:green;opacity:.9;padding: 8px;}  </style>  
+{% assign first-link = "https://api.whatsapp.com/send?phone=" %}
+{% assign phone-num = settings.phone-num | strip %}
+{% assign second-link = "&text=" %}
+{% assign text-to-send = settings.text-to-send %}
+{% capture first-part %}
+{{ first-link | append: phone-num }}
+{% endcapture %}
+{% capture second-part %}
+{{ first-part | append: second-link }}
+{% endcapture %}
+{% capture text-converted-to-link %}
+{{ text-to-send | escape }}
+{% endcapture %}
+{% capture third-part %}
+{{ second-part | append: text-converted-to-link }}
+{% endcapture %}
+<a href="{{third-part}}" class="float {% if settings.hide-desktop %} medium-up--hide {% endif %}{% if settings.whatsapp-pl == 'whatsapp-right' %} float-right {% endif %} {% if settings.whatsapp-pl == 'whatsapp-left' %} float-left {% endif %}" target="_blank" title="Whatsapp" rel="noreferrer">
+  <i class="fa fa-whatsapp" aria-hidden="true"></i>
+  <span class="float-txt"> Whatsapp </span>
+</a>

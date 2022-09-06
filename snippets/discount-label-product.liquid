@@ -1,0 +1,78 @@
+<style>
+#SPAN_1 {
+    bottom: 409.25px;
+  opacity: 0.9;
+    box-sizing: border-box;
+    display: block;
+    height: 64px;
+    left: 30px;
+    position: absolute;
+    right: 253.5px;
+    text-align: center;
+    text-size-adjust: 100%;
+    top: 10px;
+    vertical-align: middle;
+    width: 64px;
+    z-index: 1;
+    perspective-origin: 32px 32px;
+    transform: matrix(0.981246, -0.357144, 0.357144, 0.981246, 0, 0);
+    transform-origin: 32px 32px;
+    animation: 1s ease 0s infinite alternate none running beat;
+    background: {{settings.salep-bk}};
+    padding: 15px 0px;
+}/*#SPAN_1*/
+  .rotate-badge p {
+    display:block;
+    -webkit-transform: rotate(-30deg); 
+    -moz-transform: rotate(-30deg);
+  transform: rotate(-30deg);
+    color: {{settings.salep-txt}};
+        font: normal normal 700 normal 21px / 32px Lato, HelveticaNeue, "Helvetica Neue", sans-serif;
+}
+#SPAN_1:after {
+    bottom: 0px;
+    box-sizing: border-box;
+    content: '';
+    display: block;
+    height: 64px;
+    left: 0px;
+    position: absolute;
+    right: 0px;
+    text-align: center;
+    text-size-adjust: 100%;
+    top: 0px;
+    width: 64px;
+    z-index: -1;
+    perspective-origin: 32px 32px;
+    transform: matrix(0.5, 0.866025, -0.866025, 0.5, 0, 0);
+    transform-origin: 32px 32px;
+    background: {{settings.salep-bk}};
+}/*#SPAN_1:after*/
+#SPAN_1:before {
+    bottom: 0px;
+    box-sizing: border-box;
+    content: '';
+    display: block;
+    height: 64px;
+    left: 0px;
+    position: absolute;
+    right: 0px;
+    text-align: center;
+    text-size-adjust: 100%;
+    top: 0px;
+    width: 64px;
+    z-index: -1;
+    perspective-origin: 32px 32px;
+    transform: matrix(0.866025, 0.5, -0.5, 0.866025, 0, 0);
+    transform-origin: 32px 32px;
+    background: {{settings.salep-bk}};
+}
+
+  
+</style>  
+
+{% if product.available %}
+  {% if product.compare_at_price > product.price %} 
+<span id="SPAN_1" class=" anim-label rotate-badge"><p>- {{ product.compare_at_price_max | minus:product.price | times:100 | divided_by:product.compare_at_price_max | round }}%</p>
+</span> 
+{% endif %} {% endif %}

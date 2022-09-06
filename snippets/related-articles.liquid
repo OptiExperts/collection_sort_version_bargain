@@ -1,0 +1,36 @@
+{% if section.settings.related_articles %} 
+	{% if section.settings.nb_related_articles == '2' %} 
+		{% assign number_rl = 'medium-up--two-fifths' %} 
+	{% endif %} 
+	
+	{% if section.settings.nb_related_articles == '3' %} {% assign number_rl = 'medium-up--four-fifteen' %} {% endif %} {% if section.settings.nb_related_articles == '4' %} {% assign number_rl = 'medium-up--one-fifth' %} {% endif %} {% assign blogarticletitle = article.title %} {% assign articles_limit = section.settings.nb_related_articles | plus: 1 %} {% for article in blog.articles limit: articles_limit %} {% if article.title == blogarticletitle %} {% else %}
+<div class="grid__item {{number_rl}}">
+  <a href="{{ article.url }}" class="article__grid-image-container" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100}}%;" title="{{article.title}}">
+    <img id="{{ img_id }}" class="article__grid-image lazyload animation--{{settings.lazyloading-effect}}"  src="{{ 'blank.jpg' | asset_url }}" data-src="{{ article.image | img_url: '' }}" alt="{{ article.image.alt | escape }}" data-expand="-40">
+    <div class="h4 related-title">{{ article.title }}</div>
+  </a>
+  {% if section.settings.blog_rl_show_author %}
+  <i class="fa fa-user"></i>
+  <p class="article__author">{{ 'blogs.article.by_author' | t: author: article.author }}</p>
+  {% endif %} {% if section.settings.blog_rl_show_date %}
+  <br> <i class="fa fa-calendar" aria-hidden="true"></i>
+  <p class="article__date">
+    {{ article.published_at | time_tag: format: 'date' }}
+  </p>
+  {% endif %}
+  <ul class="related__meta-buttons">
+    <li>
+      <a href="{{ article.url }}" class="btn btn--tertiary btn--small" aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title }}" title="{{ 'blogs.article.read_more' | t }}">
+        {{ 'blogs.article.read_more' | t }}
+      </a>
+    </li>
+    {% if blog.comments_enabled? and article.comments_count > 0 %}
+    <li>
+      <a href="{{ article.url }}#comments" class="article__comment-count btn btn--tertiary btn--small" title="{{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}">
+        {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %} {% endfor %} {% endif %}

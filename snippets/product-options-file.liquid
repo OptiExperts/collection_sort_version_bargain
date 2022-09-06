@@ -1,0 +1,4 @@
+<div class="product-options product-form__item product-form__item--upload {{ block.settings.product-option-file-visibility }}">
+   <label for="upload--{{forloop.index}}" class="{% if block.settings.file-required %} required-icon {% endif %}">{{block.settings.file-hd}}</label>
+   <input {% if block.settings.file-required %} required {% endif %} id="upload--{{forloop.index}}" type="file" name="properties[{{block.settings.file-hd}}]" class="{% if block.settings.file-required %} required {% endif %} product-form__input">
+</div>

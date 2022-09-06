@@ -1,0 +1,1309 @@
+<style>.pricing-table-container{padding-top:18px;}@media only screen and (max-width: 749px) {.pricing-table-mob {padding-top : 40px;padding-left : 0px !important; }}.block-price{list-style-type:none;border:1px solid #eee;margin:0;padding:0;-webkit-transition:.3s;transition:.3s;display:block}.block-price:hover{box-shadow:0 8px 12px 0 rgba(0,0,0,.2)}.popular{transform:scale(1.1)}.block-price li{border-bottom:1px solid #eee;padding:20px;text-align:center}.most-popular{font-size:16px}</style>
+<div class="{{section.settings.pricing-visibility}}">
+   {% case section.blocks.size %}
+   {% when 1 %}
+   {%- assign grid_item_width = '' -%}
+   {% when 2 %}
+   {%- assign grid_item_width = 'medium-up--one-half' -%}
+   {% when 3 %}
+   {%- assign grid_item_width = 'medium-up--one-third' -%}
+   {% when 4 %}
+   {%- assign grid_item_width = 'medium-up--one-quarter' -%}
+   {% endcase %}  
+   {% if section.settings.price-title != blank %}
+   {% if section.settings.pricing-table-hd == 'h1' %}
+   <h1 class="section-header text-center">{{ section.settings.price-title | escape }}</h1>
+   {% elsif section.settings.pricing-table-hd == 'h2' %}
+   <h2 class="section-header text-center">{{ section.settings.price-title | escape }}</h2>
+   {% else %}
+   <h3 class="section-header text-center">{{ section.settings.price-title | escape }}</h3>
+   {% endif %}
+   {% endif %}
+   {% if section.settings.price-subtitle != blank %}
+   {% if section.settings.pricing-table-subhd == 'h1' %}
+   <h1 class="h4 text-center">{{ section.settings.price-subtitle | escape }}</h1>
+   {% elsif section.settings.pricing-table-subhd == 'h2' %}
+   <h2 class="h4 text-center">{{ section.settings.price-subtitle | escape }}</h2>
+   {% else %}
+   <h3 class="h4 text-center">{{ section.settings.price-subtitle | escape }}</h3>
+   {% endif %}
+   {% endif %}
+   <div class="page-width grid pricing-table-container">
+      {% for block in section.blocks %}
+      <div class="grid__item pricing-table-mob {{grid_item_width}}">
+         <ul class="block-price {% if block.settings.column-mostpopular != blank %} popular {% endif %}">
+            {% if block.settings.column-title != blank %}
+            <li class="header" 
+               style="background-color:{{block.settings.column-title-color}};color:{{block.settings.column-title-txt-color}};font-size:{{block.settings.column-title-sz}}px;font-weight: bold;"
+               >{{block.settings.column-title}}
+               {% if block.settings.column-mostpopular != blank %}
+               <sup class="most-popular"> <i class="fa fa-star " aria-hidden="true"></i> {{block.settings.column-mostpopular}} </sup>
+               {% endif %}
+            </li>
+            {% endif %}
+            {% if block.settings.column-subtitle != blank %}
+            <li style="background-color:{{block.settings.column-subtitle-color}};color:{{block.settings.column-subtitle-txt-color}};font-size:{{block.settings.column-subtitle-txt-sz}}px">{{block.settings.column-subtitle}}</li>
+            {% endif %}
+            {% if block.settings.text-1 != blank %}
+            <li style="background-color:{{block.settings.column-color}};color:{{block.settings.column-txt-color}};font-size:{{block.settings.column-txt-sz}}px">{{block.settings.text-1}}</li>
+            {% endif %}
+            {% if block.settings.text-2 != blank %}
+             <li style="background-color:{{block.settings.column-color}};color:{{block.settings.column-txt-color}};font-size:{{block.settings.column-txt-sz}}px">{{block.settings.text-2}}</li>
+            {% endif %}
+            {% if block.settings.text-3 != blank %}
+             <li style="background-color:{{block.settings.column-color}};color:{{block.settings.column-txt-color}};font-size:{{block.settings.column-txt-sz}}px">{{block.settings.text-3}}</li>
+            {% endif %}
+            {% if block.settings.text-4 != blank %}
+             <li style="background-color:{{block.settings.column-color}};color:{{block.settings.column-txt-color}};font-size:{{block.settings.column-txt-sz}}px">{{block.settings.text-4}}</li>
+            {% endif %}
+            {% if block.settings.text-5 != blank %}
+             <li style="background-color:{{block.settings.column-color}};color:{{block.settings.column-txt-color}};font-size:{{block.settings.column-txt-sz}}px">{{block.settings.text-5}}</li>
+            {% endif %}   
+            {% if block.settings.text-6 != blank %}
+             <li style="background-color:{{block.settings.column-color}};color:{{block.settings.column-txt-color}};font-size:{{block.settings.column-txt-sz}}px">{{block.settings.text-6}}</li>
+            {% endif %} 
+            {% if block.settings.button_price_label != blank %}
+            <li><a href="{{block.settings.button_price_link}}" 
+               class="btn" 
+               style="background-color: {{block.settings.color_price_btn}};color: {{block.settings.color_price_txt}};"
+               title="{{block.settings.button_price_label}}"
+               >{{block.settings.button_price_label}}</a></li>
+            {% endif %}
+         </ul>
+      </div>
+      {% endfor %}
+   </div>
+</div>
+{% schema %}
+{
+  "name": {
+        "cs": "Cenová tabulka",
+        "da": "Prisbord",
+        "de": "Preistabelle",
+        "en": "Pricing table",
+        "es": "Tabla de precios",
+        "fi": "Hinnoittelutaulukko",
+        "fr": "Tableau des prix",
+        "it": "Tabella dei prezzi",
+        "ja": "価格表",
+        "ko": "가격표",
+        "nb": "Prisbord",
+        "nl": "Prijstabel",
+        "pl": "Tabela cen",
+        "pt-BR": "Tabela de preços",
+        "pt-PT": "Tabela de preços",
+        "sv": "Prissättningstabell",
+        "th": "ตารางราคา",
+        "tr": "Fiyatlandırma tablosu",
+        "vi": "Bảng giá",
+        "zh-CN": "定价表",
+        "zh-TW": "定價表"
+  },
+"max_blocks": 4,
+    "class": "index-section",
+  "settings": [
+      {
+        "type": "header",
+        "content": {
+          "cs": " [Potřebovat pomoc?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "da": " [Brug for hjælp?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "de": " [Hulp nodig?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "en": " [Need help?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "es": " [Necesitas ayuda?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "fi": " [Tarvitsetko apua?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "fr": " [Besoin d'aide?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "it": " [Ho bisogno di aiuto?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "ja": " [助けが必要?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "ko": " [도움이 필요하다?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "nb": " [Trenger hjelp?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "nl": " [Hulp nodig?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "pl": " [Potrzebuję pomocy?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "pt-BR": " [Preciso de ajuda?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "pt-PT": " [Preciso de ajuda?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "sv": " [Behövs hjälp?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "th": " [ต้องการความช่วยเหลือ?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "tr": " [yardıma ihtiyacım var?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "vi": " [Cần giúp đỡ?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "zh-CN": " [需要帮忙?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)",
+          "zh-TW": " [需要幫忙?](https:\/\/plaktheme.com\/knowledge-base\/pricing-table---plak)"
+        }
+      },
+{
+   "type": "radio",
+   "id": "pricing-visibility",
+   "options": [
+      { "value": "medium-up--hide", 
+        "label": {
+        "cs": "Pouze mobilní zařízení",
+        "da": "Kun mobil",
+        "de": "Nur mobil",
+        "en": "Mobile only",
+        "es": "Solo móvil",
+        "fi": "Vain mobiililaite",
+        "fr": "Mobile uniquement",
+        "it": "Solo cellulare",
+        "ja": "モバイルのみ",
+        "ko": "모바일 전용",
+        "nb": "Bare mobil",
+        "nl": "Alleen mobiel",
+        "pl": "Tylko telefon komórkowy",
+        "pt-BR": "Apenas para celular",
+        "pt-PT": "Apenas para celular",
+        "sv": "Bare mobil",
+        "th": "มือถือเท่านั้น",
+        "tr": "Yalnızca mobil",
+        "vi": "Chỉ di động",
+        "zh-CN": "仅限手机",
+        "zh-TW": "僅限手機"
+        }
+        },
+      { "value": "small--hide", 
+        "label": {
+        "cs": "Pouze počítač",
+        "da": "Kun computer",
+        "de": "Nur Computer",
+        "en": "Desktop only",
+        "es": "Solo computadora",
+        "fi": "Vain tietokone",
+        "fr": "Ordinateur uniquement",
+        "it": "Solo computer",
+        "ja": "コンピューターのみ",
+        "ko": "컴퓨터 전용",
+        "nb": "Bare datamaskin",
+        "nl": "Alleen computer",
+        "pl": "Tylko komputer",
+        "pt-BR": "Apenas computador",
+        "pt-PT": "Apenas computador",
+        "sv": "Endast dator",
+        "th": "คอมพิวเตอร์เท่านั้น",
+        "tr": "sadece bilgisayar",
+        "vi": "Chỉ máy tính",
+        "zh-CN": "仅计算机",
+        "zh-TW": "僅計算機"
+        }
+      },
+      { "value": "showboth",
+                "label": {
+        "cs": "Oba",
+        "da": "Begge",
+        "de": "Beide",
+        "en": "Both",
+        "es": "Ambos",
+        "fi": "Molemmat",
+        "fr": "Les deux",
+        "it": "Tutti e due",
+        "ja": "どちらも",
+        "ko": "양자 모두",
+        "nb": "Både",
+        "nl": "Beide",
+        "pl": "Obie",
+        "pt-BR": "Ambos",
+        "pt-PT": "Ambos",
+        "sv": "Både",
+        "th": "ทั้งคู่",
+        "tr": "Her ikisi de",
+        "vi": "Cả hai",
+        "zh-CN": "两个都",
+        "zh-TW": "兩個都"
+        }
+      }
+   ],
+          "label": {
+        "cs": "Viditelnost",
+        "da": "Sigtbarhed",
+        "de": "Sichtweite",
+        "en": "Visibility",
+        "es": "Visibilidad",
+        "fi": "Näkyvyys",
+        "fr": "Visibilité",
+        "it": "Visibilità",
+        "ja": "可視性",
+        "ko": "시계",
+        "nb": "Synlighet",
+        "nl": "Zichtbaarheid",
+        "pl": "Widoczność",
+        "pt-BR": "Visibilidade",
+        "pt-PT": "Visibilidade",
+        "sv": "Synlighet",
+        "th": "ทัศนวิสัย",
+        "tr": "görünürlük",
+        "vi": "Hiển thị",
+        "zh-CN": "能见度",
+        "zh-TW": "能見度"
+        },
+"default":   "showboth"
+},
+    {
+      "type": "text",
+      "id": "price-title",
+      "label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+      },
+      "default": {
+        "cs": "Cenová tabulka",
+        "da": "Prisbord",
+        "de": "Preistabelle",
+        "en": "Pricing table",
+        "es": "Tabla de precios",
+        "fi": "Hinnoittelutaulukko",
+        "fr": "Tableau des prix",
+        "it": "Tabella dei prezzi",
+        "ja": "価格表",
+        "ko": "가격표",
+        "nb": "Prisbord",
+        "nl": "Prijstabel",
+        "pl": "Tabela cen",
+        "pt-BR": "Tabela de preços",
+        "pt-PT": "Tabela de preços",
+        "sv": "Prissättningstabell",
+        "th": "ตารางราคา",
+        "tr": "Fiyatlandırma tablosu",
+        "vi": "Bảng giá",
+        "zh-CN": "定价表",
+        "zh-TW": "定價表"
+      }
+    },
+      {
+        "type": "select",
+        "id": "pricing-table-hd",
+        "label": {
+        "cs": "Značka nadpisu",
+        "da": "Overskriftskode",
+        "de": "Überschrift-Tag",
+        "en": "Heading tag",
+        "es": "Etiqueta de encabezado",
+        "fi": "Otsikkotunniste",
+        "fr": "Balise d'en-tête",
+        "it": "Etichetta di intestazione",
+        "ja": "見出しタグ",
+        "ko": "제목 태그",
+        "nb": "Overskrift",
+        "nl": "Koptekst",
+        "pl": "Tag nagłówka",
+        "pt-BR": "Tag de cabeçalho",
+        "pt-PT": "Tag de cabeçalho",
+        "sv": "Rubrikmärke",
+        "th": "แท็กหัวเรื่อง",
+        "tr": "başlık etiketi",
+        "vi": "Thẻ tiêu đề",
+        "zh-CN": "标题标签",
+        "zh-TW": "標題標籤"
+        },
+        "options": [
+          {
+            "value": "h1",
+            "label": {
+        "cs": "h1",
+        "da": "h1",
+        "de": "h1",
+        "en": "h1",
+        "es": "h1",
+        "fi": "h1",
+        "fr": "h1",
+        "it": "h1",
+        "ja": "h1",
+        "ko": "h1",
+        "nb": "h1",
+        "nl": "h1",
+        "pl": "h1",
+        "pt-BR": "h1",
+        "pt-PT": "h1",
+        "sv": "h1",
+        "th": "h1",
+        "tr": "h1",
+        "vi": "h1",
+        "zh-CN": "h1",
+        "zh-TW": "h1"
+            }
+          },
+          {
+            "value": "h2",
+            "label": {
+        "cs": "h2",
+        "da": "h2",
+        "de": "h2",
+        "en": "h2",
+        "es": "h2",
+        "fi": "h2",
+        "fr": "h2",
+        "it": "h2",
+        "ja": "h2",
+        "ko": "h2",
+        "nb": "h2",
+        "nl": "h2",
+        "pl": "h2",
+        "pt-BR": "h2",
+        "pt-PT": "h2",
+        "sv": "h2",
+        "th": "h2",
+        "tr": "h2",
+        "vi": "h2",
+        "zh-CN": "h2",
+        "zh-TW": "h2"
+            }
+          },
+          {
+            "value": "h3",
+            "label": {
+        "cs": "h3",
+        "da": "h3",
+        "de": "h3",
+        "en": "h3",
+        "es": "h3",
+        "fi": "h3",
+        "fr": "h3",
+        "it": "h3",
+        "ja": "h3",
+        "ko": "h3",
+        "nb": "h3",
+        "nl": "h3",
+        "pl": "h3",
+        "pt-BR": "h3",
+        "pt-PT": "h3",
+        "sv": "h3",
+        "th": "h3",
+        "tr": "h3",
+        "vi": "h3",
+        "zh-CN": "h3",
+        "zh-TW": "h3"
+            }
+          }
+        ],
+        "default": "h1"
+      },
+    {
+      "type": "text",
+      "id": "price-subtitle",
+      "label": {
+          "cs": "Podnadpis",
+          "da": "Underoverskrift",
+          "de": "Untertitel",
+          "en": "Subheading",
+          "es": "Subtítulo",
+          "fi": "Alaotsikko",
+          "fr": "Sous-titre",
+          "it": "Sottotitolo",
+          "ja": "小見出し",
+          "ko": "소제목",
+          "nb": "Underoverskrift",
+          "nl": "Subkop",
+          "pl": "Nagłówek podrzędny",
+          "pt-BR": "Subtítulo",
+          "pt-PT": "Subtítulo",
+          "sv": "Underrubrik",
+          "th": "หัวเรื่องย่อย",
+          "tr": "Alt başlık",
+          "vi": "Tiêu đề phụ",
+          "zh-CN": "副标题",
+          "zh-TW": "子標題"
+      },
+      "default": {
+          "cs": "Podnadpis",
+          "da": "Underoverskrift",
+          "de": "Untertitel",
+          "en": "Subheading",
+          "es": "Subtítulo",
+          "fi": "Alaotsikko",
+          "fr": "Sous-titre",
+          "it": "Sottotitolo",
+          "ja": "小見出し",
+          "ko": "소제목",
+          "nb": "Underoverskrift",
+          "nl": "Subkop",
+          "pl": "Nagłówek podrzędny",
+          "pt-BR": "Subtítulo",
+          "pt-PT": "Subtítulo",
+          "sv": "Underrubrik",
+          "th": "หัวเรื่องย่อย",
+          "tr": "Alt başlık",
+          "vi": "Tiêu đề phụ",
+          "zh-CN": "副标题",
+          "zh-TW": "子標題"
+      }
+    },
+      {
+        "type": "select",
+        "id": "pricing-table-subhd",
+        "label": {
+        "cs": "Značka nadpisu",
+        "da": "Overskriftskode",
+        "de": "Überschrift-Tag",
+        "en": "Heading tag",
+        "es": "Etiqueta de encabezado",
+        "fi": "Otsikkotunniste",
+        "fr": "Balise d'en-tête",
+        "it": "Etichetta di intestazione",
+        "ja": "見出しタグ",
+        "ko": "제목 태그",
+        "nb": "Overskrift",
+        "nl": "Koptekst",
+        "pl": "Tag nagłówka",
+        "pt-BR": "Tag de cabeçalho",
+        "pt-PT": "Tag de cabeçalho",
+        "sv": "Rubrikmärke",
+        "th": "แท็กหัวเรื่อง",
+        "tr": "başlık etiketi",
+        "vi": "Thẻ tiêu đề",
+        "zh-CN": "标题标签",
+        "zh-TW": "標題標籤"
+        },
+        "options": [
+          {
+            "value": "h1",
+            "label": {
+        "cs": "h1",
+        "da": "h1",
+        "de": "h1",
+        "en": "h1",
+        "es": "h1",
+        "fi": "h1",
+        "fr": "h1",
+        "it": "h1",
+        "ja": "h1",
+        "ko": "h1",
+        "nb": "h1",
+        "nl": "h1",
+        "pl": "h1",
+        "pt-BR": "h1",
+        "pt-PT": "h1",
+        "sv": "h1",
+        "th": "h1",
+        "tr": "h1",
+        "vi": "h1",
+        "zh-CN": "h1",
+        "zh-TW": "h1"
+            }
+          },
+          {
+            "value": "h2",
+            "label": {
+        "cs": "h2",
+        "da": "h2",
+        "de": "h2",
+        "en": "h2",
+        "es": "h2",
+        "fi": "h2",
+        "fr": "h2",
+        "it": "h2",
+        "ja": "h2",
+        "ko": "h2",
+        "nb": "h2",
+        "nl": "h2",
+        "pl": "h2",
+        "pt-BR": "h2",
+        "pt-PT": "h2",
+        "sv": "h2",
+        "th": "h2",
+        "tr": "h2",
+        "vi": "h2",
+        "zh-CN": "h2",
+        "zh-TW": "h2"
+            }
+          },
+          {
+            "value": "h3",
+            "label": {
+        "cs": "h3",
+        "da": "h3",
+        "de": "h3",
+        "en": "h3",
+        "es": "h3",
+        "fi": "h3",
+        "fr": "h3",
+        "it": "h3",
+        "ja": "h3",
+        "ko": "h3",
+        "nb": "h3",
+        "nl": "h3",
+        "pl": "h3",
+        "pt-BR": "h3",
+        "pt-PT": "h3",
+        "sv": "h3",
+        "th": "h3",
+        "tr": "h3",
+        "vi": "h3",
+        "zh-CN": "h3",
+        "zh-TW": "h3"
+            }
+          }
+        ],
+        "default": "h1"
+      }
+  ],
+  "blocks": [
+    {
+      "type": "text_block",
+      "name": {
+        "cs": "Sloupec",
+        "da": "Kolonne",
+        "de": "Spalte",
+        "en": "Column",
+        "es": "Columna",
+        "fi": "Sarake",
+        "fr": "Colonne",
+        "it": "Colonna",
+        "ja": "桁",
+        "ko": "열",
+        "nb": "Kolonne",
+        "nl": "Kolom",
+        "pl": "Kolumna",
+        "pt-BR": "Coluna",
+        "pt-PT": "Coluna",
+        "sv": "Kolumn",
+        "th": "คอลัมน์",
+        "tr": "Kolon",
+        "vi": "Cột",
+        "zh-CN": "专栏",
+        "zh-TW": "柱子"
+      },
+      "settings": [
+        {
+          "type": "text",
+          "id": "column-title",
+          "label": {
+        "cs": "Nadpis",
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pl": "Nagłówek",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "tr": "Başlık",
+        "vi": "Tiêu đề",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+          },
+          "default": {
+          "cs": "Nadpis",
+          "da": "Overskrift",
+          "de": "Titel",
+          "en": "Heading",
+          "es": "Título",
+          "fi": "Otsake",
+          "fr": "En-tête",
+          "it": "Heading",
+          "ja": "見出し",
+          "ko": "제목",
+          "nb": "Overskrift",
+          "nl": "Kop",
+          "pl": "Nagłówek",
+          "pt-BR": "Título",
+          "pt-PT": "Título",
+          "sv": "Rubrik",
+          "th": "ส่วนหัว",
+          "tr": "Başlık",
+          "vi": "Tiêu đề",
+          "zh-CN": "标题",
+          "zh-TW": "標題"
+          }
+        },
+      {
+        "type": "range",
+        "id": "column-title-sz",
+        "min": 20,
+        "max": 50,
+        "step": 1,
+        "label": {
+          "cs": "Základní velikost",
+          "da": "Basisstørrelse",
+          "de": "Größe",
+          "en": "Size",
+          "es": "Tamaño de base",
+          "fi": "Peruskoko",
+          "fr": "Taille",
+          "it": "Dimensione base",
+          "ja": "基本サイズ",
+          "ko": "기본 사이즈",
+          "nb": "Grunnstørrelse",
+          "nl": "Basisafmeting",
+          "pl": "Rozmiar podstawowy",
+          "pt-BR": "Tamanho básico",
+          "pt-PT": "Tamanho básico",
+          "sv": "Basstorlek",
+          "th": "ขนาดพื้นฐาน",
+          "tr": "Temel boyutu",
+          "vi": "Cỡ cơ sở",
+          "zh-CN": "基本尺寸",
+          "zh-TW": "基本尺寸"
+        },
+        "default": 25
+      },
+      {
+        "type": "color",
+        "id": "column-title-color",
+        "label": {
+          "cs": "Pozadí",
+          "da": "Baggrund",
+          "de": "Hintergrund",
+          "en": "Background",
+          "es": "Fondo",
+          "fi": "Tausta",
+          "fr": "Couleur de fond",
+          "it": "Sfondo",
+          "ja": "背景",
+          "ko": "배경",
+          "nb": "Bakgrunn",
+          "nl": "Achtergrond",
+          "pl": "Tło",
+          "pt-BR": "Plano de fundo",
+          "pt-PT": "Fundo",
+          "sv": "Bakgrund",
+          "th": "พื้นหลัง",
+          "tr": "Arka plan",
+          "vi": "Nền",
+          "zh-CN": "背景",
+          "zh-TW": "背景"
+        },
+        "default": "#4CAF50"
+      },
+      {
+        "type": "color",
+        "id": "column-title-txt-color",
+        "label": {
+          "cs": "Text",
+          "da": "Tekst",
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fi": "Teksti",
+          "fr": "Texte",
+          "it": "Testo",
+          "ja": "テキスト",
+          "ko": "텍스트",
+          "nb": "Tekst",
+          "nl": "Tekst",
+          "pl": "Tekst",
+          "pt-BR": "Texto",
+          "pt-PT": "Texto",
+          "sv": "Text",
+          "th": "ข้อความ",
+          "tr": "Metin",
+          "vi": "Văn bản",
+          "zh-CN": "文本",
+          "zh-TW": "文字"
+        },
+        "default": "#fff"
+      },
+        {
+          "type": "text",
+          "id": "column-mostpopular",
+          "label": {
+        "cs": "Text nejpopulárnějších",
+        "da": "Tekst til de mest populære",
+        "de": "Beliebtester Text",
+        "en": "Most popular text",
+        "es": "Texto más popular",
+        "fi": "Teksti suosituimmista",
+        "fr": "Texte du plus populaire",
+        "it": "Testo del più popolare",
+        "ja": "最も人気のあるテキスト",
+        "ko": "가장 인기있는 텍스트",
+        "nb": "Tekst til de mest populære",
+        "nl": "Tekst van de meest populaire",
+        "pl": "Tekst najpopularniejszych",
+        "pt-BR": "Texto do mais popular",
+        "pt-PT": "Texto do mais popular",
+        "sv": "Text av de mest populära",
+        "th": "ข้อความยอดนิยม",
+        "tr": "En popüler metin",
+        "vi": "Văn bản phổ biến nhất",
+        "zh-CN": "最流行的文字",
+        "zh-TW": "最流行的文字"
+          }
+        },
+        {
+          "type": "text",
+          "id": "column-subtitle",
+          "label": {
+          "cs": "Podnadpis",
+          "da": "Underoverskrift",
+          "de": "Untertitel",
+          "en": "Subheading",
+          "es": "Subtítulo",
+          "fi": "Alaotsikko",
+          "fr": "Sous-titre",
+          "it": "Sottotitolo",
+          "ja": "小見出し",
+          "ko": "소제목",
+          "nb": "Underoverskrift",
+          "nl": "Subkop",
+          "pl": "Nagłówek podrzędny",
+          "pt-BR": "Subtítulo",
+          "pt-PT": "Subtítulo",
+          "sv": "Underrubrik",
+          "th": "หัวเรื่องย่อย",
+          "tr": "Alt başlık",
+          "vi": "Tiêu đề phụ",
+          "zh-CN": "副标题",
+          "zh-TW": "子標題"
+          },
+          "default": "9.99 $/Y"
+        },
+      {
+        "type": "range",
+        "id": "column-subtitle-txt-sz",
+        "min": 18,
+        "max": 45,
+        "step": 1,
+        "label": {
+          "cs": "Základní velikost",
+          "da": "Basisstørrelse",
+          "de": "Größe",
+          "en": "Size",
+          "es": "Tamaño de base",
+          "fi": "Peruskoko",
+          "fr": "Taille",
+          "it": "Dimensione base",
+          "ja": "基本サイズ",
+          "ko": "기본 사이즈",
+          "nb": "Grunnstørrelse",
+          "nl": "Basisafmeting",
+          "pl": "Rozmiar podstawowy",
+          "pt-BR": "Tamanho básico",
+          "pt-PT": "Tamanho básico",
+          "sv": "Basstorlek",
+          "th": "ขนาดพื้นฐาน",
+          "tr": "Temel boyutu",
+          "vi": "Cỡ cơ sở",
+          "zh-CN": "基本尺寸",
+          "zh-TW": "基本尺寸"
+        },
+        "default": 22
+      },
+      {
+        "type": "color",
+        "id": "column-subtitle-color",
+        "label": {
+          "cs": "Pozadí",
+          "da": "Baggrund",
+          "de": "Hintergrund",
+          "en": "Background",
+          "es": "Fondo",
+          "fi": "Tausta",
+          "fr": "Couleur de fond",
+          "it": "Sfondo",
+          "ja": "背景",
+          "ko": "배경",
+          "nb": "Bakgrunn",
+          "nl": "Achtergrond",
+          "pl": "Tło",
+          "pt-BR": "Plano de fundo",
+          "pt-PT": "Fundo",
+          "sv": "Bakgrund",
+          "th": "พื้นหลัง",
+          "tr": "Arka plan",
+          "vi": "Nền",
+          "zh-CN": "背景",
+          "zh-TW": "背景"
+        },
+        "default": "#eee"
+      },
+      {
+        "type": "color",
+        "id": "column-subtitle-txt-color",
+        "label": {
+        "cs": "Text",
+        "da": "Tekst",
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fi": "Teksti",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "ko": "텍스트",
+        "nb": "Tekst",
+        "nl": "Tekst",
+        "pl": "Tekst",
+        "pt-BR": "Texto",
+        "pt-PT": "Texto",
+        "sv": "Text",
+        "th": "ข้อความ",
+        "tr": "Metin",
+        "vi": "Văn bản",
+        "zh-CN": "文本",
+        "zh-TW": "文字"
+        },
+        "default": "#000000"
+      },
+    {
+      "type": "text",
+      "id": "text-1",
+      "label": {
+        "cs": "Text 1",
+        "da": "Tekst 1",
+        "de": "Text 1",
+        "en": "Text 1",
+        "es": "Texto 1",
+        "fi": "Teksti 1",
+        "fr": "Texte 1",
+        "it": "Testo 1",
+        "ja": "テキスト 1",
+        "ko": "텍스트 1",
+        "nb": "Tekst 1",
+        "nl": "Tekst 1",
+        "pl": "Tekst 1",
+        "pt-BR": "Texto 1",
+        "pt-PT": "Texto 1",
+        "sv": "Text 1",
+        "th": "ข้อความ 1",
+        "tr": "Metin 1",
+        "vi": "Văn bản 1",
+        "zh-CN": "文本 1",
+        "zh-TW": "文字 1"
+      }
+    },
+    {
+      "type": "text",
+      "id": "text-2",
+      "label": {
+        "cs": "Text 2",
+        "da": "Tekst 2",
+        "de": "Text 2",
+        "en": "Text 2",
+        "es": "Texto 2",
+        "fi": "Teksti 2",
+        "fr": "Texte 2",
+        "it": "Testo 2",
+        "ja": "テキスト 2",
+        "ko": "텍스트 2",
+        "nb": "Tekst 2",
+        "nl": "Tekst 2",
+        "pl": "Tekst 2",
+        "pt-BR": "Texto 2",
+        "pt-PT": "Texto 2",
+        "sv": "Text2",
+        "th": "ข้อความ 2",
+        "tr": "Metin 2",
+        "vi": "Văn bản 2",
+        "zh-CN": "文本 2",
+        "zh-TW": "文字 2"
+      }
+    },
+    {
+      "type": "text",
+      "id": "text-3",
+      "label": {
+        "cs": "Text 3",
+        "da": "Tekst 3",
+        "de": "Text 3",
+        "en": "Text 3",
+        "es": "Texto 3",
+        "fi": "Teksti 3",
+        "fr": "Texte 3",
+        "it": "Testo 3",
+        "ja": "テキスト 3",
+        "ko": "텍스트 3",
+        "nb": "Tekst 3",
+        "nl": "Tekst 3",
+        "pl": "Tekst 3",
+        "pt-BR": "Texto 3",
+        "pt-PT": "Texto 3",
+        "sv": "Text 3",
+        "th": "ข้อความ 3",
+        "tr": "Metin 3",
+        "vi": "Văn bản 3",
+        "zh-CN": "文本 3",
+        "zh-TW": "文字 3"
+      }
+    },
+    {
+      "type": "text",
+      "id": "text-4",
+      "label": {
+        "cs": "Text 4",
+        "da": "Tekst 4",
+        "de": "Text 4",
+        "en": "Text 4",
+        "es": "Texto 4",
+        "fi": "Teksti 4",
+        "fr": "Texte 4",
+        "it": "Testo 4",
+        "ja": "テキスト 4",
+        "ko": "텍스트 4",
+        "nb": "Tekst 4",
+        "nl": "Tekst 4",
+        "pl": "Tekst 4",
+        "pt-BR": "Texto 4",
+        "pt-PT": "Texto 4",
+        "sv": "Text 4",
+        "th": "ข้อความ 4",
+        "tr": "Metin 4",
+        "vi": "Văn bản 4",
+        "zh-CN": "文本 4",
+        "zh-TW": "文字 4"
+      }
+    },
+    {
+      "type": "text",
+      "id": "text-5",
+      "label": {
+        "cs": "Text 5",
+        "da": "Tekst 5",
+        "de": "Text 5",
+        "en": "Text 5",
+        "es": "Texto 5",
+        "fi": "Teksti 5",
+        "fr": "Texte 5",
+        "it": "Testo 5",
+        "ja": "テキスト 5",
+        "ko": "텍스트 5",
+        "nb": "Tekst 5",
+        "nl": "Tekst 5",
+        "pl": "Tekst 5",
+        "pt-BR": "Texto 5",
+        "pt-PT": "Texto 5",
+        "sv": "Text 5",
+        "th": "ข้อความ 5",
+        "tr": "Metin 5",
+        "vi": "Văn bản 5",
+        "zh-CN": "文本 5",
+        "zh-TW": "文字 5"
+      }
+    },
+    {
+      "type": "text",
+      "id": "text-6",
+      "label": {
+        "cs": "Text 6",
+        "da": "Tekst 6",
+        "de": "Text 6",
+        "en": "Text 6",
+        "es": "Texto 6",
+        "fi": "Teksti 6",
+        "fr": "Texte 6",
+        "it": "Testo 6",
+        "ja": "テキスト 6",
+        "ko": "텍스트 6",
+        "nb": "Tekst 6",
+        "nl": "Tekst 6",
+        "pl": "Tekst 6",
+        "pt-BR": "Texto 6",
+        "pt-PT": "Texto 6",
+        "sv": "Text 6",
+        "th": "ข้อความ 6",
+        "tr": "Metin 6",
+        "vi": "Văn bản 6",
+        "zh-CN": "文本 6",
+        "zh-TW": "文字 6"
+      }
+    },
+      {
+        "type": "color",
+        "id": "column-color",
+        "label": {
+          "cs": "Pozadí",
+          "da": "Baggrund",
+          "de": "Hintergrund",
+          "en": "Background",
+          "es": "Fondo",
+          "fi": "Tausta",
+          "fr": "Couleur de fond",
+          "it": "Sfondo",
+          "ja": "背景",
+          "ko": "배경",
+          "nb": "Bakgrunn",
+          "nl": "Achtergrond",
+          "pl": "Tło",
+          "pt-BR": "Plano de fundo",
+          "pt-PT": "Fundo",
+          "sv": "Bakgrund",
+          "th": "พื้นหลัง",
+          "tr": "Arka plan",
+          "vi": "Nền",
+          "zh-CN": "背景",
+          "zh-TW": "背景"
+        },
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "column-txt-color",
+        "label": {
+          "cs": "Text",
+          "da": "Tekst",
+          "de": "Text",
+          "en": "Text",
+          "es": "Texto",
+          "fi": "Teksti",
+          "fr": "Texte",
+          "it": "Testo",
+          "ja": "テキスト",
+          "ko": "텍스트",
+          "nb": "Tekst",
+          "nl": "Tekst",
+          "pl": "Tekst",
+          "pt-BR": "Texto",
+          "pt-PT": "Texto",
+          "sv": "Text",
+          "th": "ข้อความ",
+          "tr": "Metin",
+          "vi": "Văn bản",
+          "zh-CN": "文本",
+          "zh-TW": "文字"
+        },
+        "default": "#000000"
+      },
+      {
+        "type": "range",
+        "id": "column-txt-sz",
+        "min": 18,
+        "max": 45,
+        "step": 1,
+        "label": {
+          "cs": "Základní velikost",
+          "da": "Basisstørrelse",
+          "de": "Größe",
+          "en": "Size",
+          "es": "Tamaño de base",
+          "fi": "Peruskoko",
+          "fr": "Taille",
+          "it": "Dimensione base",
+          "ja": "基本サイズ",
+          "ko": "기본 사이즈",
+          "nb": "Grunnstørrelse",
+          "nl": "Basisafmeting",
+          "pl": "Rozmiar podstawowy",
+          "pt-BR": "Tamanho básico",
+          "pt-PT": "Tamanho básico",
+          "sv": "Basstorlek",
+          "th": "ขนาดพื้นฐาน",
+          "tr": "Temel boyutu",
+          "vi": "Cỡ cơ sở",
+          "zh-CN": "基本尺寸",
+          "zh-TW": "基本尺寸"
+        },
+        "default": 18
+      },
+        {
+          "type": "text",
+          "id": "button_price_label",
+          "label": {
+            "cs": "Text tlačítka",
+            "da": "Knaptekst",
+            "de": "Button-Name",
+            "en": "Button label",
+            "es": "Etiqueta de botón",
+            "fi": "Tekstipainike",
+            "fr": "Texte du bouton",
+            "it": "Etichetta pulsante",
+            "ja": "ボタンのラベル",
+            "ko": "버튼 레이블",
+            "nb": "Knappetikett",
+            "nl": "Knoplabel",
+            "pl": "Przycisk z etykietą",
+            "pt-BR": "Etiqueta de botão",
+            "pt-PT": "Etiqueta do botão",
+            "sv": "Knappetikett",
+            "th": "ป้ายกำกับปุ่ม",
+            "tr": "Düğme etiketi",
+            "vi": "Nhãn nút",
+            "zh-CN": "按钮标签",
+            "zh-TW": "按鈕標籤"
+          }
+        },
+        {
+          "type": "url",
+          "id": "button_price_link",
+          "label": {
+            "cs": "Tlačítkový odkaz",
+            "da": "Knaplink",
+            "de": "Button-Link",
+            "en": "Button link",
+            "es": "Enlace de la diapositiva",
+            "fi": "Painikelinkki",
+            "fr": "Lien du bouton",
+            "it": "Link slide",
+            "ja": "ボタンのリンク",
+            "ko": "버튼 링크",
+            "nb": "Kobling for knapp",
+            "nl": "Knoplink",
+            "pl": "Link przycisku",
+            "pt-BR": "Link do slide",
+            "pt-PT": "Ligação do botão",
+            "sv": "Knapplänk",
+            "th": "ลิงก์ปุ่ม",
+            "tr": "Düğme bağlantısı",
+            "vi": "Liên kết trên nút",
+            "zh-CN": "按钮链接",
+            "zh-TW": "按鈕連結"
+          }
+        },
+      {
+        "type": "header",
+        "content": {
+        "cs": "Knoflík",
+        "da": "Knap",
+        "de": "Taste",
+        "en": "Button",
+        "es": "Botones",
+        "fi": "Painike",
+        "fr": "Boutons",
+        "it": "Pulsante",
+        "ja": "ボタン",
+        "ko": "단추",
+        "nb": "Knapp",
+        "nl": "Knop",
+        "pl": "Przycisk",
+        "pt-BR": "Botão",
+        "pt-PT": "Botão",
+        "sv": "Knapp",
+        "th": "ปุ่ม",
+        "tr": "Buton",
+        "vi": "Cái nút",
+        "zh-CN": "按钮",
+        "zh-TW": "按鈕"
+        }
+      },
+      {
+        "type": "color",
+        "id": "color_price_btn",
+        "label": {
+          "cs": "Pozadí",
+          "da": "Baggrund",
+          "de": "Hintergrund",
+          "en": "Background",
+          "es": "Fondo",
+          "fi": "Tausta",
+          "fr": "Couleur de fond",
+          "it": "Sfondo",
+          "ja": "背景",
+          "ko": "배경",
+          "nb": "Bakgrunn",
+          "nl": "Achtergrond",
+          "pl": "Tło",
+          "pt-BR": "Plano de fundo",
+          "pt-PT": "Fundo",
+          "sv": "Bakgrund",
+          "th": "พื้นหลัง",
+          "tr": "Arka plan",
+          "vi": "Nền",
+          "zh-CN": "背景",
+          "zh-TW": "背景"
+        },
+        "default": "#4CAF50"
+      },
+      {
+        "type": "color",
+        "id": "color_price_txt",
+        "label": {
+        "cs": "Text",
+        "da": "Tekst",
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fi": "Teksti",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "ko": "텍스트",
+        "nb": "Tekst",
+        "nl": "Tekst",
+        "pl": "Tekst",
+        "pt-BR": "Texto",
+        "pt-PT": "Texto",
+        "sv": "Text",
+        "th": "ข้อความ",
+        "tr": "Metin",
+        "vi": "Văn bản",
+        "zh-CN": "文本",
+        "zh-TW": "文字"
+        },
+        "default": "#fff"
+      }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "cs": "Cenová tabulka",
+        "da": "Prisbord",
+        "de": "Preistabelle",
+        "en": "Pricing table",
+        "es": "Tabla de precios",
+        "fi": "Hinnoittelutaulukko",
+        "fr": "Tableau des prix",
+        "it": "Tabella dei prezzi",
+        "ja": "価格表",
+        "ko": "가격표",
+        "nb": "Prisbord",
+        "nl": "Prijstabel",
+        "pl": "Tabela cen",
+        "pt-BR": "Tabela de preços",
+        "pt-PT": "Tabela de preços",
+        "sv": "Prissättningstabell",
+        "th": "ตารางราคา",
+        "tr": "Fiyatlandırma tablosu",
+        "vi": "Bảng giá",
+        "zh-CN": "定价表",
+        "zh-TW": "定價表"
+      },
+      "category": {
+        "cs": "Text",
+        "da": "Tekst",
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fi": "Teksti",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "ko": "텍스트",
+        "nb": "Tekst",
+        "nl": "Tekst",
+        "pl": "Tekst",
+        "pt-BR": "Texto",
+        "pt-PT": "Texto",
+        "sv": "Text",
+        "th": "ข้อความ",
+        "tr": "Metin",
+        "vi": "Văn bản",
+        "zh-CN": "文本",
+        "zh-TW": "文字"
+      },
+      "blocks": [
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "text_block"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

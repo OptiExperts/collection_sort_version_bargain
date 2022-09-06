@@ -1,0 +1,171 @@
+<div class="page-width page-wishlist">
+  <div class="grid">
+    <div class="grid__item">
+      <div class="medium-up">
+        <header class="collection-header">
+          <div class="page-width">
+            <div class="section-header text-center">
+              <h1 style="position: relative;">
+                <span role="text">
+                  <span class="visually-hidden">{{ page.title }}: </span>
+
+                  <span style="display: inline-flex;align-items:center;">
+                    <svg width="36" height="36" style="padding-right: 5px;" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2.58374 3.00919C-0.862731 7.02127 -0.859764 13.4777 2.58374 17.4941L17.8364 35.2913C22.9265 29.3656 28.0167 23.44 33.1067 17.5147C36.5532 13.5027 36.5532 7.04248 33.1067 3.02979C29.6603 -0.982297 24.1108 -0.982782 20.6639 3.02979L17.8536 6.30102L15.0257 3.00894C11.5792 -1.00314 6.03066 -1.0029 2.58374 3.00919Z" fill="#D72324"/>
+                    </svg>
+                    <span>{{ page.title }}</span>
+                  </span>
+                </span>
+                <a href="javascript:void(0);" class="js-wishlist-empty-button" id="wishlist_empty_button">
+                  <svg width="27" height="32" viewBox="0 0 27 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.2438 32.0001H19.7721C21.7835 32.0001 23.4144 30.3694 23.4144 28.3578V8.58569H2.60107V28.3578C2.60107 30.3694 4.2318 32.0001 6.24342 32.0001H6.2438Z" fill="#00000"/>
+                    <path d="M26.0165 2.34152H18.2114V0H7.80508V2.34152H0V5.98362H26.0165V2.34152Z" fill="#00000"/>
+                  </svg>
+                  <span>{{ 'general.wishlist.empty_button' | t}}</span>
+                </a>
+              </h1>
+
+            </div>
+          </div>
+        </header>
+        <ul class="visually-hidden grid grid--uniform grid--view-items wishlist-product-grid-template ">
+          <li class="grid__item grid__item--collection-template small--one-half medium-up--one-quarter">
+            <div class="grid-view-item product-card">
+              <div class=" tooltipp">
+                <div class="wishlist-template-simple-product grid-view-item__link">
+                  <div class="anim-hover">
+                    <a class="grid-view-item__link" href="#"><img src="" class="grid-view-item__image animation--{{settings.lazyloading-effect}} ls-is-cached lazyloaded"></a>
+                    <a href="#" data-product-handle="" class="btn add-to-wishlist wishlist-active"><i class="fa fa-heart"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="h4 grid-view-item__title"><a href="#"></a></div>
+              <div class="grid-view-item__meta">
+                <dl class="price">
+                  <div class="price__regular">
+                    <dt>
+                        <span class="visually-hidden visually-hidden--inline">Regular price</span>
+                    </dt>
+                    <dd>
+                        <span class="price-item price-item--sale-only" data-regular-price="">
+                          <span class="money"></span>
+                        </span>
+                    </dd>
+                  </div>
+                  <div class="price__sale">
+                    <dt>
+                        <span class="visually-hidden visually-hidden--inline">Sale price</span>
+                    </dt>
+                    <dd>
+                        <span class="price-item price-item--sale" data-sale-price="">
+                          <span class="money"></span>
+                        </span>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+              <form method="post" action="/cart/add" class="tooltip-addtocart ">
+                <input type="hidden" name="id" value="">
+                <input type="submit" value="{{ 'products.product.add_to_cart' | t }}" class="btn">
+              </form>
+            </div>
+          </li>
+        </ul>
+        <ul class="grid grid--uniform grid--view-items wishlist-products-container"></ul>
+        <a href="javascript:void(0);" class="js-wishlist-empty-button medium-up--hide hide" style="display: flex;align-items:center;justify-content: center;margin-top: 10px;">
+          <svg width="27" height="32" style="margin-right: 5px" viewBox="0 0 27 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.2438 32.0001H19.7721C21.7835 32.0001 23.4144 30.3694 23.4144 28.3578V8.58569H2.60107V28.3578C2.60107 30.3694 4.2318 32.0001 6.24342 32.0001H6.2438Z" fill="#00000"/>
+            <path d="M26.0165 2.34152H18.2114V0H7.80508V2.34152H0V5.98362H26.0165V2.34152Z" fill="#00000"/>
+          </svg>
+          <span style="font-size:20px">{{ 'general.wishlist.empty_wishlist' | t}}</span>
+        </a>
+        <div class="empty-wishlist-text visually-hidden text-center">
+          <h2>{{ 'general.wishlist.empty_heading' | t}}</h2>
+          {%- capture heart_svg -%}
+            {%- render 'icon-heart'-%}
+          {%- endcapture -%}
+          <p>{{ 'general.wishlist.empty_subheading_html' | t: heart_svg: heart_svg }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .tooltiptext.add-to-wishlist{top:50px!important}.product-hover-icon-container .btn,.product-hover-icon-container .tooltiptext{position:relative!important;top:0!important;transform:translateX(0)!important;padding-top:8px;padding-bottom:8px}.product-hover-icon-container .add-to-wishlist{margin-left:5px}.product-card 
+  @media (min-width: 769px) and (max-width: 4096px) {
+    .tooltipp.anim-hover{overflow:hidden} 
+  }
+  
+  .product-hover-icon-container{transform:translateY(50px);visibility:hidden;transition:all .4s ease}
+  
+  @media (min-width: 769px) and (max-width: 4096px) {
+    .tooltipp.anim-hover:hover .product-hover-icon-container{transform:translateY(0);visibility:visible} 
+  }
+  @media only screen and (min-width:750px){.product-hover-icon-container{position:absolute;bottom:0;left:0;display:flex;align-items:center;height:45px;width:100%;background:rgba(0,0,0,.4);justify-content:center}}@media only screen and (max-width:950px){.product-hover-icon-container .btn,.product-hover-icon-container .tooltiptext{font-size:10px}}@media only screen and (max-width:800px){.product-hover-icon-container .btn,.product-hover-icon-container .tooltiptext{font-size:9px}}@media screen and (min-width:767px){.tooltipp{position: relative;display: inline-block;}.tooltipp .tooltiptext{visibility: none;width: auto;text-align: center;border-radius: 6px;padding: 5px;position: absolute;z-index: 1;top: 10px;}.tooltipp .tooltiptext{display:none;}.tooltipp:hover .tooltip-addtocart{display: inline-block;}.tooltipp:hover .tooltiptext{display:inline-block;}}.has-secondary.grid-view-item__link img.secondary{display:none;transition:1s;}.quick-view-button{transition:.3s!important}.quick-view-button:hover{transform:translateX(7px)}@media screen and (min-width:767px){.has-secondary.grid-view-item__link:hover img.grid-view-item__image{display:none;transition : 2s;}.has-secondary.grid-view-item__link img.secondary{display:none;transition : 2s;}.has-secondary.grid-view-item__link:hover img.secondary{display:block;}.has-secondary.grid-view-item__link:hover img.grid-view-item__image{display:none}}@media screen and (max-width:767px){.has-secondary.grid-view-item__link img.secondary{display:none}}@media screen and (max-width:767px){.has-secondary.grid-view-item__link p.secondary{display:none}}
+  
+  @media (min-width: 769px) and (max-width: 4096px) {
+  .anim-hover img{transition:1.4s;opacity : 1;}
+  .anim-hover:hover img{opacity: 0.8;}
+  }
+</style>
+<style>@media screen and (min-width:767px){.tooltipp{position: relative;display: inline-block;}.tooltipp .tooltiptext{visibility: none;width: auto;text-align: center;border-radius: 6px;padding: 5px;position: absolute;z-index: 1;top: 10px;}.tooltipp .tooltiptext{display:none;}.tooltipp .tooltip-addtocart{display: none;}.tooltipp:hover .tooltip-addtocart{display: inline-block;}.tooltipp:hover .tooltiptext{display:inline-block;}}.quick-view-button:hover{transform:translateX(7px)}</style>
+<script>
+  function removeItemFromWishlist(e) {
+    var i = jQuery(e).attr("data-product-handle");
+    updateWishlist(i), wishlistContains(i) || jQuery(e).parents("li").remove();
+  }
+  function wishlist_page_product(e) {
+    var i = $(".wishlist-product-grid-template li").clone();
+    i.find(".grid-view-item__link").attr("href", e.url),
+      i.find(".grid-view-item__link").attr("title", e.title),
+      i.find(".wishlist-remove-item").attr("data-product-handle", e.handle),
+      i.find(".grid-view-item__image").attr("src", e.featured_image),
+      i.find(".grid-view-item__image").attr("alt", e.title),
+      i.find(".grid-view-item__title a").attr("href", e.url),
+      i.find(".grid-view-item__title a").html(e.title),
+      i.find(".add-to-wishlist").attr("data-product-handle", e.handle),
+      i.find(".quick-view-button").attr("data-handle", e.handle),
+      i.find('input[name="id"]').val(e.variants[0].id),
+      i.find(".price__vendor dd").html(e.vendor),
+      (1 < e.variants.length
+        ? i.find(".wishlist-template-simple-product")
+        : i.find(".wishlist-template-variant-product")
+      ).remove(),
+      0 < e.compare_at_price_min
+        ? (i
+            .find(".price__regular dd .money")
+            .html(theme.Currency.formatMoney(e.compare_at_price_min, theme.moneyFormatWithCurrency)),
+          i.find(".grid-view-item__meta .price").addClass("price--on-sale"),
+          i.find(".price__regular dd .price-item").addClass("price-item--regular"),
+          i.find(".price__regular .price-item").removeClass("price-item--sale-only"),
+          i.find(".price__sale dd .money").html(theme.Currency.formatMoney(e.price, theme.moneyFormatWithCurrency)))
+        : (i.find(".price__regular dd .money").html(theme.Currency.formatMoney(e.price, theme.moneyFormatWithCurrency)),
+          i.find(".price__regular .price-item").addClass("price-item--sale-only")),
+      jQuery(".wishlist-products-container").append(i);
+  }
+  jQuery(window).on("load", function () {
+    var e = getWishlist();
+    if (0 < e.length)
+      for (var i = 0; i < e.length; i++) {
+        var t = e[i];
+        Shopify.getProduct(t, function (e) {
+          wishlist_page_product(e);
+        });
+      }
+    else jQuery(".empty-wishlist-text").show().removeClass("visually-hidden");
+  });
+
+  (() => {
+    let emptyButtons = document.querySelectorAll('.js-wishlist-empty-button');
+    emptyButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        localStorage.setItem('grass-wishlist', '');
+        window.location.reload();
+      });
+
+      if(localStorage.getItem('grass-wishlist').split(',').filter(Boolean).length && button.classList.contains('medium-up--hide')){
+        button.classList.remove('hide');
+      }
+    })
+  })()
+</script>

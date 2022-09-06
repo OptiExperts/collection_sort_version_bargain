@@ -1,0 +1,8 @@
+{% if section.settings.ctdn-enable %}
+<style>.ctd {line-height: 8pt;width : 100%;  background : {{section.settings.ctdn_bkclr_cart}};  text-align : ;}.promo-countainer .txtSize {color : {{section.settings.ctdn_txtclr_cart}};  font-size : {{section.settings.cntdwn-txt}}px;  }#demo { color: {{ section.settings.ctdn_dtclr}}; font-size : {{section.settings.cntdwn-dt}}px;  }</style>  
+{% assign minutes = section.settings.cntdwn-rg  | times: 60  %}
+<div class="promo-countainer ctd">
+  <h3 class="txtSize"> {{section.settings.promo_hd}} &nbsp;<strong id="demo"></strong> &nbsp;{{section.settings.ctdn-txt}} </h3>
+</div>
+<script type="text/javascript">var count = 0;var counter = null;window.onload = function() {initCounter();};function initCounter() {if(getLocalStorage('count') <= 0 ){count =  {{ minutes }};}else{count = getLocalStorage('count');}counter = setInterval(timer, 1000);}function setLocalStorage(key, val) {if (window.localStorage) {window.localStorage.setItem(key, val);}return val;}function getLocalStorage(key) {return window.localStorage ? window.localStorage.getItem(key) : '';}function timer() {count = setLocalStorage('count', count - 1);if (count == -1) {clearInterval(counter);initCounter();return;}var seconds = count % 60;var minutes = Math.floor(count / 60);var hours = Math.floor(minutes / 60);minutes %= 60;hours %= 60;document.getElementById("demo").innerHTML = minutes +  "m "   + seconds +  "s"; }</script>
+{% endif %}

@@ -1,0 +1,34 @@
+{% assign filter-code-show = collections[settings.filter-code] %}
+{% assign foundProduct = false %}
+{% assign currentProductTitle = product.title %}
+{% if filter-code-show.products.size > 0 %}
+{% for product in filter-code-show.products %}
+	{% if product.title == currentProductTitle %}
+		{% assign foundProduct = true %}
+	{% endif %}
+{% endfor %}
+{% endif %}
+{% if foundProduct == true %}
+{% if section.settings.ctdn-enable %}
+<style>.ctd-container {
+  {% if settings.enabl-coupon %}
+  padding-bottom: 50px;
+  {% endif %}
+  border: {{settings.ctdn_brd_width}}px {{settings.ctdn_brd_style}} {{settings.ctdn_brdclr}};background : {{settings.ctdn_bkclr}};}.ctd {width : 100%;}.ctd .spe {color : {{settings.ctdn_txtclr}};  font-size : {{settings.cntdwn-txt}}px;  }.ctd .ct-stl {color : {{settings.ctdn_dtclr}};  font-size : {{settings.cntdwn-dt}}px;  }.flexbox-ctd{padding:0;margin:0;display:-webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;align-items: baseline;justify-content: center;}</style>  
+{% assign days = settings.cntdwn-rg | times: 86400 %}
+<div class="ctd-container">   
+{% if settings.enabl-coupon %}
+{% include 'blurry-coupon' %} 
+{% endif %}
+{% if settings.enabl-countdown %}  
+<div class="ctd">
+<div class="flexbox-ctd">  
+<div class="spe"> <i class="fa fa-bolt" aria-hidden="true"></i> {{settings.ctdn-txt}} &nbsp;</div>  
+<div id="demo" class="ct-stl"> </div> 
+  </div>  
+</div>
+<script>var countDownDate = new Date("{{ "now" | date: "%s"| plus: days | date: "%a, %b %d, %Y" }}").getTime();var x = setInterval(function() {var now = new Date().getTime();   var distance = countDownDate - now;    var days = Math.floor(distance / (1000 * 60 * 60 * 24));var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));var seconds = Math.floor((distance % (1000 * 60)) / 1000);   document.getElementById("demo").innerHTML = days + "d " + hours + "h "+ minutes + "m " + seconds + "s ";    if (distance < 0) {clearInterval(x);document.getElementById("demo").innerHTML = "EXPIRED";}}, 1000);</script>  
+{% endif %}
+</div>
+  {% endif %}
+{% endif %}

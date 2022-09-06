@@ -1,0 +1,183 @@
+<style>@media only screen and (min-width: 769px) {.tooltip-mega{position:relative;display:inline-block}.tooltip-mega .tooltip-sale{width:30px;height:inherit;font-size:10px;color:#fff;text-align:center;border-radius:6px;padding:1px 0;position:absolute;z-index:1;bottom:18px;left:25px;margin-left:-60px;background-color:{{settings.salep-bk}}}.tooltip-mega .tooltip-sale::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border-width:5px;border-style:solid;border-color:{{settings.salep-bk}} transparent transparent transparent}.tooltip-mega .tooltip-sale{visibility:visible}.tooltip-mega .tooltip-new{width:30px;height:inherit;font-size:10px;color:#fff;text-align:center;border-radius:6px;padding:1px 0;position:absolute;z-index:1;bottom:18px;left:25px;margin-left:-60px;background-color:{{settings.newp-bkclr}}}.tooltip-mega .tooltip-new::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border-width:5px;border-style:solid;border-color:{{settings.newp-bkclr}} transparent transparent transparent}.tooltip-mega .tooltip-new{visibility:visible}.site-nav__childlist.fullarea{display:block}.site-nav__childlist-grid.setImage{justify-content:space-around;flex-wrap:nowrap}.site-nav--has-centered-dropdown,.site-nav--has-dropdown button{text-decoration:none!important;outline:0}.site-nav--has-dropdown button{position:relative}.site-nav--has-dropdown:hover .site-nav__dropdown{display:block}.site-nav .list--inline>li{padding:15px 0}.site-nav__link--active .site-nav__label{border-bottom-color:transparent}.site-nav--has-dropdown button:after{content:'\25BC';position:absolute;right:-5px;top:50%;transform:translateY(-44%);font-size:10px}.site-nav{position:inherit}.cart-header{margin-bottom:0}.search-bar.drawer{overflow:initial}}</style>
+
+{% if settings.mega-badge == 'mega-sale1' %}
+{% assign mega_badge = 'tooltip-sale' %}
+{% assign mega_badge_text = 'products.product.on_sale' | t %}
+{% endif %}
+{% if settings.mega-badge == 'mega-new1' %}
+{% assign mega_badge = 'tooltip-new' %}
+{% assign mega_badge_text = 'products.product.new_label' | t %}
+{% endif %}
+{% if settings.mega-badge2 == 'mega-sale2' %}
+{% assign mega_badge2 = 'tooltip-sale' %}
+{% assign mega_badge_text2 = 'products.product.on_sale' | t %}
+{% endif %}
+{% if settings.mega-badge2 == 'mega-new2' %}
+{% assign mega_badge2 = 'tooltip-new' %}
+{% assign mega_badge_text2 = 'products.product.new_label' | t %}
+{% endif %}
+{% liquid
+  assign menu_handle1 = settings.mega1_handle1 | handleize
+  assign menu_handle2 = settings.mega1_handle2 | handleize
+  assign menu_handle3 = settings.mega1_handle3 | handleize
+  assign menu_handle4 = settings.mega1_handle4 | handleize
+  assign menu_handle5 = settings.mega1_handle5 | handleize
+  assign menu_handle6 = settings.mega1_handle6 | handleize
+%}
+<ul class="site-nav list--inline {{ nav_alignment }}" id="SiteNav">
+  {% for link in linklists[_select_menu].links %}
+  {% liquid
+    assign current_image = blank
+    assign current_link = blank
+  %}
+  {%- capture banner_right_enable -%}{{ prefix }}banner_right_enable_{{ forloop.index }}{%- endcapture -%}
+  {%- capture banner_right -%}{{ prefix }}banner_right_{{ forloop.index }}.png{%- endcapture -%}
+  {%- assign child_list_handle = link.title | handleize -%}
+  {%- assign three_level_nav = false -%}
+  {% if link.links != blank %}
+  {% if link.levels == 2 %}
+  {%- assign three_level_nav = true -%}
+  {% endif %}
+  {% endif %}
+  {% if link.links != blank %}
+  <li
+    class="site-nav--has-dropdown{% if three_level_nav %} site-nav--has-centered-dropdown{% endif %}{% if link.active %} site-nav--active{% endif %}"
+    data-has-dropdowns>
+    <button
+      class="site-nav__label site-nav__link site-nav__link--main site-nav__link--button{% if link.child_active %} site-nav__link--active{% endif %}"
+      type="button" aria-expanded="false" aria-controls="SiteNavLabel-{{ child_list_handle }}">
+      {{ link.title | escape }}
+    </button>
+    <div class="site-nav__dropdown {% if three_level_nav %} site-nav__dropdown--centered{% endif %}"
+      id="SiteNavLabel-{{ child_list_handle }}">
+      {% if three_level_nav %}
+      <div class="site-nav__childlist {% if settings.enabe_mega %} fullarea {% endif %}">
+        <ul class="site-nav__childlist-grid {% if settings.enabe_mega %} setImage {% endif %}">
+          {% if link.links != blank %}
+            <div class="col-menu">
+              {% for childlink in link.links %}
+                <li class="site-nav__childlist-item">
+                  <a href="{{ childlink.url }}"
+                    class="site-nav__label site-nav__link site-nav__child-link site-nav__child-link--parent"
+                    {% if childlink.current %} aria-current="page" {% endif %} title="{{ childlink.title | escape }}">
+                    {{ childlink.title | escape }}
+                  </a>
+                  <a href="{{ childlink.url }}" class="site-nav__label site-nav__link site-nav__child-link"
+                    title="{{ childlink.title | escape }}" {% if childlink.current %} aria-current="page" {% endif %}>SHOP
+                    ALL</a>
+                  {% if childlink.links != blank %}
+                  {% for grandchildlink in childlink.links %}
+                  <a href="{{ grandchildlink.url }}" class="site-nav__label site-nav__link site-nav__child-link"
+                    {% if grandchildlink.current %} aria-current="page" {% endif %}
+                    title="{{ grandchildlink.title | escape }}">
+                    {{ grandchildlink.title | escape }}
+                  </a>
+                  {% endfor %}
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </div>
+
+            {% liquid
+              assign has_image = false
+              assign current_handle = link.title | handleize
+              case current_handle
+                when menu_handle1
+                  assign current_image = settings.mega1_img1 | img_url: 'x225'
+                  assign current_link = settings.mega1_link1
+                when menu_handle2
+                  assign current_image = settings.mega1_img2 | img_url: 'x225'
+                  assign current_link = settings.mega1_link2
+                when menu_handle3
+                  assign current_image = settings.mega1_img3 | img_url: 'x225'
+                  assign current_link = settings.mega1_link3
+                when menu_handle4
+                  assign current_image = settings.mega1_img4 | img_url: 'x225'
+                  assign current_link = settings.mega1_link4
+                when menu_handle5
+                  assign current_image = settings.mega1_img5 | img_url: 'x225'
+                  assign current_link = settings.mega1_link5
+                when menu_handle6
+                  assign current_image = settings.mega1_img6 | img_url: 'x225'
+                  assign current_link = settings.mega1_link6
+                else
+                  assign current_image = blank
+                  assign current_link = blank
+              endcase
+            %}
+            {%- unless current_image contains 'no-image' -%}
+              {%- assign has_image = true -%}
+            {%- endunless -%}
+
+            {% if has_image and current_image != blank or current_link != blank %}
+              <li class="site-nav__childlist-item site-nav__childlist-image small--hide" test="{{has_image}}">
+                  <a class="link-image" {% if current_link != blank %}href="{{ current_link }}"{% endif %}>
+                    <img class="lazyload js" src="{{ current_image | img_url: '1x1' }}" data-src="{{ current_image }}"
+                    data-sizes="auto" alt="{{ current_image.alt | escape }}">
+                  </a>
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+      {% else %}
+      <ul>
+        {% for childlink in link.links %}
+        <li>
+          <a href="{{ childlink.url }}"
+            class="site-nav__label site-nav__link site-nav__child-link{% if forloop.last %} site-nav__link--last{% endif %}"
+            {% if childlink.current %} aria-current="page" {% endif %} title="{{ childlink.title | escape }}">
+            {{ childlink.title | escape }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </li>
+  {% if settings.assign-mega-badge == '1' %}
+  {% assign menu = 1 %}
+  {% elsif settings.assign-mega-badge == '2' %}
+  {% assign menu = 2 %}
+  {% elsif settings.assign-mega-badge == '3' %}
+  {% assign menu = 3 %}
+  {% elsif settings.assign-mega-badge == '4' %}
+  {% assign menu = 4 %}
+  {% elsif settings.assign-mega-badge == '5' %}
+  {% assign menu = 5 %}
+  {% elsif settings.assign-mega-badge == '6' %}
+  {% assign menu = 6 %}
+  {% endif %}
+  {% if settings.assign-mega-badge2 == '1' %}
+  {% assign menu2 = 1 %}
+  {% elsif settings.assign-mega-badge2 == '2' %}
+  {% assign menu2 = 2 %}
+  {% elsif settings.assign-mega-badge2 == '3' %}
+  {% assign menu2 = 3 %}
+  {% elsif settings.assign-mega-badge2 == '4' %}
+  {% assign menu2 = 4 %}
+  {% elsif settings.assign-mega-badge2 == '5' %}
+  {% assign menu2 = 5 %}
+  {% elsif settings.assign-mega-badge2 == '6' %}
+  {% assign menu2 = 6 %}
+  {% endif %}
+  {% if forloop.index == menu %}
+  {% unless settings.mega-badge == 'mega-none1' %}<div class="tooltip-mega"><em
+      class="{{mega_badge}}">{{ mega_badge_text }}</em></div> {% endunless %}
+  {% endif %}
+  {% if forloop.index == menu2 %}
+  {% unless settings.mega-badge2 == 'mega-none2' %}<div class="tooltip-mega"><em
+      class="{{mega_badge2}}">{{ mega_badge_text2 }}</em></div> {% endunless %}
+  {% endif %}
+  {% else %}
+  <li {% if link.active %} class="site-nav--active" {% endif %}>
+    <a href="{{ link.url }}"
+      class="site-nav__label site-nav__link site-nav__link--main{% if link.active %} site-nav__link--active{% endif %}"
+      {% if link.current %} aria-current="page" {% endif %} title="{{ link.title | escape }}">
+      {% if link.title == "Home" %} <i class="fa fa-home" aria-hidden="true"></i>{% endif %}
+      {{ link.title | escape }}
+    </a>
+  </li>
+  {% endif %}
+  {% endfor %}
+</ul>

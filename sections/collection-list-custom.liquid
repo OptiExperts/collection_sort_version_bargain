@@ -1,0 +1,202 @@
+<style>.collection-grid{margin-bottom:-22px;overflow:auto}.collection-grid-item{position:relative;width:100%;padding-bottom:100%;margin-bottom:22px}@media only screen and (min-width:769px){.collection-grid-item{margin-bottom:20px}}.collection-grid-item__title{color:var(--color-overlay-title-text);position:absolute;text-align:center;width:100%;top:50%;padding:0 5px;transform:translateY(-50%);transition:.1s cubic-bezier(.44,.13,.48,.87);text-shadow:0 0 4px var(--color-text-shadow);hyphens:auto;font-weight:700}@media only screen and (min-width:768px){.collection-grid-item__title{padding:0 15px}}.collection-grid-item__link{position:absolute;top:0;left:0;bottom:0;right:0}.collection-grid-item__link:focus .collection-grid-item__title-wrapper::before,.collection-grid-item__link:hover .collection-grid-item__title-wrapper::before{opacity:var(--hover-overlay-opacity)}.collection-grid-item__link:focus{opacity:1}.collection-grid-item__overlay{position:relative;display:block;height:100%;width:100%;background-size:fill;background-repeat:no-repeat;background-position:center center}.collection-grid-item__title-wrapper::before{content:'';position:absolute;top:0;right:0;bottom:0;left:0;height:105%;background-color:var(--color-image-overlay);opacity:var(--opacity-image-overlay)}</style>  
+
+{% case section.settings.grid %}
+   {% when 2 %}
+      {%- assign grid_item_width = 'medium-up--one-half' -%}
+   {% when 3 %}
+      {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+   {% when 4 %}
+      {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+   {% when 5 %}
+      {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
+   {% when 6 %}
+      {%- assign grid_item_width = 'small--one-half medium-up--one-sixth' -%}
+{% endcase %}
+{% assign number_change = section.blocks.size | divided_by: 2 | floor %}
+
+<div class="page-width new-list-collection">
+   {% if section.settings.title != blank %}
+      <div class="section-header text-center">
+        <span class="h2" style="display: inline;">Popular</span> <h1 class="h2" style="display: inline;">{{ section.settings.title | escape }}</h1>
+      </div>
+   {% endif %}
+
+   <div class="collection-grid js-layout-read">
+      <ul class="grid grid--uniform">
+         {% for block in section.blocks limit: section.blocks.size %}
+            <li class="grid__item {{ grid_item_width }} {% if forloop.index > number_change %}small--hide{% endif %}"
+               {{ block.shopify_attributes }}>
+
+               {%- assign collection = collections[block.settings.collection] -%}
+               {% if block.settings.img != blank %}
+                  {%- assign collection_image = block.settings.img -%}
+               {% elsif collection.image %}
+                  {%- assign collection_image = collection.image -%}
+               {% elsif collection.products.first and collection.products.first.images != empty %}
+                  {%- assign collection_image = collection.products.first.featured_image -%}
+               {% else %}
+                  {% assign collection_image = blank %}
+               {% endif %}
+
+               <div class="collection-grid-item ">
+                  <div class="collection-grid-item_container js-link-mb" data-href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}">
+                     <div class="collection-grid-item__image">
+                        <a href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}"
+                           class="collection-grid-item__link">
+                           {% unless collection_image == blank %}
+                           <div
+                              class="collection-grid-item__overlay box ratio-container js lazyload animation--{{settings.lazyloading-effect}}"
+                              data-bgset="{% include 'bgset', image: collection_image %}" data-sizes="auto"
+                              data-parent-fit="cover" data-src="{{ collection_image | img_url: '300x300' }}">
+                           </div>
+                           <noscript>
+                              <div class="collection-grid-item__overlay lazyload animation--{{settings.lazyloading-effect}}"
+                                 style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
+                           </noscript>
+                           {% else %}
+                           {% if collection == empty %}
+                           <div class="collection-grid-item__overlay">
+                              {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
+                              {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                           </div>
+                           {% else %}
+                           <div class="collection-grid-item__overlay animation--{{settings.lazyloading-effect}}"
+                              style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
+                           {% endif %}
+                           {% endunless %}
+                        </a>
+                     </div>
+
+                     <div class="collection-grid-item__title-wrapper">
+                        <a class="collection-grid-item__title h3"  href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}">
+                           {%- if block.settings.label != blank -%}
+                              {{- block.settings.label -}}
+                           {%- elsif collection.title == blank -%}
+                              {{- 'homepage.onboarding.collection_title' | t -}}
+                           {%- else -%}
+                              {{- collection.title -}}
+                           {%- endif -%}
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            </li>
+         {% endfor %}
+      </ul>
+   </div>
+   
+   {% if section.blocks.size > number_change %}
+      <div class="row-btn medium-up--hide">
+         <p class="js-toggle-read" data-more="View more" data-less="View less">View more</p>
+      </div>
+   {% endif %}
+
+   {% if section.blocks.size == 0 %}
+      {% include 'no-blocks' %}
+   {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": {
+    "de": "Kategorien-Liste",
+    "en": "Collection list",
+    "es": "Lista de colecciones",
+    "fr": "Liste des collections"
+  },
+  "class": "index-section custom-index-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fr": "En-tête"
+      },
+      "default": {
+        "de": "Kategorien-Liste",
+        "en": "Collection list",
+        "es": "Lista de colecciones",
+        "fr": "Page de liste des collections"
+      }
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": {
+        "de": "Kategorien per Reihe",
+        "en": "Collections per row",
+        "es": "Colecciones por fila",
+        "fr": "Collections par rangée"
+      },
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": {
+        "de": "Kategorie",
+        "en": "Collection",
+        "es": "Colección",
+        "fr": "Collection"
+      },
+      "settings": [
+        {
+          "label": {
+            "de": "Kategorie",
+            "en": "Collection",
+            "es": "Colección",
+            "fr": "Collection"
+          },
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+           "type": "image_picker",
+           "id": "img",
+           "label": "Select image"
+        },
+        {
+           "type": "text",
+           "id": "label",
+           "label": "Label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "de": "Kategorien-Liste",
+        "en": "Collection list new",
+        "es": "Lista de colecciones",
+        "fr": "Page de liste des collections"
+      },
+      "category": {
+        "de": "Kategorie",
+        "en": "Collection",
+        "es": "Colección",
+        "fr": "Collection"
+      },
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

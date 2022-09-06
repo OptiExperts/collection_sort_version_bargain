@@ -1,0 +1,90 @@
+<style>
+/*================ upsell ================*/
+.no-thanks {
+  font-size: 13px;
+  color: #000;
+  text-decoration: underline;
+} 
+.close-upsell {
+  border-style: {{settings.upsell-border}};
+  border-color: {{ settings.upsell-border-clr }};
+  p {
+color : {{ settings.upsell-hd-clr }};  
+  }
+}
+.static-upsell {
+background-color: {{ settings.upsell-static-clr }};
+}  
+.anim-upsell {
+  animation-name: anim-upsell;
+  animation-duration: {{settings.upsell-anim-dur}}s;
+  animation-iteration-count: infinite;  
+}  
+@keyframes anim-upsell {
+  from {background-color: {{ settings.upsell-anim1-clr }};}
+  to {background-color: {{ settings.upsell-anim2-clr }};}
+}     
+</style>  
+
+
+
+{% if settings.upsell-filter != blank %}
+{% assign filter-upsell-show = collections[settings.upsell-filter] %}
+{% else %}
+{% assign filter-upsell-show = collections.all %}
+{% endif %}
+{% assign founddcollection = false %}
+{% assign currenttProdTitle = product.title %}
+{% if filter-upsell-show.products.size > 0 %}
+{% for product in filter-upsell-show.products %}
+{% if product.title == currenttProdTitle %}
+{% assign founddcollection = true %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if founddcollection == true %}
+<div class="close-upsell {{settings.anim-upsell-choice}}">
+   <p class="text-center">{{settings.titlee}}</p>
+   {%- assign upsell-prod = all_products[settings.upsell_collectionn] -%}
+   {%- if upsell-prod != empty -%}
+   <div class=" cart-popup-item">
+      {%- assign current_variantt = upsell-prod.selected_or_first_available_variant -%}
+      {%- assign featured_imagee = upsell-prod.featured_image -%}
+      {%- assign image = featured_imagee -%}
+      <div class="small--one-whole medium-up--one-third cart-popup-item__image-wrapper">
+         <img data-src="{{ image | img_url: '' }}" class="cart-popup-item__image lazyload animation--{{settings.lazyloading-effect}} " alt="{{image.alt}}" >
+      </div>
+      <div class="cart-popup-item__description">
+         <span class="small--one-whole cart-popup-item__title">
+         {{ upsell-prod.title | truncate: 45 }}
+         {% if settings.upsell-price-show %}
+         {% include 'product-price', variant: current_variantt %}
+         {% endif %}
+         </span>
+      </div>
+   </div>
+   <div class="grid">
+      <form method="post" action="/cart/add">
+         <input type="hidden" name="id" value="{{ current_variantt.id }}" />
+         {% if settings.upsell-qt-show %}
+         <div class="grid__item one-third">
+            <input min="1" type="number" id="quantity" name="quantity" value="1"/>
+         </div>
+         {% endif %}
+         <div class="grid__item two-thirds">
+            <input type="submit" value="{{ settings.upsell-addtocart-txt}}" class="btn" />
+         </div>
+      </form>
+   </div>
+   {%- endif -%}
+   <div class="grid">
+      <div class="grid__item one-third">
+         <a href="#" class="no-thanks" title="{{ 'cart.popup.no_thanks' | t }}">{{ 'cart.popup.no_thanks' | t }}</a>                            
+      </div>
+      {% if settings.upsell-quick-show %}
+      <div class="grid__item two-thirds quick-view-button small--hide"><a class="quick-view" data-handle="{{ upsell-prod.handle }}" href="javascript:void(0);" title="Quick view"> <i class="fa fa-eye" aria-hidden="true"></i> {{ 'collections.general.quick_view' | t }} </a></div>
+      {% endif %}
+   </div>
+</div>
+{% endif %}
+        

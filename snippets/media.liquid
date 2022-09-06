@@ -1,0 +1,62 @@
+{% case media.media_type %}
+{% when 'image' %}
+<li class="product-single__thumbnails-item js">
+   <a href="{{ media.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+   class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+   data-thumbnail-id="{{ media.id }}"
+   {% if enable_zoom %}data-zoom="{{ media.src | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %} title="{{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}">
+   <img class="product-single__thumbnail-image   lazyload animation--{{settings.lazyloading-effect}}" data-src="{{ media | img_url: '110x110', scale: 2 }}" alt="{{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}">
+   </a>
+</li>
+{% when 'external_video' %}
+<li class="product-single__thumbnails-item js">
+   <a href="{{ media.src | external_video_url }}"
+      class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+      data-thumbnail-id="{{ media.id }}"
+      alt="{{ media.alt | escape }}" title="{{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}">
+      <div class="product-single__media" data-media-id="{{ media.id }}">
+         {{ media | external_video_tag: class: "youtube_video product-single__thumbnail-image" }}
+      </div>
+   </a>
+</li>
+{% when 'video' %}
+<li class="product-single__thumbnails-item js">
+   <a href="{{ media.src | video_url }}"
+      class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+      data-thumbnail-id="{{ media.id }}"
+      alt="{{ media.alt | escape }}" title="{{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}">
+      <i class="fa fa-play video-play anim-label" aria-hidden="true"></i>
+      <div class="product-single__media" data-media-id="{{ media.id }}">
+         {{ media | video_tag: controls: false, class: "youtube_video product-single__thumbnail-image" }}
+      </div>
+   </a>
+</li>
+{% when 'model' %}
+{%- capture thumbnailAlt -%}
+	{{ 'sections.featured_product.model_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+{%- endcapture -%}
+<li class="product-single__thumbnails-item js product-single__thumbnail-model">
+  <a
+     href="{{ media.preview_image | img_url: product_image_zoom_size, scale: product_image_scale }}"
+     class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+     data-thumbnail-id="{{ media.id }}"
+     alt="{{ thumbnailAlt }}"
+     title="{{ thumbnailAlt }}"
+  >
+   <div class="product-single__media"  data-media-id="{{ media.id }}">
+      <img class="product-single__thumbnail-image" src="{{ media.preview_image | img_url: '110x110', scale: 2 }}" alt="{{ thumbnailAlt }}">
+     {%- if media.media_type == 'model' -%}
+       <div class="product-single__thumbnail-badge">
+         {% include 'icon-3d-badge-full-color' %}
+       </div>
+     {%- endif -%}
+   </div>
+  </a>
+</li>
+{% else %}
+<li class="product-single__thumbnails-item js">
+   <div class="product-single__media" data-media-id="{{ media.id }}">
+      {{ media | media_tag }}
+   </div>
+</li>
+{% endcase %}

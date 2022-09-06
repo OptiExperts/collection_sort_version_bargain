@@ -1,0 +1,171 @@
+<!-- gallery popup  -->
+<div class="background-gallery">
+    <div class="page-width main-gallery">
+        <div class="vertical-thumb">
+            {% for media in product.media %}
+            <div class="item" data-index="{{ forloop.index }}">
+                {% case media.media_type %}
+                {% when 'image' %}
+                <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper">
+                    <div class="product-single__photo-grid" data-image-id="{{ media.id }}">
+                        <img class="feature-row__image lazyload" src="{{ media | img_url: '100x100' }}"
+                            alt="{{ media.alt | escape }}">
+                    </div>
+                </div>
+                {% when 'external_video' %}
+                <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper">
+                    <div data-image-id="{{ media.id }}" class="product-single__photo">
+                        {{ media | external_video_tag: class: "mainFrameVideo feature-row__image product-featured-img " }}
+                    </div>
+                </div>
+                {% when 'video' %}
+                <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper">
+                    <div data-image-id="{{ media.id }}" class="product-single__photo" alt="{{media.video.alt}}">
+                        {% if settings.vid-autoplay %}
+                        {{ media | video_tag: loop: true, autoplay: true, controls: false, preload: false, muted: true , class: "mainFrameVideo feature-row__image product-featured-img " }}
+                        {% else %}
+                        {{ media | video_tag: loop: true, autoplay: false, controls: true, preload: false, muted: true , class: "mainFrameVideo feature-row__image product-featured-img " }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endcase %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="vertical-main">
+            {% for media in product.media %}
+            <div class="product-single__media-wrapper" data-index="{{ forloop.index }}">
+                {% case media.media_type %}
+                {% when 'image' %}
+                <div class="product-single__media media-image" data-image-id="{{ media.id }}"
+                    data-zoom="{{ media | img_url: '5760x5760' }}">
+                    <img id="zoom_{{ forloop.index }}" class="feature-row__image lazyload"
+                        src="{{ media | img_url: '800x' }}" alt="{{ media.alt | escape }}">
+                </div>
+                {% when 'external_video' %}
+                <div data-image-id="{{ media.id }}" class="product-single__media">
+                    {{ media | external_video_tag: class: "mainFrameVideo feature-row__image product-featured-img " }}
+                </div>
+                {% when 'video' %}
+                <div data-image-id="{{ media.id }}" class="product-single__media" alt="{{media.video.alt}}">
+                    {% if settings.vid-autoplay %}
+                    {{ media | video_tag: loop: true, autoplay: true, controls: false, preload: false, muted: true , class: "mainFrameVideo feature-row__image product-featured-img " }}
+                    {% else %}
+                    {{ media | video_tag: loop: true, autoplay: false, controls: true, preload: false, muted: true , class: "mainFrameVideo feature-row__image product-featured-img " }}
+                    {% endif %}
+                </div>
+                {% endcase %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <button class="close"></button>
+</div>
+
+<!-- grid media product  -->
+<div class="grid__item grid medium-up--three-fifths grid-media">
+    <div class="main-media">
+        {% for media in product.media %}
+        {% if forloop.index == 1 %}
+        {% case media.media_type %}
+        {% when 'image' %}
+        {%- assign featured_image = product.featured_image -%}
+        {% when 'external_video' %}
+        {%- assign featured_image = media.src -%}
+        {% when 'video' %}
+        {%- assign featured_image = media.src  -%}
+        {% endcase %}
+        {% endif %}
+
+        {% capture img_id %}FeaturedImage-{{ section.id }}-{{ media.id }}{% endcapture %}
+        {% capture img_class %}product-featured-img{% endcapture %}
+        {% capture zoom_img_id %}FeaturedImageZoom-{{ section.id }}-{{ media.id }}{% endcapture %}
+        {% capture img_wrapper_id %}{{ zoom_img_id }}-wrapper{% endcapture %}
+        {%- assign img_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+        <div class="grid__item medium-up--one-half ">
+            {% include 'image-style' with small_style: true, width: height, height: height, wrapper_id: img_wrapper_id, img_id: img_id %}
+            {% case media.media_type %}
+            {% when 'image' %}
+            <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper js-media-grid">
+                <div id="{{ zoom_img_id }}" style="padding-top:{{ 1 | divided_by: media.aspect_ratio | times: 100}}%;"
+                    class="product-single__photo-grid" data-image-id="{{ media.id }}">
+                    <img id="{{ img_id }}"
+                        class=" feature-row__image {{ img_class }} lazyload {% unless featured_image == media %} lazypreload{% endunless %}"
+                        src="{{ media | img_url: '300x300' }}" data-src="{{ img_url }}"
+                        data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                        data-aspectratio="{{ media.aspect_ratio }}" data-sizes="auto" tabindex="-1"
+                        alt="{{ media.alt | escape }}">
+                </div>
+            </div>
+            {% when 'external_video' %}
+            <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper js-media-grid">
+                <div data-image-id="{{ media.id }}"
+                    style="padding-top:{{ 1 | divided_by: media.aspect_ratio | times: 100}}%;" id="{{ zoom_img_id }}"
+                    class="product-single__photo {% unless featured_image == media.src %} hide{% endunless %} {% if product.media.size > 1 %} product-single__photo--has-thumbnails{% endif %}">
+                    {{ media | external_video_tag: class: "mainFrameVideo feature-row__image product-featured-img " }}
+                </div>
+            </div>
+            {% when 'video' %}
+            <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper js-media-grid">
+                <div data-image-id="{{ media.id }}"
+                    style="padding-top:{{ 1 | divided_by: media.aspect_ratio | times: 100}}%;"
+                    class="product-single__photo zoom-not {% unless featured_image == media.src %} hide{% endunless %} {% if product.media.size > 1 %} product-single__photo--has-thumbnails{% endif %}"
+                    alt="{{media.video.alt}}">
+                    {% if settings.vid-autoplay %}
+                    {{ media | video_tag: loop: true, autoplay: true, controls: false, preload: false, muted: true , class: "mainFrameVideo feature-row__image product-featured-img " }}
+                    {% else %}
+                    {{ media | video_tag: loop: true, autoplay: false, controls: true, preload: false, muted: true , class: "mainFrameVideo feature-row__image product-featured-img " }}
+                    {% endif %}
+                </div>
+            </div>
+            {% endcase %}
+        </div>
+        {% endfor %}
+
+        <!-- slide media product mobile  -->
+    </div>
+    <button class="zoom-btn js-zoom-btn">
+        <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M8.79723 8.55791L13.9758 13.7511L13.565 14.1619L8.3718 8.96868C7.49159 9.74619 6.33264 10.2156 5.05634 10.2156C2.28368 10.2156 0.0244751 7.9711 0.0244751 5.18377C0.0244751 2.39644 2.29835 0.137238 5.07101 0.137238C7.84367 0.137238 10.1029 2.38177 10.1029 5.1691C10.1029 6.47475 9.60409 7.66303 8.79723 8.55791ZM0.611282 5.18377C0.611282 7.63369 2.60642 9.62883 5.05634 9.62883C7.50626 9.62883 9.5014 7.63369 9.5014 5.18377C9.5014 2.73386 7.50626 0.738714 5.05634 0.738714C2.60642 0.738714 0.611282 2.73386 0.611282 5.18377ZM4.76291 2.54314H5.34972V4.89037H7.68227V5.47718H5.34972V7.80973H4.76291V5.47718H2.43036V4.89037H4.76291V2.54314Z"
+                fill="#00000" />
+        </svg>
+    </button>
+
+    <div class="medium-up--hide main-media_thumbnails">
+        <ul class="media__thumbnails">
+            {% for media in product.media %}
+            <li class="media__thumbnails-item">
+                {% case media.media_type %}
+                {% when 'image' %}
+                <a href="{{ media.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+                    class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+                    data-thumbnail-id="{{ media.id }}"
+                    {% if enable_zoom %}data-zoom="{{ media.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+                    {% endif %}>
+                    <img class="lazy2 product-single__thumbnail-image" data-src="{{ media.src | img_url: '110x110', scale: 2 }}"
+                        alt="{{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}">
+                </a>
+                {% when 'external_video' %}
+                <a href="{{ media.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+                    class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+                    data-thumbnail-id="{{ media.id }}"
+                    {% if enable_zoom %}data-zoom="{{ media.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+                    {% endif %}>
+                    {{ media | external_video_tag: class: "product-single__thumbnail-image youtube_video mobile" }}
+                </a>
+                {% when 'video' %}
+                <a href="{{ media.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+                    class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+                    data-thumbnail-id="{{ media.id }}"
+                    title="{{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}">
+                    {{ media | video_tag: loop: true, autoplay: false, muted: true , class: "product-single__thumbnail-image youtube_video mobile" }}
+                </a>
+                {% endcase %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

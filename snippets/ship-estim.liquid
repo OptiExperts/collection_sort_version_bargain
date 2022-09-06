@@ -1,0 +1,44 @@
+{% if section.settings.show_sizechart %}
+<hr class="hr--small">{% endif %}
+{% if section.settings.enable_ship-estim %}
+{% assign days = settings.thedateee | times: 86400 %}
+{% assign protec-page = settings.protec-page %}
+{% assign return-page = settings.return-page %}
+<style>.ship-est {  display: flex; margin: 0; flex-basis: 100%; background: {{settings.ship-estim-bkclr}};}.ship-est .txt {float: left;  width: 70%; margin: 0;color: {{settings.ship-estim-txtclr}};font-size: {{settings.ship-estim-txtsize}}px;}.ship-est .date {float: right;  font-weight: bolder;margin: 0;color: {{settings.ship-estim-dateclr}};font-size: {{settings.ship-estim-datesize}}px;}.ship-est p {display: flex; margin: 0; flex-basis: 100%; background: {{settings.ship-estim-bkclr}};font-weight : bold;}.ship-est i {color : green;}.ship-est:hover a {text-decoration: underline;}  </style>
+{% if settings.enabl-ship-header %}
+<label class="ship-est txt">
+   <p> {{settings.ship-estim-head}} </p>
+</label>
+<div class="ship-est">
+   <label class="txt">
+   <small> <i class="fa fa-plane" aria-hidden="true"></i>&nbsp; {{settings.ship-estim-txt}} </small>
+   </label>
+   <label class="date">
+   {{ "now" | date: "%s"| plus: days | date: "%a, %b %d, %Y" | time_tag: format: 'date' }}
+   </label>
+</div>
+<hr class="hr--small">
+{% endif %}
+{% if settings.enabl-buyer-protec %}
+<label class="ship-est txt">
+   <p> {{settings.buyer-protec-head}} </p>
+</label>
+<div class="ship-est">
+   <label class="txt">
+   <small> <i class="fa fa-check"> </i>&nbsp;<a  href="{{ pages[protec-page].url }}" target="_blank" title="{{settings.buyer-protec-head}}">{{settings.buyer-protec-txt}}</a></small>
+   </label>
+</div>
+<hr class="hr--small">
+{% endif %}
+{% if settings.enabl-return-policy %}
+<label class="ship-est txt">
+   <p> {{settings.return-policy-head}} </p>
+</label>
+<div class="ship-est">
+   <label class="txt">
+   <small> <i class="fa fa-check"> </i>&nbsp;<a  href="{{ pages[return-page].url }}" target="_blank" title="{{settings.return-policy-head}}">{{settings.return-policy-txt}}</a></small>
+   </label>
+</div>
+<hr class="hr--small">
+{% endif %}
+{% endif %}

@@ -1,0 +1,111 @@
+         {% if article.image %}
+         {% capture img_id %}ArticleImage-{{ article.image.id }}{% endcapture %}
+         {% capture img_wrapper_id %}ArticleImageWrapper-{{ article.image.id }}{% endcapture %}
+         {%- assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+         <div>
+            <img class="lazyload animation--{{settings.lazyloading-effect}} featured-article-img" src="{{ 'blank.jpg' | asset_url }}" data-src="{{ article.image | img_url: '' }}" alt="{{ article.image.alt }}">
+         </div>
+         <noscript>
+            <div class="article__grid-image-wrapper">
+               {{ article | img_url: '345x345', scale: 2 | img_tag: article.title, 'article__grid-image' }}
+            </div>
+         </noscript>
+         {% endif %}
+         <div class="section-header">
+            <h1 class="article__title">{{ article.title }}</h1>
+            {% if section.settings.blog_show_author %}
+            <span class="article__author"><i class="fa fa-user"></i>  {{ 'blogs.article.by_author' | t: author: article.author }}</span>
+            {% endif %}
+            {% if section.settings.blog_show_date %}
+            <i class="fa fa-calendar"></i>
+            <span class="article__date">
+            {{ 'blogs.article.created_on' | t }}  {{ article.published_at | time_tag: format: 'date' }}
+            </span>
+            {% endif %}
+            {% if section.settings.blog_show_update %}
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+            <span class="article__date">
+            {{ 'blogs.article.last_update' | t }} {{ article.updated_at | time_tag: format: 'date' }}
+            </span>
+            {% endif %}   
+            {% if section.settings.blog_show_min %} 
+            <i class="fa fa-clock-o"></i>
+            <div class="entry-content" id="timeestimate">
+               <div class="visually-hidden" >  {{ article.content }} </div>
+            </div>
+            {% endif %}
+            {% if blog.comments_enabled? and article.comments_count > 0 %}
+            <i class="fa fa-comment"></i>
+            <span class="entry-comment">
+            <a href="{{ article.url }}#comments" class="article__comment-count btn btn--tertiary btn--small" title="{{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}">
+            {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+            </a>
+            </span>
+            {% endif %}
+         </div>
+         {% if section.settings.show_toc %}
+         {% include 'toc' %}
+         {% else %}
+         <div class="rte">{{ article.content }}</div>
+         {% endif %}
+         {% if section.settings.show_previous_button %}
+         <div class="nextPreviousHolder">
+            {% assign current_found = false %}
+            {% assign done = false %}
+            {% for a in blog.articles %}
+            {% if current_found and done == false %}
+            {% assign next_article = a %}
+            {% assign done = true %}
+            {% endif %}
+            {% unless done %}
+            {% if a.id == article.id %}
+            {% assign current_found = true %}
+            {% else %}
+            {% assign prev_article = a %}
+            {% endif %}
+            {% endunless %}
+            {% endfor %}
+            {% if prev_article %}
+            <div class="nextPreviousBtn">
+               <a href="{{ prev_article.url }}" title="{{prev_article.title}}">
+                  <div>
+                     <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                     <span>{{ 'blogs.article.previous_article_html' | t}}</span>
+                     <p>{{ prev_article.title }}</p>
+                  </div>
+               </a>
+            </div>
+            {% endif %}
+            {% if next_article %}
+            <div class="nextPreviousBtn">
+               <a href="{{ next_article.url }}" title="{{next_article.title}}">
+                  <div>
+                     <span>{{ 'blogs.article.next_article_html' | t}}</span> 
+                     <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                     <p>{{ next_article.title }}</p>
+                  </div>
+               </a>
+            </div>
+            {% endif %}
+         </div>
+         {% endif %}
+         <div class="author_wrap">
+            {% if section.settings.blog_show_bio %}
+            <div class="blog_author">
+               <img clas="lazyload" src="//1.gravatar.com/avatar/{{ article.user.email | md5 }}" alt="{{ article.author }}" />
+               <div class="author_bio">
+                  <p>{{ article.author }}</p>
+                  <p>{{ article.user.bio }}</p>
+               </div>
+            </div>
+            {% endif %}
+            {% if section.settings.show_share_buttons %}
+            <div class="blog_share">
+               {% include 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+            </div>
+            {% endif %}
+         </div>
+         <div class="h4 related-article"> {{ 'blogs.article.related_articles' | t }} </div>
+         <div class="grid">
+            {% include 'related-articles' %}
+         </div>

@@ -1,0 +1,9 @@
+<div class="banner-image sidebar-widget {{block.settings.banner-visibility}}"{%- if block.settings.link != blank %} onclick="window.location.href='{{block.settings.link}}'"{%-endif-%}>
+      {%- if block.settings.img_banner == blank -%}
+           <img class="lazyload animation--{{settings.lazyloading-effect}}" data-src="{{ 'placeholder-banner.jpg' | asset_url }}" alt="{{ block.settings.img_banner.alt | escape }}">
+     {%- else -%}
+      {%- assign image = block.settings.img_banner -%}
+      {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+      <img class="lazyload animation--{{settings.lazyloading-effect}}" src="{{ image | img_url: '' }}" data-src="{{ img_url }}" data-widths="[157, 270, 303, 370, 377, 670, 570, 720, 900, 1080, 1296, 1512, 1728, 2048]" data-aspectratio="{{ image.aspect_ratio }}"  data-sizes="auto" alt="{{image.alt}}" title="{{block.settings.banner-on-hover}}" >
+      {%- endif -%}
+</div>

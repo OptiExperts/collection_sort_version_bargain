@@ -1,0 +1,21 @@
+<style>.article__date_sb{margin-bottom: 14px;font-size: calc(var(--font-size-base) - 4px);padding-right:7px;}</style>  
+<div class="{{block.settings.recent-articles-visibility}} sidebar-widget">  
+<div class="h4">{{block.settings.sidebar_rc_title}}</div>
+   {% for article in blogs[blog.handle].articles limit:4 %}
+   {% if block.settings.blog_sd_show_image %}
+   <div><img class="lazyload animation--{{settings.lazyloading-effect}}" data-src="{{article.image | img_url: ''}}" alt="{{article.image.alt}}" /></div>
+   {% endif %}
+      <a href="{{ article.url }}" title="{{ article.title }}">{{ article.title }}
+      <time pubdate datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+        <div class="article__date_sb">
+      {% if block.settings.blog_sd_show_date %}
+      <em class="text-light"><i class="fa fa-calendar"></i> {{ article.published_at | time_tag: format: 'date' }}</em> <br>
+      {% endif %}
+      {% if block.settings.blog_sd__show_author %}
+      <em> <i class="fa fa-user"></i> By: {{ article.author }}  </em>
+      {% endif %}
+        </div>
+      </time>  
+        </a>
+   {% endfor %}
+</div>

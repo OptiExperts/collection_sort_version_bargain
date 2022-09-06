@@ -1,0 +1,1807 @@
+{% style %}
+   .grid-view-item__image {object-fit : {{section.settings.image-effect}} !important;}
+   .secondary {object-fit : {{section.settings.image-effect}} !important;}
+{% endstyle %}
+<style>
+
+  .px-0{
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @media only screen and (max-width: 750px) and (min-width: 450px){
+    .filters-toolbar__item-child:first-child{
+      align-items: center;
+      display: flex;
+      margin: 0;
+    }
+    .filters-toolbar__label{
+      display: block;
+      width: 75px;
+      margin-top: 0;
+    }
+    .filters-toolbar--has-filter{
+      border-bottom: 1px solid #e8e9eb;
+    }
+    .filters-toolbar__item-child .filters-toolbar__input{
+        padding-left: 13px;
+    }
+    .filters-toolbar--has-filter .filters-toolbar__item-wrapper{
+      flex-basis: 50%;
+    }
+    .filters-toolbar--has-filter .filters-toolbar__item--count{
+      flex-basis: auto;
+    }
+  }
+  @media only screen and (max-width: 450px){
+    .filters-toolbar__item-child:first-child{
+      flex-basis: 100%;
+      margin-right: 0;
+    }
+    .filters-toolbar--has-filter{
+          margin-left: 25px;
+    }
+    .filters-toolbar__item-child:first-child,
+    .filters-toolbar--has-filter .filters-toolbar__item--count{
+      text-align: center;
+    }
+  }
+
+
+
+  .filters-toolbar-wrapper {
+    border-bottom: 1px solid {{ settings.color_borders }};;
+    border-top: 1px solid {{ settings.color_borders }};;
+    margin-bottom: 22px;
+  }
+  @media only screen and min-width: 750px) {
+    .filters-toolbar-wrapper {
+      margin-bottom: 50px;
+    }
+  }
+  .filters-toolbar {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filters-toolbar .icon-chevron-down {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+    fill: blue;
+    width: calc(10em / 16);
+    height: calc(10em / 16);
+    right: 8px;
+  }
+  .filters-toolbar--has-filter {
+    position: relative;
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar--has-filter {
+      border-bottom: none;
+    }
+    .filters-toolbar--has-filter .filters-toolbar__item-child {
+      flex-basis: 50%;
+    }
+    .filters-toolbar--has-filter .filters-toolbar__item-wrapper {
+      flex-basis: 100%;
+    }
+    .filters-toolbar--has-filter .filters-toolbar__item--count {
+      flex-basis: 100%;
+      text-align: left;
+    }
+    .filters-toolbar--has-filter .filters-toolbar__item--count:before {
+      background-color: {{ settings.color_borders }};;
+      content: "";
+      height: 1px;
+      left: 0;
+      position: absolute;
+      top: auto;
+      width: 100%;
+    }
+  }
+  .filters-toolbar__item {
+    min-width: 33%;
+    flex: 1 1 33%;
+  }
+  .no-flexbox .filters-toolbar__item {
+    text-align: left !important;
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar__item:first-child .filters-toolbar__input {
+      padding-left: 0;
+    }
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar__item-child {
+      flex-grow: 0;
+    }
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar__item-child:first-child {
+      margin-right: 2.5rem;
+    }
+  }
+  @media only screen and min-width: 750px) {
+    .filters-toolbar__item-child:first-child {
+      margin-right: 3rem;
+    }
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar__item-child .filters-toolbar__input {
+      padding-left: 0;
+      padding-right: 25px;
+      width: 100%;
+    }
+  }
+  .filters-toolbar__item-wrapper {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+  }
+  @include flex:1 1 33%;
+  @media only screen and max-width: 749px) {
+    justify-content: space-between;
+  }
+  .filters-toolbar__item--count {
+    min-width: 0;
+    flex: 0 1 auto;
+    text-align: center;
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar__item--count {
+      flex: 0 1 50%;
+      text-align: right;
+    }
+  }
+  .no-flexbox .filters-toolbar select {
+    width: 100% !important;
+  }
+  .filters-toolbar__label {
+    display: inline-block;
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar__label {
+      display: block;
+      margin-bottom: 0;
+      margin-top: 8px;
+    }
+  }
+  .filters-toolbar__input-wrapper {
+    display: inline-block;
+  }
+  .filters-toolbar__input {
+    border: 0 solid transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    height: 55px;
+    opacity: 1;
+    position: relative;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 18px;
+  }
+  .filters-toolbar__item:first-child .filters-toolbar__input {
+    padding-left: 0;
+  }
+  .no-flexbox .filters-toolbar__input {
+    margin: 0;
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar__input {
+      height: 46px;
+    }
+  }
+  .filters-toolbar__input.hidden {
+    opacity: 0;
+  }
+  .filters-toolbar__input option {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .filters-toolbar__product-count {
+    font-size: 12px;
+    font-style: italic;
+    line-height: 55px;
+    margin-bottom: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media only screen and max-width: 749px) {
+    .filters-toolbar__product-count {
+      font-size: 13px;
+      line-height: 46px;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*SIDEBAR*/
+  /*SIDEBAR*/
+  .sidebar-title {
+    position: relative;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+    margin-top: 0;
+    color: black;
+  }
+  .sidebar-title:before {
+    position: absolute;
+    top: 100%;
+    content: '';
+    width: 45px;
+    height: 2px;
+  }
+  .sidebar-content ul {
+    list-style: none;
+  }
+  .sidebar-content ul li {
+    margin-bottom: 0px;
+  }
+  .sidebar-content ul li.active a {
+    color: black;
+    font-weight: bold;
+  }
+  .sidebar-content span, .sidebar-content a {
+    letter-spacing: 1px;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+  @media (min-width: 1200px) {
+    .sidebar-content span:hover, .sidebar-content a:hover {
+      color: black;
+      font-weight: bold;
+    }
+  }
+  #loader-div {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 9999;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  #tags-load {
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 9999;
+  }
+  #tags-load > i {
+    top: 50%;
+    position: absolute;
+  }
+  .sidebar-col {
+    background: white;
+    z-index: 99999;
+    padding-bottom: 35px;
+    padding-left: 0px;
+  }
+  @media only screen and maxwidth: 749px) {
+    .sidebar-col {
+      padding-left: 12px !important;
+      padding-right: 12px !important;
+      opacity: 0.98;
+      padding-bottom: 60px;
+    }
+  }
+  .sidebar-col .sidebar-block {
+    width: 100%;
+    float: left;
+    margin-bottom: 5px;
+    padding-right: 0px !important;
+  }
+  .sidebar-col .sidebar-block.filter-block .title {
+    line-height: 1em;
+  }
+  .sidebar-col .sidebar-block.filter-block .tag-group {
+    margin-bottom: 5px;
+  }
+  .sidebar-col .sidebar-block:last-child {
+    margin-bottom: 100px;
+  }
+  .collapsible-arrow {
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  .content {
+    display: block;
+    overflow: auto;
+    max-height: 150px;
+  }
+  /* width */
+  #scroll-bar-coll::-webkit-scrollbar {
+    width: 7px;
+  }
+  /* Track */
+  #scroll-bar-coll::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+  /* Handle */
+  #scroll-bar-coll::-webkit-scrollbar-thumb {
+    background: #805353;
+    border-radius: 10px;
+  }
+  /* Handle on hover */
+  #scroll-bar-coll::-webkit-scrollbar-thumb:hover {
+    background: #0c0101;
+  }
+  i.rotate {
+    -moz-transition: all 0.1s linear;
+    -webkit-transition: all 0.1s linear;
+    transition: all 0.1s linear;
+  }
+  i.rotate.down {
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  i.fa-angle-up {
+    float: right;
+  }
+  .trust-badge-cart {
+    width: 100%;
+  }
+  .no-filter {
+    float: none;
+    margin: 0 auto;
+  }
+  .sidebar {
+    margin-top: 40px;
+  }
+  .sidebar__list {
+    list-style: none;
+    margin-bottom: 55px;
+  }
+  .sidebar__list li {
+    margin-bottom: 10px;
+  }
+  @media only screen and maxwidth: 749px) {
+    .mob-sidebar {
+      width: 65%;
+      display: block !important;
+      top: 0px;
+      z-index: 99999;
+      position: fixed;
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 100%;
+    }
+  }
+  .float-filter {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    top: 120px;
+    right: 30px;
+    border-radius: 50px;
+    text-align: center;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 99999;
+  }
+  .sidebar-widget {
+    margin-bottom: 50px;
+  }
+  .product_list_widget input.custom-qty {
+    height: 30px;
+  }
+  .product_list_widget li {
+    overflow: hidden;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(124, 124, 124, 0.15);
+  }
+  .product_list_widget li a {
+    margin-bottom: 8px;
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .product_list_widget li img {
+    float: left;
+    margin-right: 12px;
+    max-width: 60px;
+  }
+  .product_list_widget li .amount {
+    color: blue;
+  }
+  .product_list_widget li del {
+    color: blue;
+  }
+  .product_list_widget li del .amount {
+    font-size: 12px;
+    color: blue;
+  }
+  .product_list_widget li ins {
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .product_list_widget li ins .amount {
+    color: #1aada3;
+  }
+  .product_list_widget li:last-child {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    border-bottom: none;
+  }
+  .banner-image {
+    cursor: pointer;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .collection-refund-banner {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column-reverse;
+    margin-bottom: 20px;
+  }
+  .collection-refund-banner > div {
+    width: 100%;
+  }
+  .collection-refund-banner .banner-image1 {
+    padding: 10px 10px 4px;
+  }
+  .collection-refund-banner .banner-image1 img {
+    width: 100%;
+  }
+  .collection-refund-banner .banner-content {
+    width: 100%;
+    padding: 10px 18px 0;
+  }
+  .collection-refund-banner .banner-content .text-1 {
+    font-size: 24px;
+    line-height: 36px;
+  }
+  .collection-refund-banner .banner-content .text-2 {
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 8px;
+  }
+  .collection-refund-banner .banner-content .text-3 {
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 20px;
+  }
+  .collection-refund-banner .banner-content .text-4 {
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .collection-refund-banner .banner-content p {
+    color: #000;
+  }
+  .collection-refund-banner .banner-content p a {
+    color: #000;
+  }
+  @media (max-width: 991px) {
+    .collection-refund-banner .banner-content p {
+      text-align: center;
+    }
+  }
+  @media (min-width: 992px) {
+    .collection-refund-banner {
+      flex-direction: unset;
+    }
+    .collection-refund-banner > div {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+    .collection-refund-banner .banner-image1 {
+      padding: 16px 16px 8px;
+    }
+    .collection-refund-banner .banner-content {
+      padding: 0 20px;
+    }
+    .collection-refund-banner .banner-content .text-2 {
+      font-size: 19px;
+      line-height: 29px;
+      margin-bottom: 16px;
+    }
+    .collection-refund-banner .banner-content .text-3 {
+      font-size: 16px;
+      line-height: 24px;
+      margin-bottom: 16px;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  .product-colours-available .colours-available_title {
+    color: #d72324;
+    font-weight: 700;
+    margin-bottom: 16px;
+    font-size: 15px;
+    line-height: 23px;
+  }
+  @media (min-width: 767px) {
+    .product-colours-available .colours-available_title {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+  .product-colours-available .colours-available_list a:not(:last-child) {
+    margin-right: 16px;
+  }
+  .product-colours-available .colours-available_list img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+
+
+
+
+
+
+
+
+  .filters-toolbar-wrapper {
+    border-bottom: 1px solid {{ settings.color_borders }};;
+    border-top: 1px solid {{ settings.color_borders }};;
+    margin-bottom: 22px;
+  }
+  @media only screen and min-width: 750px) {
+    .filters-toolbar-wrapper {
+      margin-bottom: 50px;
+    }
+  }
+
+
+</style>
+
+<style>
+  .filters-toolbar-wrapper .tag-group {
+/*       padding: 0 48px 0 0 !important; */
+     padding: 0 10px 0 0 !important;
+      float: unset !important;
+      width: auto !important;
+  }
+  .filters-toolbar-wrapper .tag-group .title{
+    border-bottom: 0 !important;
+  }
+  .filters-toolbar-wrapper .content {
+      padding: 12px 24px !important;
+      width: auto !important;
+  }
+
+
+
+  .icon {
+    display: inline-block;
+    width: 20px;
+    vertical-align: middle;
+    fill: currentColor;
+  }
+  .no-svg .icon {
+    display: none;
+  }
+
+
+  @media screen and (max-width: 749px){
+    .filters-toolbar-wrapper .tag-group {
+        width: 100% !important;
+        max-width: calc(100% - 24px) !important;
+        padding: 17.5px 0 !important;
+        margin: 0 12px !important;
+        border-bottom: 1px solid #e8e9ea !important;
+    }
+
+    .filters-toolbar-wrapper .back-btn i {
+      transform: rotate(90deg);
+      width: 12px;
+      height: auto;
+      margin-right: 8px;
+    }
+
+    .filters-toolbar-wrapper .tag-group .title i {
+        display: none;
+    }
+
+    .filters-toolbar-wrapper .show-filter {
+        z-index: 9999;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+    }
+  }
+
+
+
+
+
+
+
+
+  .collection-hero__title-wrapper::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0!important;
+    right: 0!important;
+    bottom: 0!important;
+    left: 0!important;
+    opacity: {{ settings.image_overlay_opacity | divided_by: 100.00 }};
+  }
+  .collection-hero__title {
+    color: #ffffff;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    right: 0;
+      top: 0;
+      z-index: 1;
+  /* 	 top: 50%;
+    transform: translateY(-50%); */
+  }
+  @media only screen and (min-width: 750px) {
+    .collection-hero__title {
+      font-size: 2.125em;
+    }
+  }
+
+
+  .collection-hero__image {
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 300px;
+    opacity: 1;
+  }
+  @media only screen and (max-width: 749px) {
+    .collection-hero__image {
+      height: 180px;
+    }
+  }
+
+  .collection-header,
+  .collection-hero {
+    position: relative;
+  }
+
+  .collection-hero__title-wrapper {
+      position: absolute;
+      margin: 0 auto;
+      width: 100%;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+  }
+
+  .collection-hero__title-wrapper::before {
+    opacity: .15;
+    background-color: #000;
+  }
+
+  @media screen and (min-width: 750px){
+    .filters-toolbar-wrapper {
+/*         margin-bottom: 50px; megantic*/
+      margin-bottom: 20px;
+    }
+    .collection-hero {
+        margin-bottom: 35px;
+    }
+  
+.filters-toolbar__item--count{
+    display: flex;
+    position: absolute;
+    bottom: 0;
+}
+  }
+
+
+</style>
+
+{% if section.settings.high_resolution_image %}
+{%- assign grid_image_width = '' -%}
+{% endif %}
+{% case section.settings.grid %}
+{% when 2 %}
+{%- assign max_height = 530 -%}
+{% when 3 %}
+{%- assign max_height = 345 -%}
+{% when 4 %}
+{%- assign max_height = 250 -%}
+{% when 5 %}
+{%- assign max_height = 195 -%}
+{% endcase %}
+{% if section.settings.layout == 'grid' and section.settings.scroll-effect == 'pag-scroll' %}
+{%- assign limit = section.settings.grid | times: section.settings.rows -%}
+{% elsif section.settings.scroll-effect == 'pag-scroll'  %}
+{%- assign limit = 16 -%}
+{% elsif section.settings.scroll-effect == 'inf-scroll'  %}
+{%- assign limit = 10000 -%}
+{% endif %}
+
+{%- assign refund_banner_block = section.blocks | where: 'type','refund-banner' | first -%}
+
+{% paginate collection.products by limit %}
+<div id="collection" class="page-width" data-section-id="{{ section.id }}" data-section-type="collection-template">
+
+   <div class="no-filter">
+      <div class="medium-up ">
+         <header class="collection-header">
+            {% if false %}
+               <div class="collection-hero">
+                  <div class="collection-hero__image ratio-container lazyload animation--{{settings.lazyloading-effect}} js"
+                     data-bgset="{% include 'bgset', image: collection.image %}" data-sizes="auto" data-parent-fit="cover"
+                     style="background-image: url('{{ collection.image | img_url: '300x300' }});"></div>
+                  <div class="collection-hero__title-wrapper">
+                     <h1 class="collection-hero__title page-width">
+                        <span role="text">
+                             {% if current_tags %}
+              					{{ current_tags | join: ' '}} {{ collection.title }} 
+            				{% else %}
+        						{{ collection.title }}
+      						{% endif %}
+                        </span>
+                     </h1>
+                  </div>
+               </div>
+               <div class=" filters-toolbar-wrapper ">
+                  <div class="page-width">
+                     <div class="filters-toolbar__item--count">
+                        <span class="filters-toolbar__product-count">
+                           {{ 'collections.general.items_with_count' | t: count: collection.products_count }}
+                        </span>
+                     </div>
+                  </div>
+               </div>               
+            {% else %}
+            <div class="page-width px-0">
+               <div class="section-header text-center">
+                  <h1>
+                     <span role="text">
+                         {% if current_tags %}
+              				{{ current_tags | join: ' '}} {{ collection.title }} 
+            			{% else %}
+       						 {{ collection.title }}
+      					{% endif %}
+                     </span>
+                  </h1>
+                  
+                  {%- render 'collection-refund-banner' block: refund_banner_block -%}
+
+                  {% include 'sub-collections' %}
+
+                  <div
+                     class=" filters-toolbar-wrapper {% if settings.filters-enable == blank %} filters-toolbar--has-filter {% endif %}">
+                     <div class="row-toolbar px-0">
+                        {% if settings.filters-enable %}
+                          <div id="myDIV" class="filter-container">
+                            <div id="tags-load" style="display:none;"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+                            <div class="filter-block">
+                                {% if section.settings.sidebar_title != blank %}
+                                  <h4 class="sidebar-title">{{section.settings.sidebar_title}}</h4>
+                                {% endif %}
+                                <div id="tags-filter-content" class="sidebar-content">
+                                  {% render 'collection_tag-filter' with {section} %}
+                                </div>
+                            </div>
+                          </div>
+                        {% endif %}
+
+                        <div class="row-toolbar__wrapper js-toolbar-sticky">
+                          {% if settings.filters-enable %}
+                            <div class="collection-filter">
+                              <button class="filter-btn medium-up--hide" onclick="myFunction()">Filter</button>
+                              <script>
+                                function myFunction() {
+                                    document.getElementById("myDIV").classList.toggle("show-filter");
+                                    document.body.style.overflow = 'hidden';
+                                }
+                              </script>
+                            </div>
+                          {% endif %}
+
+                          <div class="filters-toolbar">
+
+                            <div class="filters-toolbar__item-wrapper">
+                                <div class="filters-toolbar__item-child">
+                                  <label class="filters-toolbar__label select-label" for="SortBy">Sort by</label>
+                                  <div class="filters-toolbar__input-wrapper">
+                                      <select name="sort_by" id="SortBy" class="filters-toolbar__input medium-up--hide"
+                                        aria-describedby="a11y-refresh-page-message a11y-selection-message"
+                                        data-default-sortby="title-ascending" style="width: auto;">
+                                        <option value="manual">Featured</option>
+                                        <option value="best-selling">Best selling</option>
+                                        <option value="title-ascending" selected>Alphabetically, A-Z</option>
+                                        <option value="title-descending">Alphabetically, Z-A</option>
+                                        <option value="price-ascending">Price, low to high</option>
+                                        <option value="price-descending">Price, high to low</option>
+                                        <option value="created-ascending">Date, old to new</option>
+                                        <option value="created-descending">Date, new to old</option>
+                                      </select>
+                                      {%- capture sort_by_best_selling_active -%}
+                                        {%- if collection.sort_by == 'best-selling' -%}active{%- endif -%}
+                                      {%- endcapture -%}
+                                      {%- capture sort_by_price_active -%}
+                                        {%- if collection.sort_by == 'price-descending' or collection.sort_by == 'price-ascending' -%}active{%- endif -%}
+                                        {%- if collection.sort_by == 'price-descending' -%}
+                                          {%- assign sort_by_price_status = 'sort-by-price--down' -%}
+                                        {%- endif -%}
+                                        {%- if collection.sort_by == 'price-ascending' -%}
+                                          {%- assign sort_by_price_status = 'sort-by-price--up' -%}
+                                        {%- endif -%}
+                                      {%- endcapture -%}
+
+                                      <div name="sort_by" id="sort-desktop" class="tag-group sort-desktop small--hide">
+                                        <div class="title">
+                                            {% for option in collection.sort_options %}
+                                              {% if option.value == collection.sort_by %}
+                                                  <span value="{{ option.value }}">{{ option.name }}</span>
+                                              {% elsif collection.sort_by == blank and option.value == 'title-ascending' %}
+                                                  <span value="{{ option.value }}">{{ option.name }}</span>
+                                              {%endif%}
+                                            {% endfor %}
+
+                                            <svg aria-hidden="true" focusable="false" role="presentation"
+                                              class="icon icon-chevron-down" viewBox="0 0 9 9">
+                                              <path
+                                                  d="M8.542 2.558a.625.625 0 0 1 0 .884l-3.6 3.6a.626.626 0 0 1-.884 0l-3.6-3.6a.625.625 0 1 1 .884-.884L4.5 5.716l3.158-3.158a.625.625 0 0 1 .884 0z"
+                                                  fill="#fff"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="content">
+                                            {% for option in collection.sort_options %}
+                                              <li class="{% if option.value == collection.sort_by %}
+                                              active-sort
+                                              {% elsif collection.sort_by == blank and option.value == 'title-ascending' %}
+                                              active-sort
+                                              {%endif%}">
+                                                  <span data-href="{{ option.value }}">{{ option.name }}</span>
+                                              </li>
+                                            {% endfor %}
+                                        </div>
+                                      </div>
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="js-toolbar-placeholder"></div>
+
+
+                        
+                     </div>
+                    <div class="filters-toolbar__item--count">
+                           <span class="filters-toolbar__product-count">
+                              {{ 'collections.general.items_with_count' | t: count: collection.products_count }}
+                           </span>
+                        </div>
+
+                     {%- for block in section.blocks -%}
+                        {%- case block.type -%}
+                           {%- when 'collection' -%}
+                              {% include 'widget-products' %}
+                           {%- when 'html' -%}
+                              {% include 'custom-html' %}
+                           {%- when 'newsletter' -%}
+                              {% include 'newsletter-sidebar' %}
+                           {%- when 'banner' -%}
+                              {% include 'banner-sidebar-image' %}
+                        {%- endcase -%}
+                     {%- endfor -%}
+
+                  </div>
+               </div>
+            </div>
+            {% endif %}
+         </header>
+
+
+         {% if section.settings.layout == 'grid' %}
+         {% case section.settings.grid %}
+         {% when 2 %}
+         {%- assign grid_item_width = 'medium-up--one-half' -%}
+         {% when 3 %}
+         {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+         {% when 4 %}
+         {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+         {% when 5 %}
+         {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
+         {% endcase %}
+         <div class="page-width px-0">
+         <ul class="grid grid--uniform{% if collection.products_count > 0 %} grid--view-items{% endif %}">
+            {% for product in collection.products %}
+            <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
+               {% include 'product-card-grid', max_height: max_height %}
+            </li>
+            {% else %}
+            {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
+            <li class="grid__item">
+               <div class="grid grid--uniform">
+                  {% for i in (1..limit) %}
+                  <div class="grid__item {{ grid_item_width }}">
+                     <div class="grid-view-item">
+                        <a href="#" class="grid-view-item__link">
+                           <div class="grid-view-item__image">
+                              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                              {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                           </div>
+                           <div class="h4 grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                           <div class="grid-view-item__meta">
+                              <span class="product-price__price">$19.99</span>
+                           </div>
+                        </a>
+                     </div>
+                  </div>
+                  {% endfor %}
+               </div>
+            </li>
+            {% else %}
+            {%- assign is_empty_collection = true -%}
+            {% endif %}
+            {% endfor %}
+         </ul>
+         </div>
+         {% else %}
+         <div class="page-width px-0">
+         <ul class="list-view-items">
+            {% for product in collection.products %}
+            <li class="list-view-item">
+               {% include 'product-card-list', product: product %}
+            </li>
+            {% else %}
+            {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0%}
+            {% for i in (1..4) %}
+            <li class="list-view-item">
+               <a href="#" class="list-view-item__link">
+                  <div class="list-view-item__image-column">
+                     <div class="list-view-item__image-wrapper">
+                        <div class="list-view-item__image">
+                           {% capture current %}{% cycle 1, 2, 3, 4 %}{% endcapture %}
+                           {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                        </div>
+                     </div>
+                  </div>
+                  <div class="list-view-item__title-column">
+                     <div class="list-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                  </div>
+                  <div class="list-view-item__price-column">
+                     <span class="product-price__price">$19.99</span>
+                  </div>
+               </a>
+            </li>
+            {% endfor %}
+            {% else %}
+            {%- assign is_empty_collection = true -%}
+            {% endif %}
+            {% endfor %}
+         </ul>
+         </div>
+         {% endif %}
+         {% if is_empty_collection %}
+         <div class="grid__item small--text-center">
+            <p class="text-center">{{ 'collections.general.no_matches' | t }}</p>
+         </div>
+         {% endif %}
+         {% if section.settings.scroll-effect == 'pag-scroll' %}
+         {% if paginate.pages > 1 %}
+         {% include 'pagination' %}
+         {% endif %} {% endif %}
+      </div>
+   </div>
+  {% if collection.description != blank %}
+<div class="rte collection-description page-width">
+{{ collection.description }}
+</div>
+{% endif %} 
+</div>
+{% endpaginate %}
+<script type="text/javascript">
+  /*============================================================================
+          Inline JS because collection liquid object is only available
+          on collection pages and not external JS files
+        ==============================================================================*/
+  Shopify.queryParams = {};
+  if (location.search.length) {
+    for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) {
+        aKeyValue = aCouples[i].split('=');
+        if (aKeyValue.length > 1) {
+          Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+        }
+    }
+  }
+
+  jQuery(document).ready(function () {
+    jQuery("option[value=" + Shopify.queryParams.sort_by).attr('selected', 'selected');
+
+    jQuery("body").on('change', '#SortBy', function () {
+      Shopify.queryParams.sort_by = jQuery(this).val();
+      if(!jQuery(this).val()) delete Shopify.queryParams.sort_by;
+      location.search = jQuery.param(Shopify.queryParams);
+    });
+  });
+</script>
+<style>
+  .page-width {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+        }
+</style>
+
+{% schema %}
+{
+  "name": {
+    "de": "Kategorie-Seiten",
+    "en": "Collection pages",
+    "es": "Páginas de colección",
+    "fr": "Pages de collections"
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "scroll-effect",
+      "label": {
+        "de": "Paginierungseffekt",
+        "en": "Pagination effect",
+        "es": "Efecto de paginación",
+        "fr": "Effet de pagination"
+      },
+      "options": [
+        {
+          "value": "pag-scroll",
+          "label": {
+            "de": "Seitennummerierung",
+            "en": "Pagination",
+            "es": "Paginación",
+            "fr": "Pagination"
+          }
+        },
+        {
+          "value": "inf-scroll",
+          "label": {
+            "de": "Nieuw",
+            "en": "infinite scrolling",
+            "es": "Nuevo",
+            "fr": "Nouveau"
+          }
+        }
+      ],
+      "default": "pag-scroll"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": {
+        "de": "Layout",
+        "en": "Layout",
+        "es": "Diseño",
+        "fr": "Mise en page"
+      },
+      "default": "grid",
+      "options": [
+        {
+          "value": "grid",
+          "label": {
+            "de": "Raster",
+            "en": "Grid",
+            "es": "Cuadrícula",
+            "fr": "Grille"
+          }
+        },
+        {
+          "value": "list",
+          "label": {
+            "de": "Liste",
+            "en": "List",
+            "es": "Lista",
+            "fr": "Liste"
+          }
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "high_resolution_image",
+      "label": {
+        "de": "afbeelding met hoge resolutie inschakelen",
+        "en": "enable high resolution image",
+        "es": "habilitar imagen de alta resolución",
+        "fr": "activer l'image haute résolution"
+      },
+      "info": {
+        "de": "Indien ingeschakeld, kan de sitesnelheid worden beïnvloed",
+        "en": "If enabled, the site speed may be affected",
+        "es": "Si está habilitado, la velocidad del sitio puede verse afectada",
+        "fr": "Si activé, la vitesse du site peut être affectée"
+      },
+      "default": false
+    },
+    {
+      "type": "radio",
+      "id": "image-effect",
+      "label": {
+        "de": "Typ",
+        "en": "Image appearance",
+        "es": "tipo",
+        "fr": "Type"
+      },
+      "options": [
+        {
+          "value": "none",
+          "label": {
+            "de": "ingezoomd",
+            "en": "zoomed",
+            "es": "ampliada",
+            "fr": "zoomée"
+          }
+        },
+        {
+          "value": "fill",
+          "label": {
+            "de": "gevulde",
+            "en": "fill",
+            "es": "llena",
+            "fr": "remplie"
+          }
+        },
+        {
+          "value": "contain",
+          "label": {
+            "de": "bevatten",
+            "en": "contain",
+            "es": "Contiene",
+            "fr": "contient"
+          }
+        },
+        {
+          "value": "scale-down",
+          "label": {
+            "de": "verkleinen",
+            "en": "scale down",
+            "es": "reducir proporcionalmente",
+            "fr": "réduite"
+          }
+        },
+        {
+          "value": "cover",
+          "label": {
+            "de": "Hoes",
+            "en": "cover",
+            "es": "cubrir",
+            "fr": "couverture"
+          }
+        }
+      ],
+      "default": "none",
+      "info": {
+        "de": "Uitgelichte afbeelding uiterlijk",
+        "en": "Featured collection image appearance",
+        "es": "Apariencia de imagen destacada",
+        "fr": "Apparence de l'image en vedette"
+      }
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": {
+        "de": "Produkte per Reihe (nur Raster)",
+        "en": "Products per row (grid only)",
+        "es": "Productos por fila (solo cuadrícula)",
+        "fr": "Produits par rangée (grille uniquement)"
+      },
+      "default": 4,
+      "min": 2,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "type": "range",
+      "id": "rows",
+      "label": {
+        "de": "Reihen per Seite (nur Raster)",
+        "en": "Rows per page (grid only)",
+        "es": "Filas por página (solo cuadrícula)",
+        "fr": "Rangées par page (grille uniquement)"
+      },
+      "default": 2,
+      "min": 2,
+      "max": 8,
+      "step": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": {
+        "de": "Kategorie-Foto anzeigen",
+        "en": "Show collection image",
+        "es": "Mostrar imagen de la colección",
+        "fr": "Afficher l'image de la collection"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": {
+        "de": "Produkt-Lieferanten anzeigen",
+        "en": "Show product vendors",
+        "es": "Mostrar proveedores del producto",
+        "fr": "Afficher les vendeurs"
+      },
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": {
+        "de": "Seitenleiste",
+        "en": "Collection sidebar ",
+        "es": "Barra lateral",
+        "fr": "Barre latérale"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "show-sd-search-bt",
+      "label": {
+        "de": "Suchbox",
+        "en": "Show search box",
+        "es": "Caja de búsqeda",
+        "fr": "Barre de recherche"
+      },
+      "info": {
+        "de": "Aktivieren / Deaktivieren in den Themeneinstellungen => Allgemein",
+        "en": "Enable/Disable from Theme Settings => General",
+        "es": "Habilitar / deshabilitar desde la configuración del tema => General",
+        "fr": "Activer / désactiver à partir des paramètres de thème => Général"
+      },
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sidebar_title",
+      "label": {
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fr": "En-tête"
+      },
+      "default": "Filter research"
+    }
+  ],
+  "max_blocks": 100,
+  "blocks": [
+{
+                "type": "content",
+                "name": "New Collection",	
+                "settings": [
+                {
+                  "id": "title",
+                  "type": "text",
+                  "label": "Name",
+                  "default": "Collection Name"
+                },
+                {
+                  "type": "text",
+                  "id": "collection-handle",
+                  "label": "Collection Handle"
+                },
+                {
+                  "type": "textarea",
+                  "id": "subcollections",
+                  "label": "List The Subcollections"     
+                },
+                {
+                  "type": "textarea",
+                  "id": "subcolltitles",
+                  "label": "List The Subcollections Titles"     
+                },
+                {
+                  "type": "text",
+                  "id": "collhandle2",
+                  "label": "Collection Handle 2"
+                },
+				{
+                  "type": "textarea",
+                  "id": "subcolllist2",
+                  "label": "List The Subcollections 2"     
+                },
+                {
+                  "type": "textarea",
+                  "id": "subcolltitles2",
+                  "label": "List The Subcollections Titles 2"     
+                },
+				{
+                  "type": "text",
+                  "id": "collhandle3",
+                  "label": "Collection Handle 3"
+                },
+				{
+                  "type": "textarea",
+                  "id": "subcolllist3",
+                  "label": "List The Subcollections 3"     
+                },
+                {
+                  "type": "textarea",
+                  "id": "subcolltitles3",
+                  "label": "List The Subcollections Titles 3"     
+                },
+				{
+                  "type": "text",
+                  "id": "collhandle4",
+                  "label": "Collection Handle 4"
+                },
+				{
+                  "type": "textarea",
+                  "id": "subcolllist4",
+                  "label": "List The Subcollections 4"     
+                },
+                {
+                  "type": "textarea",
+                  "id": "subcolltitles4",
+                  "label": "List The Subcollections Titles 4"     
+                },
+				{
+                  "type": "text",
+                  "id": "collhandle5",
+                  "label": "Collection Handle 5"
+                },
+				{
+                  "type": "textarea",
+                  "id": "subcolllist5",
+                  "label": "List The Subcollections 5"     
+                },
+                {
+                  "type": "textarea",
+                  "id": "subcolltitles5",
+                  "label": "List The Subcollections Titles 5"     
+                }
+]
+},
+    {
+      "type": "text",
+      "name": {
+        "de": "Filter",
+        "en": "Filter",
+        "es": "Filtrar",
+        "fr": "Filtre"
+      },
+      "settings": [
+        {
+          "type": "radio",
+          "id": "filter-visibility",
+          "options": [
+            {
+              "value": "medium-up--hide",
+              "label": {
+                "de": "Nur mobil",
+                "en": "Mobile only",
+                "es": "Solo móvil",
+                "fr": "Mobile uniquement"
+              }
+            },
+            {
+              "value": "small--hide",
+              "label": {
+                "de": "Nur Computer",
+                "en": "Desktop only",
+                "es": "Solo computadora",
+                "fr": "Ordinateur uniquement"
+              }
+            },
+            {
+              "value": "showboth",
+              "label": {
+                "de": "Beide",
+                "en": "Both",
+                "es": "Ambos",
+                "fr": "Les deux"
+              }
+            }
+          ],
+          "label": {
+            "de": "Sichtweite",
+            "en": "Visibility",
+            "es": "Visibilidad",
+            "fr": "Visibilité"
+          },
+          "default": "showboth"
+        },
+        {
+          "type": "paragraph",
+          "content": "Group tag filter 1"
+        },
+        {
+          "type": "text",
+          "id": "group_tag_1_label",
+          "label": "Label:"
+        },
+        {
+          "type": "text",
+          "id": "group_tag_1",
+          "label": "Keys:",
+          "info": "Separate tags with comma"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "name": {
+        "de": "Benutzerdefiniertes HTML",
+        "en": "Custom HTML",
+        "es": "HTML personalizado",
+        "fr": "HTML personnalisé"
+      },
+      "settings": [
+        {
+          "type": "radio",
+          "id": "html-visibility",
+          "options": [
+            {
+              "value": "medium-up--hide",
+              "label": {
+                "de": "Nur mobil",
+                "en": "Mobile only",
+                "es": "Solo móvil",
+                "fr": "Mobile uniquement"
+              }
+            },
+            {
+              "value": "small--hide",
+              "label": {
+                "de": "Nur Computer",
+                "en": "Desktop only",
+                "es": "Solo computadora",
+                "fr": "Ordinateur uniquement"
+              }
+            },
+            {
+              "value": "showboth",
+              "label": {
+                "de": "Beide",
+                "en": "Both",
+                "es": "Ambos",
+                "fr": "Les deux"
+              }
+            }
+          ],
+          "label": {
+            "de": "Sichtweite",
+            "en": "Visibility",
+            "es": "Visibilidad",
+            "fr": "Visibilité"
+          },
+          "default": "showboth"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fr": "En-tête"
+          },
+          "default": "Custom HTML"
+        },
+        {
+          "type": "html",
+          "id": "code",
+          "label": "HTML",
+          "default": "<p>Add your custom html code here <br> <strong> Get help from Plak forum if you don't know what to add </strong> </p>"
+        }
+      ]
+    },
+    {
+      "type": "collection",
+      "name": {
+        "de": "Ausgewählte Produkte",
+        "en": "Featured products",
+        "es": "Productos Destacados",
+        "fr": "Produits populaires"
+      },
+      "settings": [
+        {
+          "type": "radio",
+          "id": "widgetproduct-visibility",
+          "options": [
+            {
+              "value": "medium-up--hide",
+              "label": {
+                "de": "Nur mobil",
+                "en": "Mobile only",
+                "es": "Solo móvil",
+                "fr": "Mobile uniquement"
+              }
+            },
+            {
+              "value": "small--hide",
+              "label": {
+                "de": "Nur Computer",
+                "en": "Desktop only",
+                "es": "Solo computadora",
+                "fr": "Ordinateur uniquement"
+              }
+            },
+            {
+              "value": "showboth",
+              "label": {
+                "de": "Beide",
+                "en": "Both",
+                "es": "Ambos",
+                "fr": "Les deux"
+              }
+            }
+          ],
+          "label": {
+            "de": "Sichtweite",
+            "en": "Visibility",
+            "es": "Visibilidad",
+            "fr": "Visibilité"
+          },
+          "default": "showboth"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fr": "En-tête"
+          },
+          "default": "Sale Products"
+        },
+        {
+          "type": "collection",
+          "id": "featured_product_list_collection",
+          "label": {
+            "de": "Sammlung zu verwenden",
+            "en": "Collection to use",
+            "es": "Colección para usar",
+            "fr": "Collection à utiliser"
+          }
+        },
+        {
+          "type": "text",
+          "id": "featured_product_limit_all",
+          "label": "Number of products to show",
+          "default": "3"
+        }
+      ]
+    },
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "radio",
+          "id": "banner-visibility",
+          "options": [
+            {
+              "value": "medium-up--hide",
+              "label": {
+                "de": "Nur mobil",
+                "en": "Mobile only",
+                "es": "Solo móvil",
+                "fr": "Mobile uniquement"
+              }
+            },
+            {
+              "value": "small--hide",
+              "label": {
+                "de": "Nur Computer",
+                "en": "Desktop only",
+                "es": "Solo computadora",
+                "fr": "Ordinateur uniquement"
+              }
+            },
+            {
+              "value": "showboth",
+              "label": {
+                "de": "Beide",
+                "en": "Both",
+                "es": "Ambos",
+                "fr": "Les deux"
+              }
+            }
+          ],
+          "label": {
+            "de": "Sichtweite",
+            "en": "Visibility",
+            "es": "Visibilidad",
+            "fr": "Visibilité"
+          },
+          "default": "showboth"
+        },
+        {
+          "type": "text",
+          "id": "banner-on-hover",
+          "label": {
+            "de": "Überschrift",
+            "en": "Text on hover",
+            "es": "Título",
+            "fr": "Titre"
+          }
+        },
+        {
+          "type": "image_picker",
+          "id": "img_banner",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Choose link"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "limit": 1,
+      "name": {
+        "de": "Newsletter-Anmeldung",
+        "en": "Newsletter signup",
+        "es": "Suscripción al boletín",
+        "fr": "Inscription"
+      },
+      "settings": [
+        {
+          "type": "radio",
+          "id": "newsletter-visibility",
+          "options": [
+            {
+              "value": "medium-up--hide",
+              "label": {
+                "de": "Nur mobil",
+                "en": "Mobile only",
+                "es": "Solo móvil",
+                "fr": "Mobile uniquement"
+              }
+            },
+            {
+              "value": "small--hide",
+              "label": {
+                "de": "Nur Computer",
+                "en": "Desktop only",
+                "es": "Solo computadora",
+                "fr": "Ordinateur uniquement"
+              }
+            },
+            {
+              "value": "showboth",
+              "label": {
+                "de": "Beide",
+                "en": "Both",
+                "es": "Ambos",
+                "fr": "Les deux"
+              }
+            }
+          ],
+          "label": {
+            "de": "Sichtweite",
+            "en": "Visibility",
+            "es": "Visibilidad",
+            "fr": "Visibilité"
+          },
+          "default": "showboth"
+        },
+        {
+          "type": "text",
+          "id": "newsletter_col-title",
+          "label": {
+            "de": "Überschrift",
+            "en": "Heading",
+            "es": "Título",
+            "fr": "Titre"
+          },
+          "info": {
+            "de": "Abonnenten werden zu Ihrer \"akzeptiert Marketingmaterial\"-Liste hinzugefügt [Kundenliste.](/admin/customers?query=&accepts_marketing=1)",
+            "en": "Subscribers will be added to your “accepts marketing” [customer list.](/admin/customers?query=&accepts_marketing=1)",
+            "es": "Se añadirá los suscriptores a tu lista \"acepta marketing\"[lista de clients.](/admin/customers?query=&accepts_marketing=1)",
+            "fr": "Les abonnés seront ajoutés à votre [liste de clients](/admin/customers?query=&accepts_marketing=1) « Accepte le marketing »."
+          },
+          "default": {
+            "de": "Newsletter",
+            "en": "Newsletter",
+            "es": "Boletín",
+            "fr": "Newsletter"
+          }
+        }
+      ]
+    },
+    {
+      "type" : "refund-banner",
+      "name" : "Refund banner",
+      "settings" : [
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default" : "#F2F2F2"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default" : "#000000"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "text_1",
+          "label": "Text 1",
+          "default" : "<p>Not quite right?</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "text_2",
+          "label": "Text 2",
+          "default" : "<p>Risk Free 30 Day Returns.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "text_3",
+          "label": "Text 3",
+          "default" : "<p>We want you to love the products you buy from us. If you change your mind, return it to us within 30 days of the date you received it, no questions asked.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "text_4",
+          "label": "Text 4",
+          "default" : "<p>*Excludes mattresses, bedding, pillows and sofa covers. T&Cs apply</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

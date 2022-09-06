@@ -1,0 +1,33 @@
+{%- capture content -%}
+  {%- liquid
+    assign colour_available_image = product.metafields.c_f.colour_available_image
+    assign colour_available_product = product.metafields.c_f.colour_available_product
+  -%}
+  {%- for image in colour_available_image -%}
+    {%- liquid
+      assign image_name = image | split: '/' | last | split: "?" | first
+      assign new_image = images[image_name]
+      if new_image != blank
+        assign new_image_url = new_image | img_url: '100x'
+      else
+        assign new_image_url = image
+      endif
+      assign redirect_product = all_products[colour_available_product[forloop.index0]]
+    -%}
+
+    <a href="{{redirect_product.url}}">
+      <img src="{{new_image_url}}" alt="{{redirect_product.title}}">
+    </a>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if content != blank -%}
+  <div class="product-colours-available">
+    <div class="colours-available">
+      <div class="colours-available_title">{{ 'products.product.colours_available' | t}}</div>
+      <div class="colours-available_list">
+        {{content}}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
