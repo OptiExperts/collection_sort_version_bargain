@@ -1091,7 +1091,7 @@
     {% endif %}
   {% endif %}
 {% endfor %}
-{% for product in collection.products limit: products_per_page %}
+{% for product in collection.products %}
   {% if product.available == false %}
     {% if remaining > 0 %}
         {% include 'product-card-grid' %}
