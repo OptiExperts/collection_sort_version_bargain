@@ -942,6 +942,7 @@
             {% endif %}
          </header>
 
+
          {% if section.settings.layout == 'grid' %}
          {% case section.settings.grid %}
          {% when 2 %}
@@ -954,41 +955,36 @@
          {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
          {% endcase %}
          <div class="page-width px-0">
-
-          {% assign newArray = false %}
-          {% assign zeroFill = '0000' %}
-          {% assign zeroFillSize = zeroFill | size %}
-          
          <ul class="grid grid--uniform{% if collection.products_count > 0 %} grid--view-items{% endif %}">
             {% for product in collection.products %}
-              {% assign inventoryCount = 0 %}
-
-              {% for variant in product.variants %}
-                {% if variant.inventory_management != "shopify" %}{% continue %}{% endif %}
-                {% assign inventoryCount = inventoryCount | plus:variant.inventory_quantity %}
-              {% endfor %}
-
-
-              {% assign indexCharSize = inventoryCount | append:'' | size %}
-              {% assign toSlice = zeroFillSize | minus:indexCharSize %}
-              {% assign tmpZeroFill = zeroFill | slice:0,toSlice %}
-              {% assign newOrder = inventoryCount | default:'0' %}
-              {% assign matrix = tmpZeroFill | append:newOrder | append:'.'  | append:forloop.index0 %}
-            
-              {% if newArray %}
-                {% assign tmpIndex = matrix | split:',' %}
-                {% assign newArray = newArray | concat:tmpIndex %}
-              {% else %}
-                {% assign newArray = matrix | split:',' %}
-              {% endif %}
-              {% endfor %}
-            {% endfor %}
-            {% assign newArray = newArray | sort | reverse %}
-            {% for newArrayItem in newArray %}
-              <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
-                    {% assign i = newArrayItem | split:'.' | last | abs %}
-                    {% include 'product-card-grid',product: collection.products[i], max_height: max_height %} 
-              </li>
+            <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
+               {% include 'product-card-grid', max_height: max_height %}
+            </li>
+            {% else %}
+            {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
+            <li class="grid__item">
+               <div class="grid grid--uniform">
+                  {% for i in (1..limit) %}
+                  <div class="grid__item {{ grid_item_width }}">
+                     <div class="grid-view-item">
+                        <a href="#" class="grid-view-item__link">
+                           <div class="grid-view-item__image">
+                              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                              {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                           </div>
+                           <div class="h4 grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                           <div class="grid-view-item__meta">
+                              <span class="product-price__price">$19.99</span>
+                           </div>
+                        </a>
+                     </div>
+                  </div>
+                  {% endfor %}
+               </div>
+            </li>
+            {% else %}
+            {%- assign is_empty_collection = true -%}
+            {% endif %}
             {% endfor %}
          </ul>
          </div>
