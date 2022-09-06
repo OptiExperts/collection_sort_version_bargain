@@ -1083,14 +1083,7 @@
     {% assign remaining = remaining | minus: 1 %}
   {% endif %}
 {% endfor %}	
-{% for product in collection.products limit: products_per_page %}
-  {% if product.compare_at_price > product.price %}
-    {% if remaining > 0 %}
-        {% include 'product-card-grid' %}
-        {% assign remaining = remaining | minus: 1 %}
-    {% endif %}
-  {% endif %}
-{% endfor %}
+
 {% for product in collection.products %}
   {% if product.available == false %}
         {% include 'product-card-grid' %}
