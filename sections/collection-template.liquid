@@ -982,15 +982,10 @@
 
             {% assign newArray = newArray | sort | reverse %}
 
-            
-                <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
-                  {% for newArrayItem in newArray %}
-                    {% assign i = newArrayItem | split:'.' | last | abs %}
-                    {% include 'product-card-grid', product: collection.products[i], max_height: max_height %}
-                  {% endfor %}
-                </li>
-              
-          {% else %}
+            <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
+               {% include 'product-card-grid', max_height: max_height %}
+            </li>
+            {% else %}
             {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
             <li class="grid__item">
                <div class="grid grid--uniform">
