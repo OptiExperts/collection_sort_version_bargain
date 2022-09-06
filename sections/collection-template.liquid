@@ -1078,7 +1078,7 @@
 
 {% assign remaining = products_per_page %}
 {% for product in collection.products limit: products_per_page %}
-  {% if product.available and product.price >= product.compare_at_price_max %}
+  {% if product.available %}
     {% include 'product-card-grid' %}
     {% assign remaining = remaining | minus: 1 %}
   {% endif %}
