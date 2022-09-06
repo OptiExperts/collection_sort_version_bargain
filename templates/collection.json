@@ -287,7 +287,7 @@
         "high_resolution_image": false,
         "image-effect": "fill",
         "grid": 5,
-        "rows": 4,
+        "rows": 8,
         "show_collection_image": true,
         "show_vendor": false,
         "show-sd-search-bt": true,
