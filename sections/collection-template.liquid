@@ -993,33 +993,6 @@
                 {% endfor %}  
             </li>
 
-            {% for product in collection.products %}
-            {% else %}
-            {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
-            <li class="grid__item">
-               <div class="grid grid--uniform">
-                  {% for i in (1..limit) %}
-                  <div class="grid__item {{ grid_item_width }}">
-                     <div class="grid-view-item">
-                        <a href="#" class="grid-view-item__link">
-                           <div class="grid-view-item__image">
-                              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
-                              {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
-                           </div>
-                           <div class="h4 grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
-                           <div class="grid-view-item__meta">
-                              <span class="product-price__price">$19.99</span>
-                           </div>
-                        </a>
-                     </div>
-                  </div>
-                  {% endfor %}
-               </div>
-            </li>
-            {% else %}
-            {%- assign is_empty_collection = true -%}
-            {% endif %}
-            {% endfor %}
          </ul>
          </div>
          {% else %}
