@@ -961,8 +961,9 @@
           {% assign zeroFillSize = zeroFill | size %}
 
          <ul class="grid grid--uniform{% if collection.products_count > 0 %} grid--view-items{% endif %}">
-            {% for product in collection.products %}
-
+        <!-- for jamie understanding -->
+          {% for product in collection.products %}
+        <!-- the loop which we can't exeed from more than 50 products -->
               {% assign inventoryCount = 0 %}
               {% for variant in product.variants %}
                 {% if variant.inventory_management != "shopify" %}{% continue %}{% endif %}
